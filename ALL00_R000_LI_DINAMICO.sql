@@ -1,0 +1,12 @@
+use DATA_02Pruebas
+GO
+
+DECLARE @PP_TAG_NO	INT	= 0
+DECLARE @PP_LOTE	VARCHAR(100) ='32781'
+
+SELECT * FROM RP_SC 
+		-- ===========================
+	WHERE	TAGNO =	( CASE	WHEN @PP_TAG_NO = 0 THEN TAGNO 
+							ELSE @PP_TAG_NO		END		)
+	AND		LOT =	( CASE	WHEN @PP_LOTE = '' THEN LOT 
+							ELSE @PP_LOTE		END		)

@@ -1,0 +1,248 @@
+-- //////////////////////////////////////////////////////////////
+-- // DATA BASE:		ALL
+-- // MODULE:			COMBOBOX
+-- // OPERATION:		GENERAR COMBOBOX
+-- //////////////////////////////////////////////////////////////
+-- // AUTHOR:			IT	
+-- // CREATION DATE:	20200214
+-- ////////////////////////////////////////////////////////////// 
+
+USE [BD_GENERAL]
+GO
+
+
+/* CARGA COMBO DE LOCACIONES */
+-- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 1
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_SQL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_IMLOCFIL_SQL]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_CB_IMLOCFIL_SQL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+						(	TA_K_CATALOGO		INT IDENTITY(1,1) NOT NULL,
+							TA_D_CATALOGO		VARCHAR(50))
+
+	IF @PP_L_CON_TODOS=1
+		BEGIN	
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT	LTRIM(RTRIM(alt1_loc))		AS D_COMBOBOX	
+			FROM	DATA_02.DBO.imlocfil_sql 
+		END
+	ELSE
+		BEGIN
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT	LTRIM(RTRIM(alt1_loc))		AS D_COMBOBOX	
+			FROM	DATA_02.DBO.imlocfil_sql 
+			WHERE	SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) = 'T'
+			UNION
+			SELECT	LTRIM(RTRIM(alt1_loc))		AS D_COMBOBOX	
+			FROM	DATA_02.DBO.imlocfil_sql 
+			WHERE	 LTRIM(RTRIM(alt1_loc)) = 'MHI'
+		END
+	
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+			TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM	@VP_TA_CATALOGO
+	ORDER BY  TA_D_CATALOGO 
+
+	-- ==========================================
+		
+	-- ////////////////////////////////////////////////////
+GO
+
+
+
+-- //////////////////////////////////////////////////////////////
+-- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 1
+-- //////////////////////////////////////////////////////////////
+-- // /* CARGA COMBO DE CLIENTES */
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )
+	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT	A4GLIDENTITY AS TA_K_CATALOGO,
+			LTRIM(RTRIM(CUS_NO)) AS TA_D_CATALOGO, 
+			0 AS TA_O_CATALOGO,
+			0 AS L_DELETED, 
+			1 AS L_ACTIVO
+	FROM	[DATA_02].[dbo].ARCUSFIL_SQL
+	ORDER BY TA_D_CATALOGO
+
+	IF @PP_L_CON_TODOS=1
+		INSERT INTO @VP_TA_CATALOGO
+				( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+			VALUES
+				( -1,				'( TODOS )',	-999,		   0,			 1				)
+
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM	@VP_TA_CATALOGO
+		ORDER BY TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+		
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- SELECT * FROM	[DATA_02].[dbo].ARCUSFIL_SQL
+-- EXECUTE [dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL] 0,0, 1
+-- //////////////////////////////////////////////////////////////
+-- // /* CARGA COMBO DE PRODUCT_CATEGORY */
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )
+	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT	A4GLIDENTITY			AS TA_K_CATALOGO,
+			LTRIM(RTRIM(PROD_CAT))	AS TA_D_CATALOGO, 
+			0 AS TA_O_CATALOGO,
+			0 AS L_DELETED, 
+			1 AS L_ACTIVO
+	FROM	[DATA_02].[dbo].IMCATFIL_SQL
+	WHERE	PROD_CAT_DESC<>'OBSOLETE' 
+	AND		PROD_CAT_DESC<>'DO NOT DELETE'
+	ORDER BY TA_D_CATALOGO
+
+	IF @PP_L_CON_TODOS=1
+		INSERT INTO @VP_TA_CATALOGO
+				( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+			VALUES
+				( -1,				'( TODOS )',	-999,		   0,			 1				)
+
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM	@VP_TA_CATALOGO
+		ORDER BY TA_O_CATALOGO, TA_D_CATALOGO 
+	-- ==========================================		
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1,139,0
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_COLOR_IMITMIDX_SQL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_COLOR_IMITMIDX_SQL]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_CB_COLOR_IMITMIDX_SQL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )
+	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT	A4GLIDENTITY			AS TA_K_CATALOGO,
+			LTRIM(RTRIM(ITEM_NO))	AS TA_D_CATALOGO,
+			0						AS TA_O_CATALOGO,
+			0						AS L_DELETED, 
+			1						AS L_ACTIVO
+	FROM [DATA_02].[dbo].IMITMIDX_SQL 
+	WHERE ITEM_NO LIKE 'F%'
+	AND LEN(RTRIM(LTRIM(ITEM_NO)))=7
+	ORDER BY TA_D_CATALOGO 
+
+
+	IF @PP_L_CON_TODOS=1
+		INSERT INTO @VP_TA_CATALOGO
+				( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+			VALUES
+				( -1,				'( TODOS )',	-999,		   0,			 1				)
+
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM	@VP_TA_CATALOGO
+		ORDER BY TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+		
+	-- ////////////////////////////////////////////////////
+GO
+
+
+/*
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> COMBO UOM
+-- // CARGA EL COMBO CON LA INFORMACIÓN INDICADA DE LAS [UOM] UNIDADES DE MEDIDA
+-- // SE UTILIZA EN:
+-- //	1) frmVersion
+-- //////////////////////////////////////////////////////////////
+--	EXECUTE [dbo].[PG_CB_UOM] 0,139
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_UOM]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_UOM]
+GO
+
+CREATE PROCEDURE [dbo].[PG_CB_UOM]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT
+	--============================
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+						(	TA_K_CATALOGO		VARCHAR(50),
+							TA_D_CATALOGO		VARCHAR(50),
+							TA_O_CATALOGO		INT
+							)
+
+	INSERT INTO	@VP_TA_CATALOGO ( TA_K_CATALOGO,TA_D_CATALOGO, TA_O_CATALOGO )	VALUES ('SELECT ONE VALUE',	'' ,10)
+	INSERT INTO	@VP_TA_CATALOGO ( TA_K_CATALOGO,TA_D_CATALOGO, TA_O_CATALOGO )	VALUES ('EACHES',			'EA',30)
+	INSERT INTO	@VP_TA_CATALOGO ( TA_K_CATALOGO,TA_D_CATALOGO, TA_O_CATALOGO )	VALUES ('SQUARE METERS',	'SM',20)
+	INSERT INTO	@VP_TA_CATALOGO ( TA_K_CATALOGO,TA_D_CATALOGO, TA_O_CATALOGO )	VALUES ('SQUARE FEET',		'SF',30)
+
+
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+			TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM	@VP_TA_CATALOGO
+		ORDER BY  TA_O_CATALOGO 
+
+	-- ////////////////////////////////////////////////////
+GO
+*/
