@@ -11,7 +11,8 @@ USE [BD_GENERAL]
 GO
 
 -- //////////////////////////////////////////////////////////////
-
+-- ////SP APUNTA A LA BASE DE DATOS DE PRODUCCION
+-- //////////////////////////////////////////////////////////////
 			
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_IN_RP_SC_PRT]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_IN_RP_SC_PRT]
@@ -32,7 +33,7 @@ AS
 	
 	IF @VP_MENSAJE = ''
 		BEGIN
-			INSERT INTO DATA_02Pruebas.DBO.RP_SC_PRT (
+			INSERT INTO DATA_02.DBO.RP_SC_PRT (
 								TAG, TYPE	) 
 				VALUES (	@PP_TAG_NO, @PP_TYPE)
 
