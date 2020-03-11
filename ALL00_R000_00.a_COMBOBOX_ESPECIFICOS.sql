@@ -120,6 +120,7 @@ GO
 
 -- //////////////////////////////////////////////////////////////
 -- SELECT * FROM	[DATA_02].[dbo].ARCUSFIL_SQL
+-- SELECT * FROM	[DATA_02].[dbo].IMCATFIL_SQL
 -- EXECUTE [dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL] 0,0, 1
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE PRODUCT_CATEGORY */
