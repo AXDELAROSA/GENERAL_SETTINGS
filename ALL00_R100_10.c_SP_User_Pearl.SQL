@@ -13,7 +13,7 @@ USE [BD_GENERAL]
 GO
 
 
--- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  'FRANCISCOE' ,'Password'
+-- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  '' ,'123450'
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT /  
@@ -45,9 +45,9 @@ AS
 			ISNULL(TEMA, '')		AS TEMA
 	-- =====================
 	FROM	DATA_02.DBO.USERS_PEARL 
-	WHERE	contrasena = ( CASE	WHEN @PP_PASSWORD = ''	THEN contrasena
+	WHERE	LTRIM(RTRIM(contrasena)) = ( CASE	WHEN @PP_PASSWORD = ''	THEN contrasena
 							ELSE @PP_PASSWORD			END		)
-	AND		usuario	=	( CASE	WHEN @PP_USER = ''		THEN usuario
+	AND		LTRIM(RTRIM(usuario))	=	( CASE	WHEN @PP_USER = ''		THEN usuario
 							ELSE @PP_USER				END		)
 	-- =====================
 
