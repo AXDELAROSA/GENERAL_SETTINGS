@@ -368,10 +368,8 @@ GO
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
--- select * from DATA_02.DBO.users_pearl
--- select * from GRUPO_APROBADOR
 
-EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1, 'APROBADORES DESCRIPCION DE PUESTO',		'APROB_DP', 13367, 1, 1
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1, 'APROBADORES DESCRIPCION DE PUESTO',		'APROB_DP', 13367, 2, 1
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 2, 'APROBADORES DESCRIPCION DE PUESTO',		'APROB_DP', 13164, 3, 1
 --EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 3, 'APROBADORES DESCRIPCION DE PUESTO',		'APROB_DP', 41 ,  3, 1
 
