@@ -1,0 +1,276 @@
+-- //////////////////////////////////////////////////////////////
+-- // DATA BASE:		ALL
+-- // MODULE:			TAG x FORMA
+-- // OPERATION:		SP
+-- //////////////////////////////////////////////////////////////
+-- // AUTHOR:			AX DE LA ROSA			
+-- // CREATION DATE:	20200320
+-- ////////////////////////////////////////////////////////////// 
+
+USE [BD_GENERAL]
+GO
+
+-- //////////////////////////////////////////////////////////////
+-- SELECT * FROM SISTEMA_TAG
+-- SELECT * FROM GRUPO_TAG
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SISTEMA_TAG]') AND type in (N'U'))
+	DROP TABLE [dbo].[SISTEMA_TAG]
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GRUPO_TAG]') AND type in (N'U'))
+	DROP TABLE [dbo].[GRUPO_TAG]
+GO
+
+
+
+-- //////////////////////////////////////////////////////////////
+-- // GRUPO_TAG
+-- //////////////////////////////////////////////////////////////
+
+CREATE TABLE [dbo].[GRUPO_TAG] (
+	[K_GRUPO_TAG]	[INT] NOT NULL,
+	[D_GRUPO_TAG]	[VARCHAR] (100) NOT NULL,
+	[S_GRUPO_TAG]	[VARCHAR] (10) NOT NULL,
+	[O_GRUPO_TAG]	[INT] NOT NULL,
+	[C_GRUPO_TAG]	[VARCHAR] (255) NOT NULL,
+	[L_GRUPO_TAG]	[INT] NOT NULL
+) ON [PRIMARY]
+GO
+-- //////////////////////////////////////////////////////////////
+
+ALTER TABLE [dbo].[GRUPO_TAG]
+	ADD CONSTRAINT [PK_GRUPO_TAG]
+		PRIMARY KEY CLUSTERED ([K_GRUPO_TAG])
+GO
+
+CREATE UNIQUE NONCLUSTERED 
+	INDEX [UN_GRUPO_TAG_01_DESCRIPCION] 
+	   ON [dbo].[GRUPO_TAG] ( [D_GRUPO_TAG] )
+GO
+
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_GRUPO_TAG]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CI_GRUPO_TAG]
+GO
+
+CREATE PROCEDURE [dbo].[PG_CI_GRUPO_TAG]
+	@PP_K_GRUPO_TAG		[INT],
+	@PP_D_GRUPO_TAG		[VARCHAR](100),
+	@PP_S_GRUPO_TAG		[VARCHAR](10),
+	@PP_O_GRUPO_TAG		[INT],
+	@PP_C_GRUPO_TAG		[VARCHAR](255),
+	@PP_L_GRUPO_TAG		[INT]
+AS
+	-- ===============================
+	DECLARE @VP_K_EXISTE	INT
+
+	SELECT	@VP_K_EXISTE =	K_GRUPO_TAG
+							FROM	GRUPO_TAG
+							WHERE	K_GRUPO_TAG=@PP_K_GRUPO_TAG
+	-- ===============================
+	IF @VP_K_EXISTE IS NULL
+		INSERT INTO GRUPO_TAG
+			(	K_GRUPO_TAG,			D_GRUPO_TAG, 
+				S_GRUPO_TAG,			O_GRUPO_TAG,
+				C_GRUPO_TAG,
+				L_GRUPO_TAG			)		
+		VALUES	
+			(	@PP_K_GRUPO_TAG,		@PP_D_GRUPO_TAG,	
+				@PP_S_GRUPO_TAG,		@PP_O_GRUPO_TAG,
+				@PP_C_GRUPO_TAG,
+				@PP_L_GRUPO_TAG		)
+	ELSE
+		UPDATE	GRUPO_TAG
+		SET		D_GRUPO_TAG	= @PP_D_GRUPO_TAG,	
+				S_GRUPO_TAG	= @PP_S_GRUPO_TAG,			
+				O_GRUPO_TAG	= @PP_O_GRUPO_TAG,
+				C_GRUPO_TAG	= @PP_C_GRUPO_TAG,
+				L_GRUPO_TAG	= @PP_L_GRUPO_TAG	
+		WHERE	K_GRUPO_TAG=@PP_K_GRUPO_TAG
+	-- =========================================================
+GO
+
+SET NOCOUNT ON
+-- ===============================================
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 00, '(SIN-GRUPO)',		'( S/G )',	00 , '#00 // (SIN-GRUPO)'	, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 10, 'CALIDAD',			'CALID',	10 , '#10 // CALID'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 20, 'FINAL',			'FINAL',	20 , '#20 // FINAL'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 30, 'FINANZAS',			'FINZS',	30 , '#30 // FINZS'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 40, 'GENERAL',			'GNRAL',	40 , '#40 // GNRAL'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 50, 'INGENIERIA',		'INGEN',	50 , '#50 // INGEN'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 60, 'MATERIALES',		'MATER',	60 , '#60 // MATER'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 70, 'PRODUCCION',		'PRODU',	70 , '#70 // PRODU'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 80, 'RECURSOS HUMANOS',	'RHUMA',	80 , '#80 // RHUMA'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 90, 'SISTEMAS',			'SISTM',	90 , '#90 // SISTM'			, 1
+
+	-- ===============================================
+GO
+
+
+
+-- //////////////////////////////////////////////////////////////
+-- // SISTEMA_TAG
+-- //////////////////////////////////////////////////////////////
+
+CREATE TABLE [dbo].[SISTEMA_TAG] (
+	[K_SISTEMA_TAG]	[INT] NOT NULL,
+	[D_SISTEMA_TAG]	[VARCHAR] (100) NOT NULL,
+	[S_SISTEMA_TAG]	[VARCHAR] (10) NOT NULL DEFAULT '',
+	[O_SISTEMA_TAG]	[INT] NOT NULL DEFAULT 0,
+	[C_SISTEMA_TAG]	[VARCHAR] (255) NOT NULL DEFAULT '',
+	[L_SISTEMA_TAG]	[INT] NOT NULL DEFAULT 1,
+	-- ========================================
+	[K_GRUPO_TAG]	[INT] NOT NULL DEFAULT 0
+) ON [PRIMARY]
+GO
+-- //////////////////////////////////////////////////////////////
+
+ALTER TABLE [dbo].[SISTEMA_TAG]
+	ADD CONSTRAINT [PK_SISTEMA_TAG]
+		PRIMARY KEY CLUSTERED ([K_SISTEMA_TAG])
+GO
+
+CREATE UNIQUE NONCLUSTERED 
+	INDEX [UN_SISTEMA_TAG_01_DESCRIPCION] 
+	   ON [dbo].[SISTEMA_TAG] ( [D_SISTEMA_TAG] )
+GO
+
+-- //////////////////////////////////////////////////////////////
+
+ALTER TABLE [dbo].[SISTEMA_TAG] ADD 
+	CONSTRAINT [FK_SISTEMA_TAG_01] 
+		FOREIGN KEY ( [K_GRUPO_TAG] ) 
+		REFERENCES [dbo].[GRUPO_TAG] ( [K_GRUPO_TAG] )
+GO
+
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_TAG]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_TAG]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_CI_SISTEMA_TAG]
+	@PP_K_USUARIO_EXE		[INT],
+	-- ========================================
+	@PP_K_SISTEMA_TAG		[INT],
+	@PP_D_SISTEMA_TAG		[VARCHAR](100),
+	@PP_S_SISTEMA_TAG		[VARCHAR](10),
+	@PP_O_SISTEMA_TAG		[INT],
+	@PP_C_SISTEMA_TAG		[VARCHAR](255),
+	@PP_L_SISTEMA_TAG		[INT],
+	-- ===============================
+	@PP_K_GRUPO_TAG			[INT]
+AS
+	-- ===============================
+	DECLARE @VP_K_EXISTE	INT
+
+	SELECT	@VP_K_EXISTE =	K_SISTEMA_TAG
+							FROM	SISTEMA_TAG
+							WHERE	K_SISTEMA_TAG=@PP_K_SISTEMA_TAG
+
+	-- ===============================
+
+	IF @VP_K_EXISTE IS NULL
+		INSERT INTO SISTEMA_TAG
+			(	K_SISTEMA_TAG,			D_SISTEMA_TAG, 
+				S_SISTEMA_TAG,			O_SISTEMA_TAG,
+				C_SISTEMA_TAG,
+				L_SISTEMA_TAG,			K_GRUPO_TAG	)
+		VALUES	
+			(	@PP_K_SISTEMA_TAG,		@PP_D_SISTEMA_TAG,	
+				@PP_S_SISTEMA_TAG,		@PP_O_SISTEMA_TAG,
+				@PP_C_SISTEMA_TAG,
+				@PP_L_SISTEMA_TAG,		@PP_K_GRUPO_TAG	)
+	ELSE
+		UPDATE	SISTEMA_TAG
+		SET		D_SISTEMA_TAG	= @PP_D_SISTEMA_TAG,	
+				S_SISTEMA_TAG	= @PP_S_SISTEMA_TAG,			
+				O_SISTEMA_TAG	= @PP_O_SISTEMA_TAG,
+				C_SISTEMA_TAG	= @PP_C_SISTEMA_TAG,
+				L_SISTEMA_TAG	= @PP_L_SISTEMA_TAG,
+				K_GRUPO_TAG		= @PP_K_GRUPO_TAG
+		WHERE	K_SISTEMA_TAG=@PP_K_SISTEMA_TAG
+	-- =========================================================
+GO
+
+SET NOCOUNT ON
+-- ===============================================
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 0, '(NO-SISTEMA)', '( N/S )' , 0 , '#0 // (NO-SISTEMA)' , 1,0
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 1, 'PRODUCTION REPORT', '' , 1 , '#1 // PRODUCTION REPORT' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 2, 'SUPERVISORS', '' , 2 , '#2 // SUPERVISORS' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 3, 'PRODUCTION', '' , 3 , '#3 // PRODUCTION' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 4, 'REJECTS', '' , 4 , '#4 // REJECTS' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 5, 'PLANNING SCREEN', '' , 5 , '#5 // PLANNING SCREEN' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 6, 'TRANSACTIONS', '' , 6 , '#6 // TRANSACTIONS' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 7, 'HIDES SCANNER', '' , 7 , '#7 // HIDES SCANNER' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 8, 'PACKING SLIP', '' , 8 , '#8 // PACKING SLIP' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 9, 'TRANSFER MCT TO MFP', '' , 9 , '#9 // TRANSFER MCT TO MFP' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 10, 'MFP INVENTORY', '' , 10 , '#10 // MFP INVENTORY' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 11, 'LABELS', '' , 11 , '#11 // LABELS' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 12, 'HIDE LABELS', '' , 12 , '#12 // HIDE LABELS' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 13, 'PPMS', '' , 13 , '#13 // PPMS' , 1,10
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 14, 'LOAD RELEASE', '' , 14 , '#14 // LOAD RELEASE' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 15, 'EDI WEEKLY RPT', '' , 15 , '#15 // EDI WEEKLY RPT' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 16, 'DAILY INVENTORY', '' , 16 , '#16 // DAILY INVENTORY' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 17, 'HIDES ALLOCATION', '' , 17 , '#17 // HIDES ALLOCATION' , 1,40
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 18, 'HUMAN RESOURCES', '' , 18 , '#18 // HUMAN RESOURCES' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 19, 'STOCK STATUS', '' , 19 , '#19 // STOCK STATUS' , 1,40
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 20, 'EXCEL PRODUCTION REPORT', '' , 20 , '#20 // EXCEL PRODUCTION REPORT' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 21, 'BELL CURVE', '' , 21 , '#21 // BELL CURVE' , 1,40
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 22, 'TRANSACTION REPORT', '' , 22 , '#22 // TRANSACTION REPORT' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 23, 'CERTIFICATION REPORT', '' , 23 , '#23 // CERTIFICATION REPORT' , 1,10
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 24, 'FOLIOS INVENTORY', '' , 24 , '#24 // FOLIOS INVENTORY' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 25, 'QUALITY REJECTS', '' , 25 , '#25 // QUALITY REJECTS' , 1,10
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 26, 'PACKING MACOLA', '' , 26 , '#26 // PACKING MACOLA' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 27, 'TAGS', '' , 27 , '#27 // TAGS' , 1,30
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 28, 'SALES BY CUST', '' , 28 , '#28 // SALES BY CUST' , 1,30
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 29, 'POLIZA DE NOMINA', '' , 29 , '#29 // POLIZA DE NOMINA' , 1,30
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 30, 'HISTORY BY JOB NO', '' , 30 , '#30 // HISTORY BY JOB NO' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 31, 'PATTERN LABELS', '' , 31 , '#31 // PATTERN LABELS' , 1,90
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 32, 'CUMULATIVE REPORT', '' , 32 , '#32 // CUMULATIVE REPORT' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 33, 'INCOMING INSPECTION', '' , 33 , '#33 // INCOMING INSPECTION' , 1,10
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 34, 'STATUS DE ORDENES', '' , 34 , '#34 // STATUS DE ORDENES' , 1,10
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 35, 'COLORS MANT', '' , 35 , '#35 // COLORS MANT' , 1,50
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 36, 'UPDATE TARGET', '' , 36 , '#36 // UPDATE TARGET' , 1,40
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 37, 'LOT COMP', '' , 37 , '#37 // LOT COMP' , 1,10
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 38, 'ENGINEERING SCREEN', '' , 38 , '#38 // ENGINEERING SCREEN' , 1,50
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 39, 'PROD CATEGORY', '' , 39 , '#39 // PROD CATEGORY' , 1,50
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 40, 'ITEM MASTER', '' , 40 , '#40 // ITEM MASTER' , 1,50
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 41, 'KIT MASTER', '' , 41 , '#41 // KIT MASTER' , 1,50
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 42, 'ADD LOCATION', '' , 42 , '#42 // ADD LOCATION' , 1,40
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 43, 'BILLING', '' , 43 , '#43 // BILLING' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 44, 'TRANS FOLIOS', '' , 44 , '#44 // TRANS FOLIOS' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 45, 'RE-PRINT INVOICE', '' , 45 , '#45 // RE-PRINT INVOICE' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 46, 'CUM REPORT', '' , 46 , '#46 // CUM REPORT' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 47, 'REPORTE DE DEFECTOS', '' , 47 , '#47 // REPORTE DE DEFECTOS' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 48, 'LOT YIELD', '' , 48 , '#48 // LOT YIELD' , 1,70
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 49, 'LOT TRACK', '' , 49 , '#49 // LOT TRACK' , 1,40
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 50, 'SALIDAS DE INV', '' , 50 , '#50 // SALIDAS DE INV' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 51, 'USUARIOS', '' , 51 , '#51 // USUARIOS' , 1,90
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 52, 'MTTO PREVENTIVO', '' , 52 , '#52 // MTTO PREVENTIVO' , 1,90
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 53, 'EQUIPOS', '' , 53 , '#53 // EQUIPOS' , 1,90
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 54, 'BAJAS', '' , 54 , '#54 // BAJAS' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 55, 'CAPACITACION', '' , 55 , '#55 // CAPACITACION' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 56, 'HIDE LABELS JL', '' , 56 , '#56 // HIDE LABELS JL' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 57, 'TONERS', '' , 57 , '#57 // TONERS' , 1,90
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 58, 'CERRAR KITS', '' , 58 , '#58 // CERRAR KITS' , 1,20
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 59, 'AUSENTISMO', '' , 59 , '#59 // AUSENTISMO' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 60, 'REPORTE', '' , 60 , '#60 // REPORTE' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 61, 'COMPRAS', '' , 61 , '#61 // COMPRAS' , 1,30
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 62, 'IMPORT HIDES', '' , 62 , '#62 // IMPORT HIDES' , 1,60
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 63, 'HEAD COUNT', '' , 63 , '#63 // HEAD COUNT' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 64, 'SALES REPORT', '' , 64 , '#64 // SALES REPORT' , 1,30
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 65, 'FINGERPRINT', '' , 65 , '#65 // FINGERPRINT' , 1,80
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 66, 'CUSTOMERS', '' , 66 , '#66 // CUSTOMERS' , 1,50
+EXECUTE [DBO].[PG_CI_SISTEMA_TAG] 139, 67, 'COTIZACIONES', '' , 67 , '#67 // COTIZACIONES' , 1,50
+	-- ===============================================
+GO
+
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
