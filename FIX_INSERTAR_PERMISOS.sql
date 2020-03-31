@@ -16,7 +16,7 @@ select distinct grupo from data_02.dbo.apps_pearl order by grupo
 select * from data_02.dbo.apps_pearl where grupo='FINANZAS' order by grupo,descripcion
 
 SELECT * FROM data_02.dbo.USERS_PEARL order by usuario
-SELECT * FROM HOWE.dbo.VISTA_GAFETES order by ep_apellido_paterno
+SELECT * FROM HOWE.dbo.VISTA_GAFETES where EN_NUM_EMP=13204 order by ep_apellido_paterno
 
 
  SELECT	 SUBSTRING( EP_NOMBRE,1,CHARINDEX(' ',EP_NOMBRE))
@@ -42,7 +42,8 @@ SELECT	k_usuario_pearl,
 		apellido,
 		ep_apellido_materno,
 		k_empleado_pearl,
-		EN_NUM_EMP
+		EN_NUM_EMP,
+		EN_NUM_DEPT
 FROM	USuario_PEARL 
 inner join HOWE.dbo.VISTA_GAFETES on EN_NUM_EMP=k_empleado_pearl
 inner join data_02.dbo.USERS_PEARL on codigo=k_usuario_pearl
