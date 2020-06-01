@@ -57,8 +57,32 @@ SELECT
          EP_APELLIDO_PATERNO,
          EP_APELLIDO_MATERNO,
          CORREO_USUARIO_PEARL,
-         USUARIO_TIPO,
+--         USUARIO_TIPO,
          PASSWORD_USUARIO_PEARL,
          TEMA_USUARIO_PEARL
 FROM     USUARIO_PEARL
 INNER JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
+
+
+-- 27 MAYO 2020 CREANDO SP PARA INSERTAR LOS PERMISOS DE LOS USUARIOS.
+ -- select distinct k_grupo_tag from sistema_tag where k_grupo_tag <> 0 order by k_grupo_tag
+ -- select * from sistema_tag where k_grupo_tag <> 0 order by k_grupo_tag, d_sistema_tag
+
+ -- SE OBTIENEN LOS NODOS DEL USUARIO
+ select distinct K_GRUPO_TAG --K_SISTEMA_TAG
+ from	USUARIO_PEARL
+ inner join USUARIO_PERMISOS on USUARIO_PEARL.k_usuario_pearl =USUARIO_PERMISOS.K_USUARIO_PEARL
+ inner join SISTEMA_TAG on USUARIO_PERMISOS.K_SISTEMA_TAG=sistema_tag.K_SISTEMA_TAG
+ where USUARIO_PEARL.k_usuario_pearl=144
+
+ --ASI SE OBTIENEN ACTUALMENTE EN EL SISTEMA PRODUCTIVO EL LISTADO DE LOS PERMISOS A MOSTRAR EN EL TREEVIEW
+ select		codigo,nombre,apellido,usuario,tipo,app_pearl,descripcion 
+from		users_pearl 
+inner join	perm_pearl on codigo=usr_pearl and (rtrim(usuario)='alejandrod') 
+inner join	apps_pearl on app_pearl=opt_cd
+
+
+
+SELECT   * FROM HOWE.DBO.VISTA_GAFETES
+
+SELECT * FROM users_pearl
