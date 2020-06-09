@@ -48,35 +48,34 @@ AS
 			IF @VP_N_USUARIO_PEARL_X_D_USUARIO_PEARL>0
 			BEGIN
 				--SET @VP_RESULTADO =  'There are already [USUARIO_PEARLS] with that Description ['+@PP_D_USUARIO_PEARL+'].'
-				SET @VP_RESULTADO =  'Ya existen [USUARIO_PEARLS] con el Nombre de Usuario ['+@PP_D_USUARIO_PEARL+'].'
+				SET @VP_RESULTADO =  'Ya existen [USUARIOS_PEARLS] con el Nombre de Usuario ['+@PP_D_USUARIO_PEARL+'].'
 			END
 	END			
 
 	-- ///////////////////////////////////////////
-	IF @VP_RESULTADO=''
-	BEGIN	
-		DECLARE @VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL		INT = 0
+	--IF @VP_RESULTADO=''
+	--BEGIN	
+	--	DECLARE @VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL		INT = 0
 
-		IF @PP_CORREO_USUARIO_PEARL=''			-- SOLAMENTE APLICA LA VALIDACION CUANDO EL CORREO_USUARIO_PEARL NO VIENE VACIO
-		BEGIN 
-			SET		@VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL =		0
-		END
-	END
-	ELSE
-	BEGIN
-			SELECT	@VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL =		COUNT	(USUARIO_PEARL.K_USUARIO_PEARL)
-												FROM	USUARIO_PEARL
-												WHERE	USUARIO_PEARL.K_USUARIO_PEARL<>@PP_K_USUARIO_PEARL
-												AND		USUARIO_PEARL.CORREO_USUARIO_PEARL=@PP_CORREO_USUARIO_PEARL	
-												AND		@PP_CORREO_USUARIO_PEARL<>''			
+	--	IF @PP_CORREO_USUARIO_PEARL=''			-- SOLAMENTE APLICA LA VALIDACION CUANDO EL CORREO_USUARIO_PEARL NO VIENE VACIO
+	--	BEGIN 
+	--		SET		@VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL =		0
+	--	END
+	--END
+	--ELSE
+	--BEGIN
+	--		SELECT	@VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL =		COUNT	(USUARIO_PEARL.K_USUARIO_PEARL)
+	--											FROM	USUARIO_PEARL
+	--											WHERE	USUARIO_PEARL.K_USUARIO_PEARL<>@PP_K_USUARIO_PEARL
+	--											AND		USUARIO_PEARL.CORREO_USUARIO_PEARL=@PP_CORREO_USUARIO_PEARL	
+	--											AND		@PP_CORREO_USUARIO_PEARL<>''			
 		
-			IF @VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL>0
-			BEGIN
-				--SET @VP_RESULTADO =  'There are already [USUARIO_PEARLS] with that RFC ['+@PP_CORREO_USUARIO_PEARL+'].' 
-				SET @VP_RESULTADO =  'Ya existen [USUARIO_PEARLS] con el E-Mail ['+@PP_CORREO_USUARIO_PEARL+'].' 
-			END
-	END
-		
+	--		IF @VP_N_USUARIO_PEARL_X_CORREO_USUARIO_PEARL>0
+	--		BEGIN
+	--			--SET @VP_RESULTADO =  'There are already [USUARIO_PEARLS] with that RFC ['+@PP_CORREO_USUARIO_PEARL+'].' 
+	--			SET @VP_RESULTADO =  'Ya existen [USUARIOS_PEARLS] con el E-Mail ['+@PP_CORREO_USUARIO_PEARL+'].' 
+	--		END
+	--END		
 	-- ///////////////////////////////////////////
 	
 	IF @VP_RESULTADO<>''
@@ -210,6 +209,59 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> RN_EXISTE
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_USUARIO_PEARL_EXISTE]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_USUARIO_PEARL_EXISTE]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_RN_USUARIO_PEARL_EXISTE]
+	--  @PP_L_DEBUG					INT,
+	@PP_K_SISTEMA_EXE				INT,
+	@PP_K_USUARIO_ACCION			INT,
+	-- ===========================		
+	@PP_K_USUARIO_PEARL				INT,
+	-- ===========================		
+	@OU_RESULTADO_VALIDACION		VARCHAR(300)	OUTPUT
+AS
+
+	DECLARE @VP_RESULTADO		VARCHAR(300) = '' 
+	
+	-- /////////////////////////////////////////////////////
+
+	DECLARE @VP_K_USUARIO_PEARL		INT
+	DECLARE @VP_L_BORRADO			INT
+
+
+	SELECT	@VP_K_USUARIO_PEARL =	USUARIO_PEARL.K_USUARIO_PEARL,
+			@VP_L_BORRADO	=		USUARIO_PEARL.L_BORRADO
+									FROM	USUARIO_PEARL
+									WHERE	USUARIO_PEARL.K_USUARIO_PEARL=139--@PP_K_USUARIO_PEARL
+
+	-- ===========================
+
+	IF @VP_RESULTADO=''
+		IF ( @VP_K_USUARIO_PEARL IS NULL )
+			SET @VP_RESULTADO =  'El registro para el [USUARIO_PEARL] no existe.' 
+
+	-- ===========================
+
+	IF @VP_RESULTADO=''
+		IF @VP_L_BORRADO=1
+			SET @VP_RESULTADO =  'El [USUARIO_PEARL] fue dado de baja.' 
+		
+	-- /////////////////////////////////////////////////////
+	
+	SET @OU_RESULTADO_VALIDACION = @VP_RESULTADO
+
+	-- /////////////////////////////////////////////////////
+GO
+
+
+
+-- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> RN_CLAVE_EXISTE
 -- //////////////////////////////////////////////////////////////
 
@@ -275,16 +327,17 @@ AS
 	DECLARE @VP_RESULTADO				VARCHAR(300) = ''
 		
 	-- ///////////////////////////////////////////
+
 	IF @VP_RESULTADO=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_EXISTS]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-														@PP_K_USUARIO_PEARL,	 
-														@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
+		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_EXISTE]				@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+																@PP_K_USUARIO_PEARL,	 
+																@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
 	-- ///////////////////////////////////////////
 
 	IF @VP_RESULTADO=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_ITS_DELETEABLE]	@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-														@PP_K_USUARIO_PEARL,	 
-														@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
+		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_ITS_DELETEABLE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+																@PP_K_USUARIO_PEARL,	 
+																@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
 	-- ///////////////////////////////////////////
 
 	IF	@VP_RESULTADO<>''
