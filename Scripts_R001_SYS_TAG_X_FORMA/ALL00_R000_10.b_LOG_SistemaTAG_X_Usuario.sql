@@ -85,6 +85,20 @@ CREATE PROCEDURE [dbo].[PG_IN_VERSION_SYS]
 	@PP_S_BD_SYS					[VARCHAR](50)		-- BD_DEBUG_SYSTEM
 AS
 	-- ========================================
+	--INSERT INTO VERSION_SYS
+	--(	
+	--	--[K_VERSION_SYS],
+	--	[F_VERSION_SYS_EVENTO],
+	--	[K_USUARIO],				[D_VERSION_SYS],
+	--	[S_VERSION_SYS],			[S_BD_SYS]	
+	--)
+	--VALUES	
+	--(	
+	--	--@PP_K_VERSION_SYS,			
+	--	GETDATE(),
+	--	@PP_K_USUARIO,				@PP_D_VERSION_SYS,
+	--	@PP_S_VERSION_SYS,			@PP_S_BD_SYS
+	--)
 	DECLARE @PP_DATOS VARCHAR (100)
 					--	COMPUTER_NAME		VERSION_SYSTEM		BD_DEBUG_SYSTEM
 	SET @PP_DATOS = (@PP_D_VERSION_SYS+' / '+@PP_S_VERSION_SYS+' / '+@PP_S_BD_SYS)
@@ -98,48 +112,6 @@ AS
 													@PP_DATOS,
 													-- ===========================================
 													'[PG_IN_VERSION_SYS] COMPUTER_NAME , VERSION_SYSTEM, BD_DEBUG_SYSTEM',	-- @PP_STORED_PROCEDURE		[VARCHAR] (100),
-													0, 0, 	-- @PP_K_FOLIO_1, @PP_K_FOLIO_2, 
-													-- ===========================================			
-													-- === DATOS A INSERTAR Y TIPO DE DATO
-													0, 0,								-- [INT],	[INT]										
-													'', '' ,							-- [VARCHAR](100), [VARCHAR](100), 
-													0.00, 0.00,							-- DECIMAL(19,4), DECIMAL(19,4),												  
-													-- ===========================================			
-													-- === @PP_VALOR_ DE LOS DATOS A INSERTAR DEL 1 al 6
-													'', '',								-- [INT],	[INT]					
-													'', '', 							-- [VARCHAR](100), [VARCHAR](100), 
-													'', ''								-- DECIMAL(19,4), DECIMAL(19,4),
-GO
-
--- //////////////////////////////////////////////////////////////
--- // STORED PROCEDURE ---> INSERT
--- //////////////////////////////////////////////////////////////
-
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_IN_ACCESO_SYS]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_IN_ACCESO_SYS]
-GO
--- EXECUTE [dbo].[PG_IN_ACCESO_SYS] 0,140,'IT-002','378','1'
--- SELECT * FROM VERSION_SYS
-CREATE PROCEDURE [dbo].[PG_IN_ACCESO_SYS]
-	@PP_K_SISTEMA_EXE				[INT],
-	@PP_K_USUARIO					[INT],
-	-- ===========================================
-	@PP_D_SISTEMA_SYS				[VARCHAR](50),		-- (D_SISTEMA_TAG_MENU) SELECCIÓN EN EL MENÚ 
-	@PP_K_SISTEMA_SYS				[VARCHAR](50),		-- (K_SISTEMA_TAG_MENU) SELECCIÓN EN EL MENÚ
-	@PP_S_VERSION_SYS				[VARCHAR](50)		-- VERSION SISTEMA
-AS
-	-- ========================================
-	DECLARE @PP_DATOS		VARCHAR (500)
-	SET @PP_DATOS	= (@PP_D_SISTEMA_SYS+' / '+@PP_K_SISTEMA_SYS+' / '+@PP_S_VERSION_SYS)
-	
-	-- ========================================
-	EXECUTE [dbo].[PG_IN_BITACORA_SYS_OPERACION]	@PP_K_SISTEMA_EXE, @PP_K_USUARIO,
-													-- ===========================================
-													2,		-- 0 al 6 // @PP_K_IMPORTANCIA_BITACORA_SYS	[INT],	
-													'LOG_ACCESO_SYS',
-													@PP_DATOS,
-													-- ===========================================
-													'[PG_IN_ACCESO_SYS] MENU_ACCESO , K, VERSION_SYS',	-- @PP_STORED_PROCEDURE		[VARCHAR] (100),
 													0, 0, 	-- @PP_K_FOLIO_1, @PP_K_FOLIO_2, 
 													-- ===========================================			
 													-- === DATOS A INSERTAR Y TIPO DE DATO
