@@ -145,8 +145,13 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 1, 'CREAR DESCRIPCION PUESTO',	
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 2, 'AUTORIZAR DESCRIPCION PUESTO',	'AUTOR_DP', 2, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 3, 'NOTIFICAR DESCRIPCION PUESTO',	'NOTIF_DP', 3, '', 1
 
---=========PARA DESCRIPCION DE PUESTOS========================================
+--=========PARA MQU SALIDA========================================
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 21, 'MQU SALIDA',					'MQU_SAL', 21, '', 1
+
+--=========PARA MFP ENTRADA========================================
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 41, 'MFP NOTIFICAR ENTRADA',					'MFP_NOT_ENT', 41, '', 1
+
+
 GO
 -- ===============================================
 SET NOCOUNT OFF
@@ -384,8 +389,15 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 10, 'APROBADORES DESCRIPCION DE PUES
 
 -- ===============================================
 
-EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 51, 'AUTORIZAR SALIDA MQU',					'AUT_SAL_MQU', 144, 21, 0
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 51, 'AUTORIZAR SALIDA MQU',					'AUT_SAL_MQU', 144, 21, 0 -- FEG
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 52, 'AUTORIZAR SALIDA MQU',					'AUT_SAL_MQU', 89, 21, 1 --VIVIANAC
+
+-- ===============================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 101, 'NOTIFICAR ENTRADA MFP',					'NOT_EN_MFP', 45, 41, 1 -- PEDROV
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 102, 'NOTIFICAR ENTRADA MFP',					'NOT_EN_MFP', 56, 41, 1 -- MANUELG
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 103, 'NOTIFICAR ENTRADA MFP',					'NOT_EN_MFP', 70, 41, 1 -- FERNANDOG
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 104, 'NOTIFICAR ENTRADA MFP',					'NOT_EN_MFP', 87, 41, 1 -- DIANAN
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 105, 'NOTIFICAR ENTRADA MFP',					'NOT_EN_MFP', 144, 41, 1 -- FEG
 GO
 -- ===============================================
 SET NOCOUNT OFF
