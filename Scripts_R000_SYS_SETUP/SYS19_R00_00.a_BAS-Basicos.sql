@@ -28,12 +28,9 @@ GO
 -- // [SUB_SK_CATALOGO_N_CONSECUTIVO_MAX_GET]
 -- //////////////////////////////////////////////////////////////
 
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_CATALOGO_N_CONSECUTIVO_MAX_GET]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_SK_CATALOGO_N_CONSECUTIVO_MAX_GET]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_SK_CATALOGO_N_CONSECUTIVO_MAX_GET]
 	@PP_K_SISTEMA_EXE		INT,
 	@PP_NOMBRE_TABLA		VARCHAR(255),
@@ -42,105 +39,30 @@ CREATE PROCEDURE [dbo].[PG_SK_CATALOGO_N_CONSECUTIVO_MAX_GET]
 	@PP_CAMPO_MAX			VARCHAR(255),
 	@OU_N_CONSECUTIVO		INT		OUTPUT
 AS
-
 	DECLARE @VP_SQL		NVARCHAR(MAX)
-
 	SET		@VP_SQL =	'SELECT' 
 	SET		@VP_SQL =	@VP_SQL + ' '
 	SET		@VP_SQL =	@VP_SQL + '  @OU_K_TABLA_MAX_SQL = MAX('+@PP_CAMPO_MAX + ')'
 	SET		@VP_SQL =	@VP_SQL + ' '
 	SET		@VP_SQL =	@VP_SQL + 'FROM '  + @PP_NOMBRE_TABLA + ' '
 	SET		@VP_SQL =	@VP_SQL + 'WHERE ' + @PP_CAMPO_AGRUPADOR + '=' + CONVERT(VARCHAR(50),@PP_K_AGRUPADOR)+' '
-
 	-- ===============================
-
-	DECLARE @VP_DEFINICION_PARAMETROS		NVARCHAR(500)
-	
+	DECLARE @VP_DEFINICION_PARAMETROS		NVARCHAR(500)	
 	SET		@VP_DEFINICION_PARAMETROS =		N'@OU_K_TABLA_MAX_SQL INT OUTPUT'
-
 	-- ===============================
-
 	DECLARE @VP_K_TABLA_MAX			INT		
 	DECLARE @VP_K_TABLA_SIGUIENTE	INT			
-
 	EXECUTE sp_executesql	@VP_SQL, @VP_DEFINICION_PARAMETROS, 
 							@OU_K_TABLA_MAX_SQL = @VP_K_TABLA_MAX		OUTPUT
-
-	-- ===============================
- 
+	-- =============================== 
 	IF @VP_K_TABLA_MAX IS NULL 
 		SET @VP_K_TABLA_SIGUIENTE = 1
 	ELSE
-		SET @VP_K_TABLA_SIGUIENTE = ( @VP_K_TABLA_MAX + 1 )
-	
+		SET @VP_K_TABLA_SIGUIENTE = ( @VP_K_TABLA_MAX + 1 )	
 	-- ===============================
-
 	SET @OU_N_CONSECUTIVO = @VP_K_TABLA_SIGUIENTE
-
 	-- ===============================
 GO
-
-
-
--- //////////////////////////////////////////////////////////////
--- // [SUB_SK_CATALOGO_K_MAX_GET]	
--- //////////////////////////////////////////////////////////////
-
-/*
-
-DECLARE @VP_K_TABLA_DISPONIBLE INT
-
-EXECUTE  [dbo].[PG_SK_CATALOGO_K_MAX_GET]	0, 1001, 'SIMULACION',
-											@OU_K_TABLA_DISPONIBLE = @VP_K_TABLA_DISPONIBLE		OUTPUT
-
-SELECT @VP_K_TABLA_DISPONIBLE
-
-*/
-
-
---IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_CATALOGO_K_MAX_GET]') AND type in (N'P', N'PC'))
---	DROP PROCEDURE [dbo].[PG_SK_CATALOGO_K_MAX_GET]
---GO
-
-
---CREATE PROCEDURE [dbo].[PG_SK_CATALOGO_K_MAX_GET]
-----	@PP_L_DEBUG					INT,
---	@PP_K_SISTEMA_EXE			INT,
---	@PP_NOMBRE_TABLA			VARCHAR(255),
---	@OU_K_TABLA_DISPONIBLE		INT OUTPUT
---AS
-
---	DECLARE @VP_K_TABLA_MAX				INT		
---	DECLARE @VP_K_TABLA_SIGUIENTE		INT			
---	DECLARE @VP_SQL						NVARCHAR(MAX)
---	DECLARE @VP_DEFINICION_PARAMETROS	NVARCHAR(500)
-	
---	-- ===============================
-
---	SET @VP_SQL = 'SELECT' 
---	SET @VP_SQL = @VP_SQL + ' '
---	SET @VP_SQL = @VP_SQL + '  @OU_K_TABLA_MAX_SQL = MAX(K_'+@PP_NOMBRE_TABLA + ')'
---	SET @VP_SQL = @VP_SQL + ' '
---	SET @VP_SQL = @VP_SQL + 'FROM ' + @PP_NOMBRE_TABLA 
-	
---	SET @VP_DEFINICION_PARAMETROS = N'@OU_K_TABLA_MAX_SQL INT OUTPUT'
-	
---	-- ===============================
-
---	EXECUTE sp_executesql	@VP_SQL, @VP_DEFINICION_PARAMETROS, 
---							@OU_K_TABLA_MAX_SQL = @VP_K_TABLA_MAX		OUTPUT
-	
---	-- =============================== 
-
---	IF @VP_K_TABLA_MAX IS NULL 
---		SET @VP_K_TABLA_SIGUIENTE = 1
---	ELSE
---		SET @VP_K_TABLA_SIGUIENTE = ( @VP_K_TABLA_MAX + 1 )
-
---	SET @OU_K_TABLA_DISPONIBLE = @VP_K_TABLA_SIGUIENTE
-
---	-- ===============================
---GO
 
 
 CREATE PROCEDURE [dbo].[PG_SK_CATALOGO_K_MAX_GET]
@@ -150,27 +72,22 @@ CREATE PROCEDURE [dbo].[PG_SK_CATALOGO_K_MAX_GET]
 	@PP_NOMBRE_CAMPO			VARCHAR(255),
 	@OU_K_TABLA_DISPONIBLE		INT OUTPUT
 AS
-
 	DECLARE @VP_K_TABLA_MAX				INT		
 	DECLARE @VP_K_TABLA_SIGUIENTE		INT			
 	DECLARE @VP_SQL						NVARCHAR(MAX)
-	DECLARE @VP_DEFINICION_PARAMETROS	NVARCHAR(500)
-	
+	DECLARE @VP_DEFINICION_PARAMETROS	NVARCHAR(500)	
 	-- ===============================
-
 	SET @VP_SQL = 'SELECT' 
 	SET @VP_SQL = @VP_SQL + ' '
 	SET @VP_SQL = @VP_SQL + '  @OU_K_TABLA_MAX_SQL = MAX('+ @PP_NOMBRE_CAMPO + ')'
 	SET @VP_SQL = @VP_SQL + ' '
 	SET @VP_SQL = @VP_SQL + 'FROM ' + @PP_NOMBRE_BD+'.dbo.'+ @PP_NOMBRE_TABLA 
 	
-	SET @VP_DEFINICION_PARAMETROS = N'@OU_K_TABLA_MAX_SQL INT OUTPUT'
-	
+	SET @VP_DEFINICION_PARAMETROS = N'@OU_K_TABLA_MAX_SQL INT OUTPUT'	
 	-- ===============================
 
 	EXECUTE sp_executesql	@VP_SQL, @VP_DEFINICION_PARAMETROS, 
-							@OU_K_TABLA_MAX_SQL = @VP_K_TABLA_MAX		OUTPUT
-	
+							@OU_K_TABLA_MAX_SQL = @VP_K_TABLA_MAX		OUTPUT	
 	-- =============================== 
 
 	IF @VP_K_TABLA_MAX IS NULL 
@@ -183,104 +100,28 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
--- // [SUB_SK_OBJETOS]
+-- // [PG_RN_DATA_VER_BORRADOS] VER ELEMENTOS ELIMINADOS EN LISTADOS
 -- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_DATA_VER_BORRADOS]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_DATA_VER_BORRADOS]
+GO
 
--- EXECUTE [dbo].[PG_SK_OBJETOS] 'PG%sk_contenido'
+CREATE PROCEDURE [dbo].[PG_RN_DATA_VER_BORRADOS]
+	@PP_K_SISTEMA_EXE					[INT],
+	@PP_K_USUARIO_ACCION				[INT],
+	-- ===========================		
+	@OU_L_VER_BORRADOS					[INT]		OUTPUT
+AS	
+	DECLARE	@VP_L_VER_BORRADOS		INT 
 
-
---IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_OBJETOS]') AND type in (N'P', N'PC'))
---	DROP PROCEDURE [dbo].[PG_SK_OBJETOS]
---GO
-
---CREATE PROCEDURE [dbo].[PG_SK_OBJETOS]
---	@PP_L_DEBUG			INT,
---	@PP_K_SISTEMA_EXE	INT,
---	@PP_NOMBRE			VARCHAR(255)
---AS
-
---	SELECT	*
---	FROM	SYS.sysobjects
---	WHERE	NAME LIKE '%'+@PP_NOMBRE+'%'
---	ORDER BY NAME
-
---	-- ====================================
---GO
-
-
-
--- //////////////////////////////////////////////////////////////
--- // [SUB_PR_TEXTO_DEPURAR_GET]
--- //////////////////////////////////////////////////////////////
-/*
-
-	DECLARE @VP_TEXTO_ORIGINAL		VARCHAR(MAX) 
-	
-	SET @VP_TEXTO_ORIGINAL	= '123'+CHAR(13)+'456'
-
-	PRINT @VP_TEXTO_ORIGINAL
-
-	EXECUTE	[dbo].[PG_PR_TEXTO_DEPURAR]		@VP_TEXTO_ORIGINAL,
-											@OU_TEXTO_LIMPIO = @VP_TEXTO_ORIGINAL	OUTPUT
-	PRINT @VP_TEXTO_ORIGINAL
-
-*/
-
-
---IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_PR_TEXTO_DEPURAR_GET]') AND type in (N'P', N'PC'))
---	DROP PROCEDURE [dbo].[PG_PR_TEXTO_DEPURAR_GET]
---GO
-
-
---CREATE PROCEDURE [dbo].[PG_PR_TEXTO_DEPURAR_GET]
---	@PP_L_DEBUG				INT,
---	@PP_K_SISTEMA_EXE		INT,
---	@PP_TEXTO_ORIGINAL		VARCHAR(MAX),
---	@OU_TEXTO_LIMPIO		VARCHAR(MAX)	OUTPUT
---AS
-
---	DECLARE @VP_TEXTO_LIMPIO	VARCHAR(MAX)
-
---	SET		@VP_TEXTO_LIMPIO =	''
-
---	-- ====================================
-	
---	DECLARE @VP_N_CARACTERES		INT
-
---	IF @PP_TEXTO_ORIGINAL IS NULL
---		SET	@VP_N_CARACTERES =		0
---	ELSE
---		SET	@VP_N_CARACTERES =		LEN(@PP_TEXTO_ORIGINAL)
-
---	-- ====================================
-
---	DECLARE @VP_IN_CICLO	INT = 0
---	DECLARE @VP_CARACTER	VARCHAR(1)
-
---	IF @VP_N_CARACTERES>0
---		WHILE ( @VP_IN_CICLO<=@VP_N_CARACTERES )
---			BEGIN
-
---			SET @VP_CARACTER = SUBSTRING(@PP_TEXTO_ORIGINAL,@VP_IN_CICLO,1)
-
---			-- ==============
-
---			IF NOT ( ASCII(@VP_CARACTER) IN (13, 10) )
---				SET @VP_TEXTO_LIMPIO = @VP_TEXTO_LIMPIO + @VP_CARACTER
-
---			-- ==============
-
---			SET @VP_IN_CICLO = @VP_IN_CICLO + 1 
-
---			END
-		
---	-- ====================================
-
---	SET @OU_TEXTO_LIMPIO = @VP_TEXTO_LIMPIO
-
---	-- ====================================
---GO
-
+	IF @PP_K_USUARIO_ACCION IN (139)
+		SET @VP_L_VER_BORRADOS = 1
+	ELSE
+		SET @VP_L_VER_BORRADOS = 0	
+	-- ===========================
+	SET @OU_L_VER_BORRADOS = @VP_L_VER_BORRADOS
+	-- /////////////////////////////////////////////////////
+GO
 
 
 
