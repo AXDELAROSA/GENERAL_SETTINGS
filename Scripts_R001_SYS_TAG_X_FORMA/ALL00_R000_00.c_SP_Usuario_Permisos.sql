@@ -32,7 +32,9 @@ AS
 	-- ///////////////////////////////////////////
 	--DECLARE @VP_LI_N_REGISTROS	INT=5000
 	-- =========================================	
---	
+	--DECLARE @VP_L_VER_BORRADOS		INT			
+	--EXECUTE [dbo].[PG_RN_DATA_VER_BORRADOS]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+	--											@OU_L_VER_BORRADOS = @VP_L_VER_BORRADOS			OUTPUT--	
 --	DECLARE @VP_K_FOLIO				INT
 --
 --	EXECUTE [BD_GENERAL].DBO.[PG_RN_OBTENER_ID_X_REFERENCIA]			
@@ -68,7 +70,7 @@ AS
 			TEMA_USUARIO_PEARL AS TEMA
 	FROM    USUARIO_PEARL
 	LEFT JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
-	WHERE	L_BORRADO=0
+	WHERE	L_BORRADO=0	--OR	@VP_L_VER_BORRADOS=1 )	
 	ORDER BY APELLIDO_PATERNO ASC
 	-- /////////////////////////////////////////////////////////////////////
 GO
@@ -424,7 +426,7 @@ DECLARE @VP_MENSAJE			NVARCHAR(MAX) = ''	, @VP_L_EXISTE		INT
 				EN_NUM_DEPT AS K_DEPARTAMENTO,
 				--==========================================
 				(	CASE WHEN	@VP_D_USUARIO = 'ASIGNAR_MANUALMENTE'	THEN 'ASIGNAR_MANUALMENTE' 
-					ELSE		@VP_D_USUARIO	END)	AS CORREO,
+					ELSE		@VP_D_USUARIO+'@PEARLLEATHER.COM.MX'	END)	AS CORREO,
 					--ELSE		@VP_D_USUARIO+'@PEARLLEATHER.COM.MX'	END)	AS CORREO,
 				--@VP_D_USUARIO AS USUARIO,
 				--==========================================
@@ -931,178 +933,223 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / SEEK USUARIO POR D_USUARIO
+-- // PROCEDIMIENTOS PARA LA FORMA DE LOGIN	20200623
 -- //////////////////////////////////////////////////////////////
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USUARIO_EXIST]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_SK_USUARIO_EXIST]
+GO
+-- EXECUTE [dbo].[PG_SK_USUARIO_EXIST] 'SISTEMAS'
+-- EXECUTE [dbo].[PG_SK_USUARIO_EXIST] 'ALEJANDROD'
+-- EXECUTE [dbo].[PG_SK_USUARIO_EXIST] 'ALEJANDRO'	
+CREATE PROCEDURE [dbo].[PG_SK_USUARIO_EXIST]
+	--@PP_K_SISTEMA_EXE				INT,
+	--@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_D_USUARIO					VARCHAR(50)
+AS
+-- =========================================	
+	DECLARE @VP_K_CODIGO INTEGER
+	DECLARE @PP_K_USUARIO INTEGER
+	DECLARE @VP_MENSAJE VARCHAR(500)
 
+	SELECT	@PP_K_USUARIO=(K_USUARIO_PEARL)
+	FROM	USUARIO_PEARL
+	WHERE	D_USUARIO_PEARL=@PP_D_USUARIO
 
--- //////////////////////////////////////////////////////////////
--- // STORED PROCEDURE ---> UPDATE / FICHA
--- //////////////////////////////////////////////////////////////
--- EXECUTE [dbo].[PG_UP_USUARIO_PEARL] 0, 139,												
---				379,												
---				'TEST USUARIO_PEARL 3' , '' , 
---				'TEST200220IT' , 'TEST200201IT@TEST.USUARIO_PEARL' , '6660000000' , 30 , 
---				1,0,
---				1,
---				'CALLE USUARIO_PEARL' , 'COLONIA USUARIO_PEARL' , 'COMMENTS' , 
---				'CIUDAD USUARIO_PEARL', 'ESTADO USUARIO_PEARL' , '32000' , '123' , '-A',
---				1, 
---				'NOMBRE 1' , 'APELLIDO 1' , '' , '' , '' , 
---				'' , '' ,'' ,''			
-/*											
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_USUARIO_PEARL]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_UP_USUARIO_PEARL]
+	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
+		BEGIN
+			SET		@VP_MENSAJE			= 'Invalid [USER] name.'
+			SET		@VP_K_CODIGO		=-10			
+		END
+	
+	SELECT	@VP_MENSAJE			AS MENSAJE,
+			@VP_K_CODIGO		AS USUARIO_CODIGO
+-- /////////////////////////////////////////////////////////////////////
 GO
 
-CREATE PROCEDURE [dbo].[PG_UP_USUARIO_PEARL]
-	@PP_K_SISTEMA_EXE				INT,
-	@PP_K_USUARIO_ACCION			INT,
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / SEEK USUARIO POR D_USUARIO
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USUARIO_LOGIN]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_SK_USUARIO_LOGIN]
+GO
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'SISTEMAS','m@ster++'
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ALEJANDROD','11111111'
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ALEJANDROD','111111'
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ALEJANDROD','XXX'		
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'VIVIANAC','123450'		
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ALEJANDRO','11111111'
+CREATE PROCEDURE [dbo].[PG_SK_USUARIO_LOGIN]
+	--@PP_K_SISTEMA_EXE				INT,
+	--@PP_K_USUARIO_ACCION			INT,
 	-- ===========================
-	@PP_K_USUARIO_PEARL					INT,
-	@PP_D_USUARIO_PEARL					VARCHAR(250),
-	@PP_C_USUARIO_PEARL					VARCHAR(255),
-	-- ===========================
-	@PP_RFC_USUARIO_PEARL					VARCHAR(13),
-	@PP_EMAIL						VARCHAR(100),
-	@PP_PHONE						VARCHAR(100),
-	@PP_N_CREDIT_DAYS				INT,
-	-- ===========================
-	@PP_K_STATUS_USUARIO_PEARL				INT,
-	@PP_K_CATEGORY_USUARIO_PEARL			INT,
-	-- ============================-- ============================
-	@PP_K_ADDRESS_USUARIO_PEARL			INT,
-	@PP_D_ADDRESS_USUARIO_PEARL_1			VARCHAR (255) ,	-- STREET
-	@PP_D_ADDRESS_USUARIO_PEARL_2			VARCHAR (255) ,	-- COLONY, FRACC, 
-	-- ============================
-	@PP_CITY						VARCHAR (100) ,
-	@PP_STATE_GEO					VARCHAR (100),
-	@PP_POSTAL_CODE					VARCHAR (10),
-	@PP_NUMBER_EXTERIOR				VARCHAR (10),
-	@PP_NUMBER_INSIDE				VARCHAR (10),
-	-- ============================-- ============================
-	@PP_K_CONTACT_USUARIO_PEARL			INT,
-	@PP_1_FIRST_NAME				VARCHAR(255),
-	@PP_1_MIDDLE_NAME				VARCHAR(255),
-	@PP_2_FIRST_NAME				VARCHAR(255),
-	@PP_2_MIDDLE_NAME				VARCHAR(255)
-	-- ============================				
---	,@PP_1_EMAIL						VARCHAR(100),
---	@PP_1_PHONE						VARCHAR(25)	,
---	@PP_2_EMAIL						VARCHAR(100),
---	@PP_2_PHONE						VARCHAR(25)	
-AS			
-DECLARE @VP_MENSAJE				VARCHAR(300) = ''
-BEGIN TRANSACTION 
-BEGIN TRY
-	-- /////////////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UPDATE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-												@PP_K_USUARIO_PEARL, 
-												@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
-	-- /////////////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-												@PP_K_USUARIO_PEARL,@PP_D_USUARIO_PEARL, @PP_RFC_USUARIO_PEARL,
-												@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
-	-- /////////////////////////////////////////////////////////////////////
+	@PP_D_USUARIO					VARCHAR(50),
+	@PP_PASSWORD					VARCHAR(50)
+AS
+-- =========================================	
+	DECLARE @PP_K_USUARIO INTEGER
+	DECLARE @VP_MENSAJE VARCHAR(500)
+
+	DECLARE @VP_K_CODIGO		INTEGER
+	DECLARE @VP_NOMBRE_APELLIDO	VARCHAR(100)
+	--DECLARE @VP_APELLIDO_P		VARCHAR(100)
+	DECLARE @VP_TEMA			VARCHAR(100)
+	DECLARE @VP_D_USUARIO		VARCHAR(100)
+	DECLARE @VP_D_USUARIO_TIPO	VARCHAR(100)
+	DECLARE @VP_S_USUARIO_TIPO	VARCHAR(100)
+
+	SELECT	@PP_K_USUARIO=(K_USUARIO_PEARL)
+	FROM	USUARIO_PEARL
+	WHERE	D_USUARIO_PEARL=@PP_D_USUARIO
 	
-	IF @VP_MENSAJE=''
-	BEGIN
-		UPDATE	USUARIO_PEARL
-		SET		
-				[D_USUARIO_PEARL]						= @PP_D_USUARIO_PEARL,
-				[C_USUARIO_PEARL]						= @PP_C_USUARIO_PEARL,
-				-- ========================== -- ===========================
-				[BUSINESS_NAME]					= @PP_D_USUARIO_PEARL,				--@PP_BUSINESS_NAME,
-				[RFC_USUARIO_PEARL]					= @PP_RFC_USUARIO_PEARL,
-				[EMAIL]							= @PP_EMAIL,
-				[PHONE]							= @PP_PHONE,
-				[N_CREDIT_DAYS]					= @PP_N_CREDIT_DAYS,
-				-- ========================== -- ===========================
-				[K_STATUS_USUARIO_PEARL]				= @PP_K_STATUS_USUARIO_PEARL,
-				[K_CATEGORY_USUARIO_PEARL]				= @PP_K_CATEGORY_USUARIO_PEARL,		
-				-- ========================== -- ============================
-				[F_CAMBIO]						= GETDATE(), 
-				[K_USUARIO_CAMBIO]				= @PP_K_USUARIO_ACCION
-		WHERE	[K_USUARIO_PEARL]=@PP_K_USUARIO_PEARL
-		IF @@ROWCOUNT = 0
-			BEGIN
-				SET @VP_MENSAJE='The USUARIO_PEARL was not updated. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
-			END
-		
-		IF @VP_MENSAJE=''
+
+	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
 		BEGIN
-			UPDATE	ADDRESS_USUARIO_PEARL
-			SET
-					[D_ADDRESS_USUARIO_PEARL_1]		= @PP_D_ADDRESS_USUARIO_PEARL_1	,	
-					[D_ADDRESS_USUARIO_PEARL_2]		= @PP_D_ADDRESS_USUARIO_PEARL_2	,		
-					[C_ADDRESS_USUARIO_PEARL]			= @PP_D_USUARIO_PEARL				,	
-					-- =======================	= -- =========================
-					[CITY]						= @PP_CITY			,		
-					[STATE_GEO]					= @PP_STATE_GEO		,
-					[POSTAL_CODE]				= @PP_POSTAL_CODE		,		
-					[NUMBER_EXTERIOR]			= @PP_NUMBER_EXTERIOR	,		
-					[NUMBER_INSIDE]				= @PP_NUMBER_INSIDE	,		
-					-- ========================== -- ============================
-					[F_CAMBIO]					= GETDATE(), 
-					[K_USUARIO_CAMBIO]			= @PP_K_USUARIO_ACCION
-			WHERE	[K_ADDRESS_USUARIO_PEARL]=@PP_K_ADDRESS_USUARIO_PEARL			
-			AND		[K_USUARIO_PEARL]=@PP_K_USUARIO_PEARL
-			IF @@ROWCOUNT = 0
+			SET		@VP_MENSAJE			= 'Invalid [USER] name.'
+			SET		@VP_K_CODIGO		=-10
+			SET		@VP_NOMBRE_APELLIDO	=NULL
+			--SET		@VP_APELLIDO_P		=NULL
+			SET		@VP_TEMA			=NULL
+			SET		@VP_D_USUARIO		=NULL
+			SET		@VP_D_USUARIO_TIPO	=NULL
+			SET		@VP_S_USUARIO_TIPO	=NULL
+		END
+	ELSE
+		BEGIN
+			SELECT	@VP_K_CODIGO		=	K_USUARIO_PEARL,
+					--@VP_NOMBRE_APELLIDO	=CONCAT(NOMBRE,' ',APELLIDO_PATERNO),
+					
+					
+					@VP_NOMBRE_APELLIDO	=	CONCAT((
+													CASE 
+													WHEN CHARINDEX(' ',NOMBRE)=0  THEN NOMBRE
+													WHEN CHARINDEX(' ',NOMBRE)<>0 THEN SUBSTRING( NOMBRE,1,(CHARINDEX(' ',NOMBRE))-1)
+													END),' ',APELLIDO_PATERNO),
+					@VP_TEMA			=TEMA_USUARIO_PEARL,
+					@VP_D_USUARIO		=lower(D_USUARIO_PEARL),
+					@VP_D_USUARIO_TIPO	=D_USUARIO_TIPO,
+					@VP_S_USUARIO_TIPO	=S_USUARIO_TIPO
+			FROM	USUARIO_PEARL, USUARIO_TIPO
+			WHERE	D_USUARIO_PEARL=		@PP_D_USUARIO
+			AND		PASSWORD_USUARIO_PEARL=	@PP_PASSWORD
+			--=======================================================
+			AND		USUARIO_PEARL.K_USUARIO_TIPO=USUARIO_TIPO.K_USUARIO_TIPO
+
+			IF	@VP_K_CODIGO IS NULL
 				BEGIN
-				DECLARE @VP_ERROR_1 VARCHAR(250)='The address was not updated.[USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+' //ADDRESS#'+CONVERT(VARCHAR(10),@PP_K_ADDRESS_USUARIO_PEARL)+']'
-					RAISERROR (@VP_ERROR_1, 16, 1 ) --MENSAJE - Severity -State.
+					SET		@VP_MENSAJE			= '[PASSWORD] not valid, try again ...'
+					SET		@VP_K_CODIGO		=-100
+					SET		@VP_NOMBRE_APELLIDO	=NULL
+					--SET		@VP_APELLIDO_P		=NULL
+					SET		@VP_TEMA			=NULL
+					SET		@VP_D_USUARIO		=NULL
+					SET		@VP_D_USUARIO_TIPO	=NULL
+					SET		@VP_S_USUARIO_TIPO	=NULL
 				END
 		END
 
-		IF @VP_MENSAJE=''
-		BEGIN
-			UPDATE	CONTACT_USUARIO_PEARL
-			SET													
-					[1_FIRST_NAME]					= @PP_1_FIRST_NAME		,
-					[1_MIDDLE_NAME]					= @PP_1_MIDDLE_NAME		,		
-					[2_FIRST_NAME]					= @PP_2_FIRST_NAME		,		
-					[2_MIDDLE_NAME]					= @PP_2_MIDDLE_NAME		,		
-					[C_CONTACT_USUARIO_PEARL]				= @PP_D_USUARIO_PEARL			,		
-					-- ========================== -- ============================
---					[1_EMAIL]						= @PP_1_EMAIL			,			
---					[1_PHONE]						= @PP_1_PHONE			,			
---					[2_EMAIL]						= @PP_2_EMAIL			,			
---					[2_PHONE]						= @PP_2_PHONE			,		
-					-- ========================== -- ============================
-					[F_CAMBIO]						= GETDATE()				, 
-					[K_USUARIO_CAMBIO]				= @PP_K_USUARIO_ACCION
-			WHERE	[K_CONTACT_USUARIO_PEARL]=@PP_K_CONTACT_USUARIO_PEARL			
-			AND		[K_USUARIO_PEARL]=@PP_K_USUARIO_PEARL
-			IF @@ROWCOUNT = 0
-				BEGIN
-				DECLARE @VP_ERROR_2 VARCHAR(250)='The contact was not updated.[USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+' //CONTACT# '+CONVERT(VARCHAR(10),@PP_K_CONTACT_USUARIO_PEARL)+']'
-					RAISERROR (@VP_ERROR_2, 16, 1 ) --MENSAJE - Severity -State.
-				END
-		END	
-	END
---	RAISERROR ('ERROR DE PRUEBAS 3', 16, 1 ) --MENSAJE - Severity -State.
+	SELECT	@VP_MENSAJE			AS MENSAJE,
+			@VP_K_CODIGO		AS USUARIO_CODIGO,	
+			@VP_NOMBRE_APELLIDO	AS NOMBRE_APELLIDO,
+			--@VP_APELLIDO_P		AS APELLIDO,
+			@VP_TEMA			AS USUARIO_TEMA,
+			@VP_D_USUARIO		AS D_USUARIO,
+			@VP_S_USUARIO_TIPO	AS USUARIO_TIPO,
+			@VP_D_USUARIO_TIPO	AS D_USUARIO_TIPO
 -- /////////////////////////////////////////////////////////////////////
-COMMIT TRANSACTION 
-END TRY
-
-BEGIN CATCH
-	-- Ocurrió un error, deshacemos los cambios
-	ROLLBACK TRANSACTION
-	DECLARE @VP_ERROR_TRANS NVARCHAR(4000);
-	SET @VP_ERROR_TRANS = ERROR_MESSAGE() 
-	SET @VP_MENSAJE = 'ERROR:// ' + @VP_ERROR_TRANS
-END CATCH	
-
-	-- /////////////////////////////////////////////////////////////////////	
-	IF @VP_MENSAJE<>''
-	BEGIN
-		SET		@VP_MENSAJE = 'Not is possible [Update] at [USUARIO_PEARL]: ' + @VP_MENSAJE 
-	END
-
-	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_USUARIO_PEARL AS CLAVE
-	-- //////////////////////////////////////////////////////////////
-	
 GO
-*/
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / USUARIO POR D_USUARIO
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_USUARIO_LOGIN]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_UP_USUARIO_LOGIN]
+GO
+-- EXECUTE [dbo].[PG_UP_USUARIO_LOGIN] 'ALEJANDROD','11111111','XXX'
+CREATE PROCEDURE [dbo].[PG_UP_USUARIO_LOGIN]
+	--@PP_K_SISTEMA_EXE				INT,
+	--@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_D_USUARIO					VARCHAR(50),
+	@PP_PASSWORD_OLD				VARCHAR(50),
+	@PP_PASSWORD_NEW				VARCHAR(50)
+AS
+-- =========================================	
+	DECLARE @PP_K_USUARIO INTEGER
+	DECLARE @VP_MENSAJE VARCHAR(500)
+
+	DECLARE @VP_K_CODIGO		INTEGER
+
+	SELECT	@PP_K_USUARIO=(K_USUARIO_PEARL)
+	FROM	USUARIO_PEARL
+	WHERE	D_USUARIO_PEARL=@PP_D_USUARIO
+	
+
+	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
+		BEGIN
+			SET		@VP_MENSAJE			= 'Invalid USER: ['+UPPER(@PP_D_USUARIO)+']'
+			SET		@VP_K_CODIGO		=-10
+		END
+	ELSE
+		BEGIN
+			SELECT	@VP_K_CODIGO		=K_USUARIO_PEARL
+			FROM	USUARIO_PEARL, USUARIO_TIPO
+			WHERE	D_USUARIO_PEARL=		@PP_D_USUARIO
+			AND		PASSWORD_USUARIO_PEARL=	@PP_PASSWORD_OLD
+
+			IF	@VP_K_CODIGO IS NULL
+				BEGIN
+					SET		@VP_MENSAJE			= 'The current [PASSWORD] value is not valid, try again ...'
+					SET		@VP_K_CODIGO		=-100
+				END
+			ELSE
+				BEGIN
+					UPDATE USUARIO_PEARL
+					SET		PASSWORD_USUARIO_PEARL=@PP_PASSWORD_NEW
+					WHERE	K_USUARIO_PEARL=@VP_K_CODIGO
+					AND		D_USUARIO_PEARL=@PP_D_USUARIO		
+
+						IF @@ROWCOUNT <> 0
+						BEGIN
+							SET @VP_MENSAJE='The [PASSWORD] was changed successfully...'
+							SET @VP_K_CODIGO=0
+						END		
+				END
+		END
+
+	SELECT	@VP_MENSAJE			AS MENSAJE,
+			@VP_K_CODIGO		AS USUARIO_CODIGO
+-- /////////////////////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / UPDATE THEME
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_THEME]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_UP_THEME]
+GO
+-- EXECUTE [dbo].[PG_UP_THEME] 139,'Red Planet.isl'
+CREATE PROCEDURE [dbo].[PG_UP_THEME]
+	--@PP_K_SISTEMA_EXE				INT,
+	--@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_K_USUARIO					INT,
+	@PP_THEME						VARCHAR(50)
+AS
+-- =========================================	
+	DECLARE @VP_MENSAJE VARCHAR(500)
+	UPDATE USUARIO_PEARL
+	SET		TEMA_USUARIO_PEARL=@PP_THEME
+	WHERE	K_USUARIO_PEARL=@PP_K_USUARIO		
+-- /////////////////////////////////////////////////////////////////////
+GO
+
+-- //////////////////////////////////////////////////////////////
+-- //////////////////////////////////////////////////////////////
+-- //////////////////////////////////////////////////////////////
