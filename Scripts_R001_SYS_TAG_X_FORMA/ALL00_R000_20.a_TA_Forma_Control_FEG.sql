@@ -113,6 +113,8 @@ EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 1,	'frmLots'
 ---- ===================FORMA frmHides (SECUNDARIA/DEPENDE DE UN PADRE)============================
 EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 2,	'frmHides'
 
+---- ===================FORMA FO_PO_REVIEW (SECUNDARIA/DEPENDE DE UN PADRE)============================
+EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 3,	'FO_PO_REVIEW'
 GO
 -- ===============================================
 SET NOCOUNT OFF
@@ -257,6 +259,11 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 94, 32,	'Button6'
 
 -- ===================FORMA Transferencias============================
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 100, 6,	'ComboBox1'
+
+-- ===================FORMA FO_PO_REVIEW - PO ========================
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 110, 3,	'BT_PRINT_PO'		-- SUBSITEMA SE ENVÍA [#1] EN EL FRONT
+
+
 
 GO
 -- ===============================================
@@ -517,6 +524,11 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 179, 100,	87 -- VIVIANAC / C
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 180, 100,	89 -- ERNESTOG / ComboBox1 / USUARIO TIPO U2
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 181, 100,	113-- JOSUEC / ComboBox1 / USUARIO TIPO U1
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 182, 100,	114-- RODOLFOC / ComboBox1 / USUARIO TIPO U1
+
+
+-- ===================FORMA FO_PO_PREVIEW============================
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 200, 110,	139	-- AX / BT_PRINT_PO
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 201, 110,	57	-- AX / BT_PRINT_PO
 
 GO
 -- ===============================================

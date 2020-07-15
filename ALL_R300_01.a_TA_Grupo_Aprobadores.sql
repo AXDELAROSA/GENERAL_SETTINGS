@@ -13,12 +13,6 @@ USE [BD_GENERAL]
 GO
 
 -- //////////////////////////////////////////////////////////////
-
-
-
-
-
-
 -- //////////////////////////////////////////////////////////////
 -- // DROPs
 -- //////////////////////////////////////////////////////////////
@@ -27,23 +21,18 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GRUPO_
 	DROP TABLE [dbo].[GRUPO_APROBADOR]
 GO
 
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ESTATUS_GRUPO_APROBADOR]') AND type in (N'U'))
 	DROP TABLE [dbo].[ESTATUS_GRUPO_APROBADOR]
 GO
-
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TIPO_GRUPO_APROBADOR]') AND type in (N'U'))
 	DROP TABLE [dbo].[TIPO_GRUPO_APROBADOR]
 GO
 
 
-
 -- //////////////////////////////////////////////////////////////
 -- // TIPO_GRUPO_APROBADOR
 -- //////////////////////////////////////////////////////////////
-
-
 CREATE TABLE [dbo].[TIPO_GRUPO_APROBADOR] (
 	[K_TIPO_GRUPO_APROBADOR]	[INT]			NOT NULL,
 	[D_TIPO_GRUPO_APROBADOR]	[VARCHAR] (100) NOT NULL,
@@ -53,40 +42,26 @@ CREATE TABLE [dbo].[TIPO_GRUPO_APROBADOR] (
 	[L_TIPO_GRUPO_APROBADOR]	[INT]			NOT NULL
 ) ON [PRIMARY]
 GO
-
-
 -- //////////////////////////////////////////////////////////////
-
-
 ALTER TABLE [dbo].[TIPO_GRUPO_APROBADOR]
 	ADD CONSTRAINT [PK_TIPO_GRUPO_APROBADOR]
 		PRIMARY KEY CLUSTERED ([K_TIPO_GRUPO_APROBADOR])
 GO
-
-
 CREATE UNIQUE NONCLUSTERED 
 	INDEX [UN_TIPO_GRUPO_APROBADOR_01_DESCRIPCION] 
 	   ON [dbo].[TIPO_GRUPO_APROBADOR] ( [D_TIPO_GRUPO_APROBADOR] )
 GO
-
 -- //////////////////////////////////////////////////////////////
-
-
 --ALTER TABLE [dbo].[TIPO_GRUPO_APROBADOR] ADD 
 --	CONSTRAINT [FK_TIPO_GRUPO_APROBADOR_01] 
 --		FOREIGN KEY ( [L_TIPO_GRUPO_APROBADOR] ) 
 --		REFERENCES [dbo].[ESTATUS_ACTIVO] ( [K_ESTATUS_ACTIVO] )
 --GO
-
-
 -- //////////////////////////////////////////////////////////////
-
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_TIPO_GRUPO_APROBADOR]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR]
 	@PP_L_DEBUG					INT,
 	@PP_K_SISTEMA_EXE			INT,
@@ -99,15 +74,11 @@ CREATE PROCEDURE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR]
 	@PP_L_TIPO_GRUPO_APROBADOR	INT
 AS
 	-- ===============================
-
 	DECLARE @VP_K_EXISTE	INT
-
 	SELECT	@VP_K_EXISTE =	K_TIPO_GRUPO_APROBADOR
 							FROM	TIPO_GRUPO_APROBADOR
 							WHERE	K_TIPO_GRUPO_APROBADOR=@PP_K_TIPO_GRUPO_APROBADOR
-
 	-- ===============================
-
 	IF @VP_K_EXISTE IS NULL
 		INSERT INTO TIPO_GRUPO_APROBADOR	
 			(	K_TIPO_GRUPO_APROBADOR,				D_TIPO_GRUPO_APROBADOR, 
@@ -127,15 +98,10 @@ AS
 				C_TIPO_GRUPO_APROBADOR	= @PP_C_TIPO_GRUPO_APROBADOR,
 				L_TIPO_GRUPO_APROBADOR	= @PP_L_TIPO_GRUPO_APROBADOR	
 		WHERE	K_TIPO_GRUPO_APROBADOR=@PP_K_TIPO_GRUPO_APROBADOR
-
 	-- =========================================================
 GO
 
 -- //////////////////////////////////////////////////////////////
-
-
-
-
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
@@ -163,8 +129,13 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 81, 'MODIFCAR ESTATUS REPORTE',
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 101, 'SELECCIONAR TODO',			'SELEC_TODO',	101, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 102, 'ABRIR ORDEN',				'ABR_ORD',		102, '', 1
 
-
-
+-- =============================================== -- ===============================================
+-- ================================= GRUPOS APROBADORES PARA PO	================================== AX
+-- =============================================== -- ===============================================
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6001, 'CREAR PO',					'CREAR_PO',	6001, '', 1
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6002, 'AUTORIZAR PO',				'AUTOR_PO', 6002, '', 1
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6003, 'NOTIFICAR PO',				'NOTIF_PO', 6003, '', 1
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6004, 'IMPRIMIR PO',				'IMPRI_PO', 6003, '', 1
 GO
 -- ===============================================
 SET NOCOUNT OFF
@@ -276,8 +247,8 @@ SET NOCOUNT ON
 EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 0, 'INACTIVO',			'INACTVO', 0, '', 1
 EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 1, 'ACTIVO',			'ACTIVO', 1, '', 1
 EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 2, 'SUSPENDIDO',		'SUSPNDO', 2, '', 1
---EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 3, 'APROVADO',			'APROV', 3, '', 1
---EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 4, 'CANCELADO',			'CANCEL', 4, '', 1
+--EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 3, 'APROBADO',		'APROB', 3, '', 1
+--EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 4, 'CANCELADO',		'CANCEL', 4, '', 1
 --EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 4, 'VENCIDO',			'CANCEL', 4, '', 1
 
 GO
@@ -452,6 +423,38 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 256, 'PRODUCCION SELECCIONAR KITS',	
 -- ===================USUARIOS PARA ABRIR LA ORDEN COMPLETADA PANTALLA frmKits============================
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 257, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 41, 102, 1 -- RAFAELF
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 258, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 44, 102, 1 -- GUILLERMOM
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 259, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 144, 102, 1 -- FEG
+
+-- =============================================== -- ===============================================
+-- ================================= GRUPOS APROBADORES PARA PO	================================== AX
+-- =============================================== -- ===============================================
+-- #6001- 'CREAR PO',		#6002- 'AUTORIZAR PO',		#6003- 'NOTIFICAR PO',		#6004- 'IMPRIMIR PO'
+-- =================================			CREAR PO		   ==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 260, 'CREAR PO',			'USR_IN_PO', 62,	6001, 1		-- PATY
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 261, 'CREAR PO',			'USR_IN_PO', 115,	6001, 1		-- SONIA
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 262, 'CREAR PO',			'USR_IN_PO', 121,	6001, 1		-- LUCY
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 263, 'CREAR PO',			'USR_IN_PO', 125,	6001, 1		-- IRIS
+
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 264, 'CREAR PO',			'USR_IN_PO', 145,	6001, 1		-- DULCE
+
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 265, 'CREAR PO',			'USR_IN_PO', 41,	6001, 1		-- RAFA
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 266, 'CREAR PO',			'USR_IN_PO', 42,	6001, 1		-- OMAR
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 267, 'CREAR PO',			'USR_IN_PO', 139,	6001, 1		-- AX
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 268, 'CREAR PO',			'USR_IN_PO', 144,	6001, 1		-- FEG
+
+-- =================================	AUTORIZAR PO - GERENTES	  ==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 269, 'AUTORIZAR PO',		'USR_UP_PO', 62,	6002, 1		-- PATY			RH / SEG / ENFER
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 270, 'AUTORIZAR PO',		'USR_UP_PO', 42,	6002, 1		-- OMAR			SIST/PROY
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 271, 'AUTORIZAR PO',		'USR_UP_PO', 44,	6002, 1		-- GUILLERMO	PROD / MTTO / ING
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 272, 'AUTORIZAR PO',		'USR_UP_PO', 47,	6002, 1		-- MIKE			QC
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 273, 'AUTORIZAR PO',		'USR_UP_PO', 56,	6002, 1		-- MIGUELG		MATERIALES
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 274, 'AUTORIZAR PO',		'USR_UP_PO', 60,	6002, 1		-- ADRIANA		FINANZAS
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 275, 'AUTORIZAR PO',		'USR_UP_PO', 57,	6002, 1		-- FABIOLA		FINANZAS
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 276, 'AUTORIZAR PO',		'USR_UP_PO', 139,	6002, 1		-- AX			PRUEBAS
+
+-- =================================			IMPRIMIR PO 	  ==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 278, 'IMPRIMIR PO',			'USR_IM_PO', 57,	6004, 1		-- FABIOLA		FINANZAS
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 279, 'IMPRIMIR PO',			'USR_IM_PO', 139,	6004, 1		-- AX
 
 /*
 USE BD_GENERAL
