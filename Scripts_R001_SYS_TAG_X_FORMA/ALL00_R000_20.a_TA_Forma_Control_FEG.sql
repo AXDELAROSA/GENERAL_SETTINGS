@@ -387,6 +387,10 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 26, 24,	144 -- FRANCISCOE / 
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 27, 24,	41 -- RAFAELF / BOTON cmdCBackout
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 28, 24,	139 -- ALEJANDROD / BOTON cmdCBackout
 
+--==========================PARA PRUEBAS=========================
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 25, 23,	144 -- FRANCISCOE / BOTON Button1 para pruebas
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 29, 22,	144 -- FRANCISCOE / BOTON TextBox3 para pruebas
+
 -- ===================FORMA Factuarion============================
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 30, 30,	41 -- RAFAELF / BOTON Button13
 
