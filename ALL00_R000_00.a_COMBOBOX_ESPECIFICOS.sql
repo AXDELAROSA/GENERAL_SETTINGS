@@ -297,6 +297,53 @@ AS
 GO
 
 
+
+-- //////////////////////////////////////////////////////////////
+-- EXECUTE [dbo].[PG_CB_SYSCDEFIL_SQL] 0,0, 1
+-- //////////////////////////////////////////////////////////////
+-- // /* CODIGO UTILIZACION */ sycdefil_sql
+-- //////////////////////////////////////////////////////////////
+--	USE [BD_GENERAL]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_SYSCDEFIL_SQL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_SYSCDEFIL_SQL]
+GO
+
+
+CREATE PROCEDURE [dbo].[PG_CB_SYSCDEFIL_SQL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50)
+							 )
+	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT	A4GLIDENTITY AS TA_K_CATALOGO,
+			CONCAT(LTRIM(RTRIM(sy_terms_cd)), ' - ', LTRIM(RTRIM(filler_0001))) AS TA_D_CATALOGO
+	FROM	[DATA_02].[dbo].sycdefil_sql
+	WHERE	cd_type = 'R' 
+	AND		sy_terms_cd LIKE 'H%' 
+	ORDER BY	sy_terms_cd
+
+	IF @PP_L_CON_TODOS=1
+		INSERT INTO @VP_TA_CATALOGO
+				( TA_K_CATALOGO,	TA_D_CATALOGO)
+			VALUES
+				( -1,				'( TODOS )')
+
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+			TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM	@VP_TA_CATALOGO
+	ORDER BY  TA_D_CATALOGO 
+
+	-- ==========================================
+		
+	-- ////////////////////////////////////////////////////
+GO
+
 /*
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> COMBO UOM
