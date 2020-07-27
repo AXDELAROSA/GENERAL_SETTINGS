@@ -13,12 +13,6 @@ USE [BD_GENERAL]
 GO
 
 -- //////////////////////////////////////////////////////////////
-
-
-
-
-
-
 -- //////////////////////////////////////////////////////////////
 -- // DROPs
 -- //////////////////////////////////////////////////////////////
@@ -27,7 +21,6 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SISTEM
 	DROP TABLE [dbo].[SISTEMA_CONTROL_PERMISO]
 GO
 
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SISTEMA_CONTROL]') AND type in (N'U'))
 	DROP TABLE [dbo].[SISTEMA_CONTROL]
 GO
@@ -35,7 +28,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SUB_SISTEMA_TAG]') AND type in (N'U'))
 	DROP TABLE [dbo].[SUB_SISTEMA_TAG]
 GO
-
 
 -- //////////////////////////////////////////////////////////////
 -- // SUB_SISTEMA_TAG
@@ -55,12 +47,8 @@ ALTER TABLE [dbo].[SUB_SISTEMA_TAG]
 	ADD CONSTRAINT [PK_SUB_SISTEMA_TAG]
 		PRIMARY KEY CLUSTERED ([K_SUB_SISTEMA_TAG])
 GO
-
--- //////////////////////////////////////////////////////////////
-	
-GO
-
-
+-- //////////////////////////////////////////////////////////////	
+--GO
 -- //////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////
 
@@ -68,8 +56,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SUB_SISTEMA_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CI_SUB_SISTEMA_TAG]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_CI_SUB_SISTEMA_TAG]
 	@PP_L_DEBUG						INT,
 	@PP_K_SISTEMA_EXE				INT,
@@ -78,15 +64,12 @@ CREATE PROCEDURE [dbo].[PG_CI_SUB_SISTEMA_TAG]
 	@PP_D_SUB_SISTEMA_TAG			VARCHAR(100)
 AS
 	-- ===============================
-
 	DECLARE @VP_K_EXISTE	INT
 
 	SELECT	@VP_K_EXISTE =	K_SUB_SISTEMA_TAG
 							FROM	SUB_SISTEMA_TAG
 							WHERE	K_SUB_SISTEMA_TAG=@PP_K_SUB_SISTEMA_TAG
-
 	-- ===============================
-
 	IF @VP_K_EXISTE IS NULL
 		INSERT INTO SUB_SISTEMA_TAG	
 			(	K_SUB_SISTEMA_TAG,	
@@ -105,8 +88,9 @@ GO
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
-
-
+-- AQUI SE GREGAN LAS FORMAS DONDE SE APLICARAN LOS PERMISOS DEL OBJETO
+-- ===============================================
+-- ===============================================
 ---- ===================FORMA frmLots (SECUNDARIA/DEPENDE DE UN PADRE)============================
 EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 1,	'frmLots'
 
@@ -118,16 +102,15 @@ EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 3,	'FO_PO_REVIEW'
 GO
 -- ===============================================
 SET NOCOUNT OFF
+GO
 -- ===============================================
-
-
-
-
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SUB_SISTEMA_TAG]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CI_SUB_SISTEMA_TAG]
+GO
 
 -- //////////////////////////////////////////////////////////////
 -- // SISTEMA_CONTROL
 -- //////////////////////////////////////////////////////////////
-
 CREATE TABLE [dbo].[SISTEMA_CONTROL] (
 	[K_SISTEMA_CONTROL]			[INT]			NOT NULL,
 	-- =================================	
@@ -136,25 +119,18 @@ CREATE TABLE [dbo].[SISTEMA_CONTROL] (
 	-- =================================	
 )ON [PRIMARY]	
 GO
-
 -- //////////////////////////////////////////////////////
-
 ALTER TABLE [dbo].[SISTEMA_CONTROL]
 	ADD CONSTRAINT [PK_SISTEMA_CONTROL]
 		PRIMARY KEY CLUSTERED ([K_SISTEMA_CONTROL])
 GO
-
 -- //////////////////////////////////////////////////////////////
-
-
 ALTER TABLE [dbo].[SISTEMA_CONTROL] ADD 
 	CONSTRAINT [FK_SISTEMA_CONTROL_01]  
 		FOREIGN KEY ([K_SISTEMA_TAG]) 
 		REFERENCES [dbo].[SISTEMA_TAG] ([K_SISTEMA_TAG])
 	
 GO
-
-
 -- //////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////
 
@@ -162,8 +138,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL]
 	@PP_L_DEBUG						INT,
 	@PP_K_SISTEMA_EXE				INT,
@@ -173,15 +147,12 @@ CREATE PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL]
 	@PP_D_SISTEMA_CONTROL			VARCHAR(100)
 AS
 	-- ===============================
-
 	DECLARE @VP_K_EXISTE	INT
 
 	SELECT	@VP_K_EXISTE =	K_SISTEMA_CONTROL
 							FROM	SISTEMA_CONTROL
 							WHERE	K_SISTEMA_CONTROL=@PP_K_SISTEMA_CONTROL
-
 	-- ===============================
-
 	IF @VP_K_EXISTE IS NULL
 		INSERT INTO SISTEMA_CONTROL	
 			(	K_SISTEMA_CONTROL,					K_SISTEMA_TAG,		
@@ -194,14 +165,15 @@ AS
 		SET		K_SISTEMA_TAG				= @PP_K_SISTEMA_TAG,
 				D_SISTEMA_CONTROL			= @PP_D_SISTEMA_CONTROL
 		WHERE	K_SISTEMA_CONTROL=@PP_K_SISTEMA_CONTROL
-
 	-- =========================================================
 GO
 
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
-
+-- AQUI SE LE AGREGAN LOS OBJETOS Y SE RELACIONAN CON LA FORMA PREVIAMENTE INSERTADA.
+-- ===============================================
+-- ===============================================
 /*
 use BD_GENERAL
 SELECT * FROM SISTEMA_TAG WHERE D_SISTEMA_TAG = 'Transferencias'
@@ -262,21 +234,20 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 100, 6,	'ComboBox1'
 
 -- ===================FORMA FO_PO_REVIEW - PO ========================
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 110, 3,	'BT_PRINT_PO'				-- SUBSITEMA SE ENVÍA [#1] EN EL FRONT
-EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 111, 3,	'PN_MANAGEMENT_VENDOR'		-- SE ENCUENTRA EN LA FORMA DEL MENÚ SE AGREAG AQUÍ PARA NO AGRANDAR LA TABLA.
-
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 111, 3,	'PN_MANAGEMENT_VENDOR'		-- SE ENCUENTRA EN LA FORMA DEL MENÚ SE AGREGA AQUÍ PARA NO AGRANDAR LA TABLA.
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 112, 3,	'CH_L_FINANCES'				-- SE ENCUENTRA EN LA FORMA DEL MENÚ SE AGREGA AQUÍ PARA NO AGRANDAR LA TABLA.
 GO
 -- ===============================================
 SET NOCOUNT OFF
+GO
 -- ===============================================
-
-
-
-
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL]
+GO
 
 -- //////////////////////////////////////////////////////////////
 -- // SISTEMA_CONTROL
 -- //////////////////////////////////////////////////////////////
-
 CREATE TABLE [dbo].[SISTEMA_CONTROL_PERMISO] (
 	[K_SISTEMA_CONTROL_PERMISO]			[INT]		NOT NULL,
 	-- =================================	
@@ -285,25 +256,17 @@ CREATE TABLE [dbo].[SISTEMA_CONTROL_PERMISO] (
 	-- =================================	
 )ON [PRIMARY]	
 GO
-
 -- //////////////////////////////////////////////////////
-
 ALTER TABLE [dbo].[SISTEMA_CONTROL_PERMISO]
 	ADD CONSTRAINT [PK_SISTEMA_CONTROL_PERMISO]
 		PRIMARY KEY CLUSTERED ([K_SISTEMA_CONTROL_PERMISO])
 GO
-
 -- //////////////////////////////////////////////////////////////
-
-
 ALTER TABLE [dbo].[SISTEMA_CONTROL_PERMISO] ADD 
 	CONSTRAINT [FK_SISTEMA_CONTROL_PERMISO_01]  
 		FOREIGN KEY ([K_USUARIO]) 
-		REFERENCES [dbo].[USUARIO_PEARL] ([K_USUARIO_PEARL])
-	
+		REFERENCES [dbo].[USUARIO_PEARL] ([K_USUARIO_PEARL])	
 GO
-
-
 -- //////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////
 
@@ -311,8 +274,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]
 	@PP_L_DEBUG						INT,
 	@PP_K_SISTEMA_EXE				INT,
@@ -322,15 +283,12 @@ CREATE PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]
 	@PP_K_USUARIO					VARCHAR(100)
 AS
 	-- ===============================
-
 	DECLARE @VP_K_EXISTE	INT
 
 	SELECT	@VP_K_EXISTE =	K_SISTEMA_CONTROL_PERMISO
 							FROM	SISTEMA_CONTROL_PERMISO
 							WHERE	K_SISTEMA_CONTROL_PERMISO=@PP_K_SISTEMA_CONTROL_PERMISO
-
 	-- ===============================
-
 	IF @VP_K_EXISTE IS NULL
 		INSERT INTO SISTEMA_CONTROL_PERMISO	
 			(	K_SISTEMA_CONTROL_PERMISO,					K_SISTEMA_CONTROL,
@@ -344,14 +302,15 @@ AS
 		SET		K_SISTEMA_CONTROL			= @PP_K_SISTEMA_CONTROL,
 				K_USUARIO	= @PP_K_USUARIO
 		WHERE	K_SISTEMA_CONTROL_PERMISO=@PP_K_SISTEMA_CONTROL_PERMISO
-
 	-- =========================================================
 GO
 
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
-
+-- AQUI SE RELACIONAN LOS OBJETOS CON LOS USUARIOS QUE PODRÁN VISUALIZARLOS
+-- ===============================================
+-- ===============================================
 /*
 use BD_GENERAL
 select * from sistema_tag where d_sistema_tag = 'eng_main'
@@ -530,18 +489,22 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 182, 100,	114-- RODOLFOC / C
 
 
 -- ===================FORMA FO_PO_PREVIEW============================
-EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 200, 110,	139	-- AX / BT_PRINT_PO
-EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 201, 110,	57	-- AX / BT_PRINT_PO
-EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 202, 111,	139	-- AX / BT_PRINT_PO
-EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 203, 111,	57	-- AX / BT_PRINT_PO
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 200, 110,	139	-- AX			/ BT_PRINT_PO
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 201, 110,	57	-- FABIOLA		/ BT_PRINT_PO
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 202, 111,	139	-- AX			/ PANEL MENU
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 203, 111,	57	-- FABIOLA		/ PANEL MENU
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 204, 112,	139	-- AX			/ CHECK POR AUSCENCIA
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 205, 112,	60	-- LIC. ADRIANA	/ CHECK POR AUSCENCIA
+
 GO
 -- ===============================================
 SET NOCOUNT OFF
+GO
 -- ===============================================
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]
 GO
-
-
 
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
