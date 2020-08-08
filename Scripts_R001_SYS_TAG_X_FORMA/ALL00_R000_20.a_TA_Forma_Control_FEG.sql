@@ -104,9 +104,9 @@ GO
 SET NOCOUNT OFF
 GO
 -- ===============================================
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SUB_SISTEMA_TAG]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_CI_SUB_SISTEMA_TAG]
-GO
+--IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SUB_SISTEMA_TAG]') AND type in (N'P', N'PC'))
+--	DROP PROCEDURE [dbo].[PG_CI_SUB_SISTEMA_TAG]
+--GO
 
 -- //////////////////////////////////////////////////////////////
 -- // SISTEMA_CONTROL
@@ -245,9 +245,9 @@ GO
 SET NOCOUNT OFF
 GO
 -- ===============================================
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL]
-GO
+--IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL]') AND type in (N'P', N'PC'))
+--	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL]
+--GO
 
 -- //////////////////////////////////////////////////////////////
 -- // SISTEMA_CONTROL
@@ -514,9 +514,9 @@ SET NOCOUNT OFF
 GO
 -- ===============================================
 
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]
-GO
+--IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]') AND type in (N'P', N'PC'))
+--	DROP PROCEDURE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO]
+--GO
 
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
