@@ -129,6 +129,10 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 81, 'MODIFCAR ESTATUS REPORTE',
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 101, 'SELECCIONAR TODO',			'SELEC_TODO',	101, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 102, 'ABRIR ORDEN',				'ABR_ORD',		102, '', 1
 
+--=========PARA MQU SALIDA PANTALLA FOLIOS TX7========================================
+-- SELECT * FROM TIPO_GRUPO_APROBADOR
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 121, 'CERRAR ORDEN',				'CERR_ORD', 121, '', 1
+
 -- =============================================== -- ===============================================
 -- ================================= GRUPOS APROBADORES PARA PO	================================== AX
 -- =============================================== -- ===============================================
@@ -456,11 +460,18 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 276, 'AUTORIZAR PO',		'USR_UP_PO', 1
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 278, 'IMPRIMIR PO',			'USR_IM_PO', 57,	6004, 1		-- FABIOLA		FINANZAS
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 279, 'IMPRIMIR PO',			'USR_IM_PO', 139,	6004, 1		-- AX
 
+
+-- ===================USUARIOS AUTORIZADOS PARA SALIDA DE MQU EN PANTALLA FOLIOS============================
+-- SELECT * FROM GRUPO_APROBADOR
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 301, 'PRD CERRAR ORDEN',					'PR_CER_ORD', 144, 121, 1 -- FEG
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 302, 'PRD CERRAR ORDEN',					'PR_CER_ORD', 41, 121, 1 --RAFA
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 303, 'PRD CERRAR ORDEN',					'PR_CER_ORD', 44, 121, 1 --GUILLERMO
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 304, 'PRD CERRAR ORDEN',					'PR_CER_ORD', 87, 121, 1 --DIANAN
+
 /*
 USE BD_GENERAL
 
 SELECT * FROM GRUPO_APROBADOR WHERE D_GRUPO_APROBADOR = 'AUTORIZAR TRANSACCION'
-
 
 select * from sistema_tag where d_sistema_tag = 'frmKits'
 select * from SISTEMA_CONTROL
