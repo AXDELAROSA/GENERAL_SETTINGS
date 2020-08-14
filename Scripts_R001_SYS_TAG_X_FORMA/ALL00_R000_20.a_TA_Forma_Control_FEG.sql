@@ -100,6 +100,10 @@ EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 2,	'frmHides'
 ---- ===================FORMA FO_PO_REVIEW (SECUNDARIA/DEPENDE DE UN PADRE)============================
 EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 3,	'FO_PO_REVIEW'
 GO
+
+---- ===================FORMA FO_PURCHASE_ORDER (DEPENDE DE OTRA)============================
+EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 4,	'FO_PURCHASE_ORDER'
+GO
 -- ===============================================
 SET NOCOUNT OFF
 GO
@@ -241,7 +245,9 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 114, 3,	'BT_ITEM_RECEIVED'			-- SUBS
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 115, 3,	'BT_VER_REPORTE'					-- SUBSITEMA SE ENVÍA [#1] EN EL FRONT
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 116, 3,	'CB_LI_FILTRO_ORDENES_COMPLETAS'	-- SUBSITEMA SE ENVÍA [#1] EN EL FRONT
 GO
--- ===============================================
+-- ===================FORMA FO_PURCHASE_ORDER ========================
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 120, 4,	'CH_IS_BLANKET_PO'			-- CHECK PARA ESTABLECER QUIEN REALIZARÁ BLANKET PO.
+-- ===============================================
 SET NOCOUNT OFF
 GO
 -- ===============================================
@@ -508,8 +514,11 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 210, 115,	139	-- AX			/ BT_V
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 211, 115,	57	-- FABIOLA		/ BT_VER_REPORTE
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 212, 116,	139	-- AX			/ CB_LI_FILTRO_ORDENES_COMPLETAS
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 213, 116,	57	-- FABIOLA		/ CB_LI_FILTRO_ORDENES_COMPLETAS
-GO
--- ===============================================
+
+-- ===================FORMA FO_PURCHASE_ORDER============================EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 214, 120,	139	-- AX			/ CHECK BLANKET PO
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 215, 120,	89	-- AX			/ CHECK BLANKET PO
+GO
+-- ===============================================
 SET NOCOUNT OFF
 GO
 -- ===============================================
