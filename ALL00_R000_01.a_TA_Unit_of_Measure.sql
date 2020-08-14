@@ -96,7 +96,8 @@ AS
 	-- //////////////////////////////////////////////////////////////
 GO
 
-EXECUTE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]  0, 139,  'INCH-YARD'	,'CONVERT INCH TO YARD'	, 'in-yd', 10 , 1, 5,24,0.0277778, 1,9
+EXECUTE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]  0, 139,  'INCH-YARD'		,'CONVERT INCH TO YARD'		, 'in-yd', 10 , 1, 5,24	,0.0277778, 1,9
+EXECUTE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]  0, 139,  'INCH-METER'	,'CONVERT INCH TO METER'	, 'in-mt', 10 , 1, 5,9	,0.02540,	1,10.7639
 GO
 
 
@@ -253,10 +254,10 @@ GO
 
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  0, '(TO DEFINE)'	,''				, '2DFNE', 10 , 1, 0
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  1, 'CENTIMETRO		- CENTIMETER'	,'cm'		, 'cm', 10 , 1, 2
-EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  2, 'PIE			- FOOT'			,'ft'		, 'ft',  10 , 1, 2
+EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  2, 'PIE				- FOOT'			,'ft'		, 'ft',  10 , 1, 2
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  3, 'GALÓN			- GALLON'		,'gal'		, 'gal', 10 , 1, 1
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  4, 'GRAMO			- GRAM'			,'g'		, 'g' , 10 , 1, 5
-EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  5, 'PULGADA		- INCH'			,'in'		, 'inch',  10 , 1, 2
+EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  5, 'PULGADA			- INCH'			,'in'		, 'inch',  10 , 1, 2
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  6, 'KILOGRAMO		- KILOGRAM'		,'kg'		, 'Kg', 10 , 1, 5
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  7, 'LITRO			- LITER'		,'L'		, 'L', 10 , 1, 1
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  8, 'MILILITRO		- MILILITER'	,'ml'		, 'ml', 10 , 1, 1
