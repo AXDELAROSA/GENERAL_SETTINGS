@@ -144,7 +144,9 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6002, 'AUTORIZAR PO',				'AUTOR
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6003, 'NOTIFICAR PO',				'NOTIF_PO', 6003, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6004, 'IMPRIMIR PO',				'IMPRI_PO', 6003, '', 1
 GO
--- ===============================================
+
+
+-- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
 
@@ -259,7 +261,9 @@ EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 2, 'SUSPENDIDO',		'SUSPNDO',
 --EXECUTE [dbo].[PG_CI_ESTATUS_GRUPO_APROBADOR] 0, 0, 4, 'VENCIDO',			'CANCEL', 4, '', 1
 
 GO
--- ===============================================
+
+
+-- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
 
@@ -465,6 +469,8 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 273, 'AUTORIZAR PO',		'USR_UP_PO', 5
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 274, 'AUTORIZAR PO',		'USR_UP_PO', 60,	6002, 1		-- ADRIANA		FINANZAS
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 275, 'AUTORIZAR PO',		'USR_UP_PO', 57,	6002, 1		-- FABIOLA		FINANZAS
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 276, 'AUTORIZAR PO',		'USR_UP_PO', 139,	6002, 1		-- AX			PRUEBAS
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 280, 'AUTORIZAR PO',		'USR_UP_PO', 41,	6002, 1		-- RAFAELF		SISTEMAS
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 281, 'AUTORIZAR PO',		'USR_UP_PO', 156,	6002, 1		-- OMARG		MANTENIMIENTO
 
 -- =================================			IMPRIMIR PO 	  ==================================
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 278, 'IMPRIMIR PO',			'USR_IM_PO', 57,	6004, 1		-- FABIOLA		FINANZAS
@@ -512,7 +518,9 @@ SELECT * FROM USUARIO_PERMISOS WHERE K_SISTEMA_TAG = 60
 														304 )
 */
 GO
--- ===============================================
+
+
+-- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
 
