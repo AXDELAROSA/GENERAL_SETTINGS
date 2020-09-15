@@ -21,6 +21,51 @@ GO
 -- // STORED PROCEDURE ---> 
 -- //////////////////////////////////////////////////////////////
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_GRUPO_QA_MODIFICAR_INSPECCION_MATERIAL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_GRUPO_QA_MODIFICAR_INSPECCION_MATERIAL]
+GO
+/*
+	EXEC [PG_RN_GRUPO_QA_MODIFICAR_INSPECCION_MATERIAL] 0,0, 'FRANCISCOE', '123456'
+*/
+CREATE PROCEDURE [dbo].[PG_RN_GRUPO_QA_MODIFICAR_INSPECCION_MATERIAL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO_ACCION		INT,
+	-- ===========================		
+	@PP_D_USUARIO				VARCHAR(150),
+	@PP_PASSWORD				VARCHAR(150)
+	-- ===========================		
+AS
+
+	DECLARE @VP_RESULTADO		VARCHAR(300) = '' 
+	
+	-- /////////////////////////////////////////////////////
+
+	IF @VP_RESULTADO=''
+		IF NOT EXISTS(	SELECT	K_GRUPO_APROBADOR 
+					FROM	BD_GENERAL.DBO.[GRUPO_APROBADOR] 
+					INNER	JOIN USUARIO_PEARL ON [GRUPO_APROBADOR].K_USUARIO = USUARIO_PEARL.K_USUARIO_PEARL
+					WHERE	D_USUARIO_PEARL = @PP_D_USUARIO	
+					AND		S_GRUPO_APROBADOR = @PP_PASSWORD
+					AND		D_GRUPO_APROBADOR = 'QA MADIFICAR INSPECCION MATERIAL'
+					AND		K_ESTATUS_GRUPO_APROBADOR = 1 -- ACTIVO
+					AND		K_TIPO_GRUPO_APROBADOR = 150 --  MODIFICAR INSPECCION MATERIAL QA
+				)
+			BEGIN
+				SET @VP_RESULTADO =  'Usuario  <NO AUTORIZADO>...' 
+			END
+	-- /////////////////////////////////////////////////////
+	
+	SELECT @VP_RESULTADO AS MENSAJE
+
+	-- /////////////////////////////////////////////////////
+GO
+
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> 
+-- //////////////////////////////////////////////////////////////
+
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_VALIDA_USUARIO_MQU]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_RN_VALIDA_USUARIO_MQU]
 GO
