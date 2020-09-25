@@ -149,6 +149,10 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6001, 'CREAR PO',					'CREAR_PO
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6002, 'AUTORIZAR PO',				'AUTOR_PO', 6002, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6003, 'NOTIFICAR PO',				'NOTIF_PO', 6003, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6004, 'IMPRIMIR PO',				'IMPRI_PO', 6004, '', 1
+-- =============================================== USE BD_GENERAL===============================================
+-- ================================= NOTIFICACIONES DE PEDIDO Y RECIBOS	================================== AX
+-- =============================================== -- ===============================================	
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 7800, 'PEDIDO BLANKET_PO',		'PEDIDO_BPO',	7800, '', 1
 GO
 
 
@@ -524,6 +528,17 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 406, 'QA MADIFICAR INSPECCION MATERI
  -- USE BD_GENERAL
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 500, 'MHI/MQU NOTIFICAR MATERIAL LIBERADO/RECHASADO POR QA',					'MHI_MQU_LR', 144, 180, 1 -- FEG
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 501, 'MHI/MQU NOTIFICAR MATERIAL LIBERADO/RECHASADO POR QA',					'MHI_MQU_LR', 144, 200, 1 -- FEG
+
+
+
+-- =============================================== -- ===============================================
+-- ================================= GRUPOS PARA NOTIFICACION DE PEDIDOS Y RECIBOS	================================== AX
+-- =============================================== -- ===============================================
+-- #7800- 'NOTIFICAR MATERIAL',		#6002- 'AUTORIZAR PO',		#6003- 'NOTIFICAR PO',		#6004- 'IMPRIMIR PO'
+-- =================================			CREAR PO		   ==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 600, 'MATERIAL SIN PARAMETROS PARA INSPECCION',			'MAT_REC', 139,	7800, 1		-- AX
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 601, 'MATERIAL SIN PARAMETROS PARA INSPECCION',			'MAT_REC', 144,	7800, 1		-- FEG
+
 
 -- ===============================================
 SET NOCOUNT OFF
