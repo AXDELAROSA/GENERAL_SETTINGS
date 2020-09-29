@@ -12,7 +12,7 @@ GO
 
 
 /* CARGA COMBO DE LOCACIONES */
--- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 7
+-- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 1
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_IMLOCFIL_SQL]
 GO
@@ -56,7 +56,7 @@ AS
 			WHERE	SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G') 
 		END
 
-		IF @PP_L_CON_TODOS=4
+	IF @PP_L_CON_TODOS=4
 		BEGIN
 			INSERT INTO @VP_TA_CATALOGO 
 			SELECT	LTRIM(RTRIM(loc_desc))		AS D_COMBOBOX	
@@ -64,7 +64,7 @@ AS
 			WHERE	SUBSTRING(LTRIM(RTRIM(loc_desc)),1,1) = 'T'
 		END
 
-		IF @PP_L_CON_TODOS=5
+	IF @PP_L_CON_TODOS=5
 		BEGIN
 			INSERT INTO @VP_TA_CATALOGO 
 			SELECT	LTRIM(RTRIM(alt1_loc))		AS D_COMBOBOX	
@@ -74,7 +74,7 @@ AS
 			VALUES ( '( TODOS )'	)
 		END
 		
-		IF @PP_L_CON_TODOS=6 -- PARA LISTADO DE GENERAR ORDEN EN GERBER
+	IF @PP_L_CON_TODOS=6 -- PARA LISTADO DE GENERAR ORDEN EN GERBER
 		BEGIN
 			INSERT INTO @VP_TA_CATALOGO 
 			SELECT	LTRIM(RTRIM(loc_desc))		AS D_COMBOBOX	
@@ -85,7 +85,7 @@ AS
 			VALUES ( '( TODOS )'	)
 		END
 
-		IF @PP_L_CON_TODOS=7 -- PARA FICHA DE GENERAR ORDEN EN GERBER
+	IF @PP_L_CON_TODOS=7 -- PARA FICHA DE GENERAR ORDEN EN GERBER
 		BEGIN
 			INSERT INTO @VP_TA_CATALOGO 
 			SELECT	LTRIM(RTRIM(loc_desc))		AS D_COMBOBOX	
@@ -94,16 +94,92 @@ AS
 
 		END
 
+		-- ====================================================================================
+		-- =======================		FO_INVENTARIO
+		-- ====================================================================================
+		--	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES
+	--IF @PP_L_CON_TODOS=10	OR	@PP_L_CON_TODOS=11
+	--	BEGIN
+	--		INSERT INTO @VP_TA_CATALOGO 
+	--		SELECT	A4GLIDENTITY AS TA_K_CATALOGO,
+	--				LTRIM(RTRIM(loc)) AS TA_D_CATALOGO
+	--		FROM	[DATA_02].[dbo].imlocfil_sql
+	--		WHERE	LTRIM(RTRIM(alt1_loc))=''
+	--		ORDER BY TA_D_CATALOGO
+
+			--	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES CON EL TODOS CON (-1)
+				--IF @PP_L_CON_TODOS=11
+				--	BEGIN
+				--		INSERT INTO @VP_TA_CATALOGO
+				--			( TA_K_CATALOGO,	TA_D_CATALOGO	)
+				--		VALUES
+				--			( -1,				'( TODOS )'		)
+				--	END
+		--END
+		-- ====================================================================================
+		--SELECT * FROM [DATA_02].[dbo].imlocfil_sql
+		-- ====================================================================================
+
 	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
 			TA_D_CATALOGO	AS D_COMBOBOX 
 	FROM	@VP_TA_CATALOGO
 	ORDER BY  TA_D_CATALOGO 
-
-	-- ==========================================
 		
 	-- ////////////////////////////////////////////////////
 GO
 
+
+-- ////////////////////////////////////////////////////
+-- //	CARGA COMBO DE LOCACIONES PARA LA FO_INVENTARIO
+-- ////////////////////////////////////////////////////
+-- EXECUTE [PG_CB_IMLOCFIL_INVENTARIO_SQL] 001,144, 10
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]
+GO
+CREATE PROCEDURE [dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+						(	TA_K_CATALOGO		INT NOT NULL,
+							TA_D_CATALOGO		VARCHAR(50))
+
+		-- ====================================================================================
+		-- =======================		FO_INVENTARIO
+		-- ====================================================================================
+		----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES
+		IF @PP_L_CON_TODOS=10	OR	@PP_L_CON_TODOS=11
+			BEGIN
+				INSERT INTO @VP_TA_CATALOGO 
+				SELECT	A4GLIDENTITY AS TA_K_CATALOGO,
+						LTRIM(RTRIM(loc)) AS TA_D_CATALOGO
+				FROM	[DATA_02].[dbo].imlocfil_sql
+				WHERE	LTRIM(RTRIM(alt1_type))=''
+				ORDER BY TA_D_CATALOGO
+
+				----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES CON EL TODOS CON (-1)
+					IF @PP_L_CON_TODOS=11
+						BEGIN
+							INSERT INTO @VP_TA_CATALOGO
+								( TA_K_CATALOGO,	TA_D_CATALOGO	)
+							VALUES
+								( -1,				'( TODOS )'		)
+						END
+			END
+		-- ====================================================================================
+		--SELECT * FROM [DATA_02].[dbo].imlocfil_sql
+		-- ====================================================================================
+
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+			TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM	@VP_TA_CATALOGO
+	ORDER BY  TA_D_CATALOGO 
+		
+	-- ////////////////////////////////////////////////////
+GO
 
 
 -- //////////////////////////////////////////////////////////////
@@ -111,12 +187,9 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE CLIENTES */
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL]
 	@PP_K_SISTEMA_EXE			INT,
 	@PP_K_USUARIO				INT,
@@ -207,7 +280,9 @@ AS
 	-- ////////////////////////////////////////////////////
 GO
 
-
+-- //////////////////////////////////////////////////////////////
+-- // /* CARGA COMBO DE COLORES */
+-- //////////////////////////////////////////////////////////////
 -- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1,139,0
 -- USE [BD_GENERAL]
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_COLOR_IMITMIDX_SQL]') AND type in (N'P', N'PC'))
