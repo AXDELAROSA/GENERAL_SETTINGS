@@ -451,7 +451,7 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 256, 'PRODUCCION SELECCIONAR KITS',	
 -- ===================USUARIOS PARA ABRIR LA ORDEN COMPLETADA PANTALLA frmKits============================
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 257, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 41, 102, 1 -- RAFAELF
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 258, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 44, 102, 1 -- GUILLERMOM
-EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 259, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 144, 102, 1 -- FEG
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 259, 'PRODUCCION SELECCIONAR KITS',			'PRD_SL_KIT', 144, 102, 0 -- FEG
 
 -- =============================================== -- ===============================================
 -- ================================= GRUPOS APROBADORES PARA PO	================================== AX
