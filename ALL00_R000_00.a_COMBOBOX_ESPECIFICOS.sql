@@ -283,7 +283,7 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE COLORES */
 -- //////////////////////////////////////////////////////////////
--- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1,139,4
+-- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 139, 5
 -- USE [BD_GENERAL]
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_COLOR_IMITMIDX_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_COLOR_IMITMIDX_SQL]
@@ -363,7 +363,49 @@ AS
 		AND LEN(RTRIM(LTRIM(ITEM_NO)))=7
 		ORDER BY TA_D_CATALOGO 
 			-- ==========================================
-					
+		
+		-- COMBO UTILIZADO EN PANTALLA IMPORT HIDE
+		IF @PP_L_CON_TODOS=4
+		BEGIN
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT	DISTINCT
+					1			AS TA_K_CATALOGO,
+					LTRIM(RTRIM(COLOUR))	AS TA_D_CATALOGO,
+					0						AS TA_O_CATALOGO,
+					0						AS L_DELETED, 
+					1						AS L_ACTIVO
+			FROM [DATA_02].[dbo].COLORES_ACTIVOS 
+			ORDER BY TA_D_CATALOGO 
+
+			INSERT INTO @VP_TA_CATALOGO
+					( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+				VALUES
+					( -1,				'(Seleccione Color)',	-999,		   0,			 1				)
+
+		END
+			-- ==========================================
+
+		-- COMBO UTILIZADO EN PANTALLA MATERIAL LABELS
+		IF @PP_L_CON_TODOS=5
+		BEGIN
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT	DISTINCT
+					1			AS TA_K_CATALOGO,
+					LTRIM(RTRIM(COLOUR))	AS TA_D_CATALOGO,
+					0						AS TA_O_CATALOGO,
+					0						AS L_DELETED, 
+					1						AS L_ACTIVO
+			FROM [DATA_02].[dbo].COLORES_ACTIVOS 
+			ORDER BY TA_D_CATALOGO 
+
+			INSERT INTO @VP_TA_CATALOGO
+					( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+				VALUES
+					( -1,				'',	-999,		   0,			 1				)
+
+		END
+			-- ==========================================
+
 		SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
 				TA_D_CATALOGO	AS D_COMBOBOX 
 		FROM	@VP_TA_CATALOGO
