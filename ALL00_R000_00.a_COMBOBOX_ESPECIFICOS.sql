@@ -607,3 +607,48 @@ AS
 	-- ////////////////////////////////////////////////////
 GO
 
+
+
+
+-- USE BD_GENERAL
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMPRESORA_ETIQUETA]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_IMPRESORA_ETIQUETA]
+GO
+/*
+ EXECUTE [dbo].[PG_CB_IMPRESORA_ETIQUETA] 0,0, 1
+*/
+CREATE PROCEDURE [dbo].[PG_CB_IMPRESORA_ETIQUETA]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT IDENTITY (1,1),
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT DEFAULT 1
+					)
+
+	IF @PP_L_CON_TODOS=1
+		BEGIN
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT 'Datamax #1' , 1
+
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT 'Datamax #2' , 2
+
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT 'Datamax #3' , 3
+		END
+
+	-- ==========================================	
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM	@VP_TA_CATALOGO
+		ORDER BY TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+		
+	-- ////////////////////////////////////////////////////
+GO
+
