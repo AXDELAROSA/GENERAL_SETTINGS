@@ -53,7 +53,7 @@ AS
 			INSERT INTO @VP_TA_CATALOGO 
 			SELECT	LTRIM(RTRIM(alt1_loc))		AS D_COMBOBOX	
 			FROM	DATA_02.DBO.imlocfil_sql 
-			WHERE	SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G') 
+			WHERE	SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G','R') 
 		END
 
 	IF @PP_L_CON_TODOS=4
@@ -131,6 +131,7 @@ GO
 
 -- ////////////////////////////////////////////////////
 -- //	CARGA COMBO DE LOCACIONES PARA LA FO_INVENTARIO
+-- //	AX : 20201203
 -- ////////////////////////////////////////////////////
 -- EXECUTE [PG_CB_IMLOCFIL_INVENTARIO_SQL] 001,144, 10
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]') AND type in (N'P', N'PC'))
@@ -142,36 +143,33 @@ CREATE PROCEDURE [dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]
 	--============================
 	@PP_L_CON_TODOS				INT
 AS
-
 	DECLARE @VP_TA_CATALOGO	AS TABLE
-						(	TA_K_CATALOGO		INT NOT NULL,
-							TA_D_CATALOGO		VARCHAR(50))
+		(	TA_K_CATALOGO		INT NOT NULL,
+			TA_D_CATALOGO		VARCHAR(50)	)
 
-		-- ====================================================================================
-		-- =======================		FO_INVENTARIO
-		-- ====================================================================================
-		----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES
-		IF @PP_L_CON_TODOS=10	OR	@PP_L_CON_TODOS=11
-			BEGIN
-				INSERT INTO @VP_TA_CATALOGO 
-				SELECT	A4GLIDENTITY AS TA_K_CATALOGO,
-						LTRIM(RTRIM(loc)) AS TA_D_CATALOGO
-				FROM	[DATA_02].[dbo].imlocfil_sql
-				WHERE	LTRIM(RTRIM(alt1_type))=''
-				ORDER BY TA_D_CATALOGO
+	-- ====================================================================================
+	-- =======================		FO_INVENTARIO
+	-- ====================================================================================
+	----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT	A4GLIDENTITY AS TA_K_CATALOGO,
+			LTRIM(RTRIM(loc)) AS TA_D_CATALOGO
+	FROM	[DATA_02].[dbo].imlocfil_sql
+	WHERE	LTRIM(RTRIM(alt1_type))=''
+	AND		SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G','R')
+	ORDER BY TA_D_CATALOGO
 
-				----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES CON EL TODOS CON (-1)
-					IF @PP_L_CON_TODOS=11
-						BEGIN
-							INSERT INTO @VP_TA_CATALOGO
-								( TA_K_CATALOGO,	TA_D_CATALOGO	)
-							VALUES
-								( -1,				'( TODOS )'		)
-						END
-			END
-		-- ====================================================================================
-		--SELECT * FROM [DATA_02].[dbo].imlocfil_sql
-		-- ====================================================================================
+	----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES CON EL TODOS CON (-1)
+	IF @PP_L_CON_TODOS = 1
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO	)
+		VALUES
+			( -1,				'( TODOS )'		)
+	END
+	-- ====================================================================================
+	--SELECT * FROM [DATA_02].[dbo].imlocfil_sql
+	-- ====================================================================================
 
 	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
 			TA_D_CATALOGO	AS D_COMBOBOX 
