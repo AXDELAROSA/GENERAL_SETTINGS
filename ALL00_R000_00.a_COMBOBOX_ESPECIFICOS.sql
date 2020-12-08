@@ -157,8 +157,9 @@ AS
 	FROM	[DATA_02].[dbo].imlocfil_sql
 	WHERE	LTRIM(RTRIM(alt1_type))=''
 	AND		SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G','R')
+	AND		LOC NOT IN ('MCT','MEP','MFP','MHH','MIT','MOB','MOS','MRD','MTR')
 	ORDER BY TA_D_CATALOGO
-
+	--SELECT	*	FROM	[DATA_02].[dbo].imlocfil_sql
 	----	PARA GENERAR COMBO DE LA FO_INVENTARIO, MUESTRA LAS LOCACIONES CON EL TODOS CON (-1)
 	IF @PP_L_CON_TODOS = 1
 	BEGIN
@@ -175,9 +176,8 @@ AS
 			TA_D_CATALOGO	AS D_COMBOBOX 
 	FROM	@VP_TA_CATALOGO
 	ORDER BY  TA_D_CATALOGO 
-		
 	-- ////////////////////////////////////////////////////
-GO
+GO		
 
 
 -- //////////////////////////////////////////////////////////////
