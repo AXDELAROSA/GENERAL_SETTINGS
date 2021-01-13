@@ -280,12 +280,16 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 		@VP_S_APELLIDO_P VARCHAR(30), @VP_S_APELLIDO_M VARCHAR(30)
 	--==========================================	--==========================================
 	-- PARA UTILIZAR EN EL CURSOR
-DECLARE @VP_CU_D_USUARIO_FINAL NVARCHAR(MAX)='',	@VP_EXISTE	INT=0,	@VP_INCONVENIENTE	INT=0
+	DECLARE @VP_CU_D_USUARIO_FINAL NVARCHAR(MAX)='',	@VP_EXISTE	INT=0,	@VP_INCONVENIENTE	INT=0
 		
-	CREATE TABLE #Tablausuario ( D_USUARIO VARCHAR(250) )
-
+	--==========================================	--==========================================
+	-- PARA ALMACENAR LOS D_USUARIOS
+	DECLARE @Tablausuario TABLE	
+	( TA_D_USUARIO VARCHAR(250) )
+	--==========================================	--==========================================
+	
+	--==============================================================================================================================
 	SELECT	TOP  (1)
-		--==========================================
 	@VP_D_USUARIO_1=(	CASE WHEN CHARINDEX(' ',EP_NOMBRE)=0 
 			THEN EP_NOMBRE		END		),
 	@VP_D_USUARIO_2=(	CASE WHEN CHARINDEX(' ',EP_NOMBRE)<>0 
@@ -303,72 +307,82 @@ DECLARE @VP_CU_D_USUARIO_FINAL NVARCHAR(MAX)='',	@VP_EXISTE	INT=0,	@VP_INCONVENI
 	--FROM    USUARIO_PEARL
 	--INNER JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
 	--WHERE	K_EMPLEADO_PEARL=@PP_K_EMPLEADO_PEARL		--12602
-	FROM HOWE.DBO.VISTA_GAFETES
+	FROM	HOWE.DBO.VISTA_GAFETES
 	WHERE	EN_NUM_EMP=@PP_K_EMPLEADO_PEARL
-
-	IF @@ROWCOUNT<>0 
+	IF @@ROWCOUNT>0 
 	BEGIN
-	
-	IF NOT(@VP_D_USUARIO_1 IS NULL)
-		BEGIN
-			INSERT INTO		#TABLAUSUARIO (	D_USUARIO )
-			VALUES	(	@VP_D_USUARIO_1 + @VP_S_APELLIDO_P	),
-					(	@VP_D_USUARIO_1 + @VP_S_APELLIDO_M	)
-			--GOTO INCONVENIENTE
-		END
-	ELSE
-		BEGIN
-			INSERT INTO		#TABLAUSUARIO (	D_USUARIO )
-			VALUES	(	@VP_D_USUARIO_2 + @VP_S_APELLIDO_P	),		(	@VP_D_USUARIO_3 + @VP_S_APELLIDO_P	),
-					(	@VP_D_USUARIO_4 + @VP_S_APELLIDO_P	),		(	@VP_D_USUARIO_5 + @VP_S_APELLIDO_P	),
-					(	@VP_D_USUARIO_2 + @VP_S_APELLIDO_M	),		(	@VP_D_USUARIO_3 + @VP_S_APELLIDO_M	),		
-					(	@VP_D_USUARIO_4 + @VP_S_APELLIDO_M	),		(	@VP_D_USUARIO_5 + @VP_S_APELLIDO_M	)
-		END
-				
-		DECLARE Employee_Cursor CURSOR FOR  
-		SELECT * FROM #TABLAUSUARIO
-		OPEN Employee_Cursor;  
-		FETCH NEXT FROM Employee_Cursor INTO	@VP_CU_D_USUARIO_FINAL				
-		WHILE @@FETCH_STATUS = 0
-		   BEGIN  
-		   IF NOT(@VP_CU_D_USUARIO_FINAL IS NULL)
-		   BEGIN
-				EXECUTE	[dbo].[PG_SK_USUARIO_INCONVENIENTE]	@PP_K_SISTEMA_EXE , @PP_K_USUARIO_ACCION,
-															-- ===========================
-															@VP_CU_D_USUARIO_FINAL,	@VP_INCONVENIENTE			OUTPUT
-				
-					IF(SELECT	COUNT(D_USUARIO_PEARL)	
-								FROM BD_GENERAL.dbo.USUARIO_PEARL
-								WHERE	LTRIM(RTRIM(UPPER(@VP_CU_D_USUARIO_FINAL)))=LTRIM(RTRIM(UPPER(D_USUARIO_PEARL))))>0
+		--==============================================================================================================================		
+		--==============================================================================================================================		
+		--==============================================================================================================================		
+			IF NOT(@VP_D_USUARIO_1 IS NULL)
+			BEGIN
+				INSERT INTO		@Tablausuario (	TA_D_USUARIO )
+				VALUES	(	@VP_D_USUARIO_1 + @VP_S_APELLIDO_P	),
+						(	@VP_D_USUARIO_1 + @VP_S_APELLIDO_M	)
+				--GOTO INCONVENIENTE
+			END
+			ELSE
+			BEGIN
+				INSERT INTO		@Tablausuario (	TA_D_USUARIO )
+				VALUES	(	@VP_D_USUARIO_2 + @VP_S_APELLIDO_P	),		(	@VP_D_USUARIO_3 + @VP_S_APELLIDO_P	),
+						(	@VP_D_USUARIO_4 + @VP_S_APELLIDO_P	),		(	@VP_D_USUARIO_5 + @VP_S_APELLIDO_P	),
+						(	@VP_D_USUARIO_2 + @VP_S_APELLIDO_M	),		(	@VP_D_USUARIO_3 + @VP_S_APELLIDO_M	),		
+						(	@VP_D_USUARIO_4 + @VP_S_APELLIDO_M	),		(	@VP_D_USUARIO_5 + @VP_S_APELLIDO_M	)
+			END
+				--==========================================	--==========================================
+				DECLARE CU_Employee_Cursor CURSOR FOR  
+					SELECT * FROM @Tablausuario
+				OPEN			CU_Employee_Cursor  
+				--==========================================	--==========================================
+				FETCH NEXT FROM CU_Employee_Cursor INTO	@VP_CU_D_USUARIO_FINAL				
+				WHILE @@FETCH_STATUS = 0
+				BEGIN  
+				   IF NOT(@VP_CU_D_USUARIO_FINAL IS NULL)
+				   BEGIN
+						EXECUTE	[dbo].[PG_SK_USUARIO_INCONVENIENTE]	@PP_K_SISTEMA_EXE , @PP_K_USUARIO_ACCION,
+																	-- ===========================
+																	@VP_CU_D_USUARIO_FINAL,	@VP_INCONVENIENTE			OUTPUT
+						
+							--==========================================--==========================================
+							--	SE VERIFICA SI EXISTE EL USUARIO EN EL SISTEMA
+							IF(SELECT	COUNT(D_USUARIO_PEARL)	
+										FROM BD_GENERAL.dbo.USUARIO_PEARL
+										WHERE	LTRIM(RTRIM(UPPER(@VP_CU_D_USUARIO_FINAL)))=LTRIM(RTRIM(UPPER(D_USUARIO_PEARL))))>0
+							BEGIN
+								SET @VP_EXISTE=1
+								BREAK
+							END
+							ELSE
+							BEGIN
+								SET @VP_EXISTE=0
+							END
+							--==========================================--==========================================
+					
+						IF (@VP_INCONVENIENTE=0 AND @VP_EXISTE=0)
 						BEGIN
-							SET @VP_EXISTE=1
 							BREAK
 						END
-					ELSE
-						BEGIN
-							SET @VP_EXISTE=0
-						END
-			
-				IF (@VP_INCONVENIENTE=0 AND @VP_EXISTE=0)
-				BEGIN
-					BREAK
+					END
+				--==========================================	--==========================================
+				FETCH NEXT FROM CU_Employee_Cursor INTO	@VP_CU_D_USUARIO_FINAL
 				END
-			END
-			  FETCH NEXT FROM Employee_Cursor INTO	@VP_CU_D_USUARIO_FINAL
-		   END
-		CLOSE Employee_Cursor
-		DEALLOCATE Employee_Cursor
+				CLOSE		CU_Employee_Cursor
+				DEALLOCATE	CU_Employee_Cursor
+		--==============================================================================================================================		
+		--==============================================================================================================================		
+		--==============================================================================================================================
 	END
 	ELSE
-	BEGIN
-	SET @VP_CU_D_USUARIO_FINAL='ASIGNAR_MANUALMENTE'
-	END
-	
-	IF @VP_EXISTE <> 0	OR	@VP_INCONVENIENTE <> 0	OR @VP_CU_D_USUARIO_FINAL='' OR @VP_CU_D_USUARIO_FINAL IS NULL
 	BEGIN
 		SET @VP_CU_D_USUARIO_FINAL='ASIGNAR_MANUALMENTE'
 	END
 	
+--==============================================================================================================================
+	IF @VP_EXISTE <> 0	OR	@VP_INCONVENIENTE <> 0	OR @VP_CU_D_USUARIO_FINAL='' OR @VP_CU_D_USUARIO_FINAL IS NULL
+	BEGIN
+		SET @VP_CU_D_USUARIO_FINAL='ASIGNAR_MANUALMENTE'
+	END
+--==============================================================================================================================	
 	--SELECT @VP_CU_D_USUARIO_FINAL
 	SET @PP_D_USUARIO = @VP_CU_D_USUARIO_FINAL
 GO
@@ -497,82 +511,113 @@ BEGIN TRY
 			AND		K_EMPLEADO_PEARL>0
 		END
 
-	IF @VP_K_USUARIO_PEARL_EXISTE_PEARL<>0
+	IF @VP_K_USUARIO_PEARL_EXISTE_PEARL>0
 	BEGIN
 		SET @VP_MENSAJE= 'EL USUARIO YA TIENE UN REGISTRO EN EL SISTEMA'
+		RAISERROR (@VP_MENSAJE, 16, 1 )
 	END
 	--IF @PP_K_EMPLEADO_PEARL<1 AND @PP_L_EMPLEADO_PEARL=1
 	--	SET @VP_MENSAJE= 'EL USUARIO YA TIENE UN REGISTRO EN EL SISTEMA'
 
-	IF @VP_MENSAJE=''
-		EXECUTE [BD_GENERAL].dbo.[PG_SK_CATALOGO_K_MAX_GET]		@PP_K_SISTEMA_EXE, 'BD_GENERAL',
-																'USUARIO_PEARL', 'K_USUARIO_PEARL',
-																@OU_K_TABLA_DISPONIBLE = @VP_K_USUARIO_PEARL	OUTPUT
+	EXECUTE [BD_GENERAL].dbo.[PG_SK_CATALOGO_K_MAX_GET]		@PP_K_SISTEMA_EXE, 'BD_GENERAL',
+															'USUARIO_PEARL', 'K_USUARIO_PEARL',
+															@OU_K_TABLA_DISPONIBLE = @VP_K_USUARIO_PEARL	OUTPUT
 	-- /////////////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_CLAVE_EXISTE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-																@VP_K_USUARIO_PEARL, 
-																@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
+	EXECUTE [dbo].[PG_RN_USUARIO_PEARL_CLAVE_EXISTE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+															@VP_K_USUARIO_PEARL, 
+															@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
 	-- /////////////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-														@VP_K_USUARIO_PEARL, @PP_USUARIO, @PP_CORREO,
-														@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
-	
-	-- //////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-	BEGIN		
-		--IF	@PP_CORREO LIKE ('%@%')
-		--	BEGIN
-		--		SET @PP_L_CORREO=0
-		--	END		
-		--============================================================================
-		--======================================INSERTAR EL USUARIO_PEARL
-		--============================================================================
-			INSERT INTO USUARIO_PEARL
-				(	[K_USUARIO_PEARL]			,
-					-- =========================
-					[D_USUARIO_PEARL]			,
-					-- ===========================
-					[NOMBRE]					,
-					[APELLIDO_PATERNO]			,
-					[APELLIDO_MATERNO]			,
-					-- ===========================
-					[PASSWORD_USUARIO_PEARL]	,		--[L_CORREO_PEARL]	,
-					[CORREO_USUARIO_PEARL]		,
-					[K_USUARIO_DEPARTAMENTO]	,		
-					[K_USUARIO_TIPO]	,
-					-- =========================
-					[K_EMPLEADO_PEARL]			,		--[L_USUARIO_PEARL],		
-					-- =========================
-					[K_USUARIO_ALTA], [F_ALTA], [K_USUARIO_CAMBIO], [F_CAMBIO],
-					[L_BORRADO], [K_USUARIO_BAJA], [F_BAJA]  )
-			VALUES	
-				(	@VP_K_USUARIO_PEARL			, 
-					-- ===========================
-					@PP_USUARIO					,
-					-- ===========================
-					@PP_NOMBRE					,
-					@PP_APELLIDO_PATERNO		,
-					@PP_APELLIDO_MATERNO		,
-					-- ===========================
-					@PP_PASSWORD				,		--@PP_L_CORREO				,
-					@PP_CORREO					,		
-					@PP_K_USUARIO_DEPARTAMENTO	,
-					@PP_K_USUARIO_TIPO			,
-					-- ============================
-					@PP_K_EMPLEADO_PEARL		,		--@PP_L_USUARIO_PEARL,
-					-- ============================
-					@PP_K_USUARIO_ACCION, GETDATE(), @PP_K_USUARIO_ACCION, GETDATE(),
-					0, NULL, NULL  )
-
-				IF @@ROWCOUNT = 0
-					BEGIN
-						--DECLARE @VP_ERROR_1 VARCHAR(250)='THE USUARIO_PEARL WAS NOT INSERTED. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@VP_K_USUARIO_PEARL)+']'
-						--RAISERROR (@VP_ERROR_1, 16, 1 ) --MENSAJE - Severity -State.
-						SET @VP_MENSAJE='The USUARIO_PEARL was not inserted. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@VP_K_USUARIO_PEARL)+']'
-					END
+	IF @VP_MENSAJE<>''
+	BEGIN
+		RAISERROR (@VP_MENSAJE, 16, 1 )
 	END
+	
+	EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+													@VP_K_USUARIO_PEARL, @PP_USUARIO, @PP_CORREO,
+													@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT	
+	-- //////////////////////////////////////////////////////////////
+	IF @VP_MENSAJE<>''
+	BEGIN
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END
+	--============================================================================
+	--======================================INSERTAR EL USUARIO_PEARL
+	--============================================================================
+		INSERT INTO USUARIO_PEARL
+			(	[K_USUARIO_PEARL]			,
+				-- =========================
+				[D_USUARIO_PEARL]			,
+				-- ===========================
+				[NOMBRE]					,
+				[APELLIDO_PATERNO]			,
+				[APELLIDO_MATERNO]			,
+				-- ===========================
+				[PASSWORD_USUARIO_PEARL]	,		--[L_CORREO_PEARL]	,
+				[CORREO_USUARIO_PEARL]		,
+				[K_USUARIO_DEPARTAMENTO]	,		
+				[K_USUARIO_TIPO]	,
+				-- =========================
+				[K_EMPLEADO_PEARL]			,		--[L_USUARIO_PEARL],		
+				-- =========================
+				[K_USUARIO_ALTA], [F_ALTA], [K_USUARIO_CAMBIO], [F_CAMBIO],
+				[L_BORRADO], [K_USUARIO_BAJA], [F_BAJA]  )
+		VALUES	
+			(	@VP_K_USUARIO_PEARL			, 
+				-- ===========================
+				@PP_USUARIO					,
+				-- ===========================
+				@PP_NOMBRE					,
+				@PP_APELLIDO_PATERNO		,
+				@PP_APELLIDO_MATERNO		,
+				-- ===========================
+				@PP_PASSWORD				,		--@PP_L_CORREO				,
+				@PP_CORREO					,		
+				@PP_K_USUARIO_DEPARTAMENTO	,
+				@PP_K_USUARIO_TIPO			,
+				-- ============================
+				@PP_K_EMPLEADO_PEARL		,		--@PP_L_USUARIO_PEARL,
+				-- ============================
+				@PP_K_USUARIO_ACCION, GETDATE(), @PP_K_USUARIO_ACCION, GETDATE(),
+				0, NULL, NULL  )
+
+		IF @@ROWCOUNT = 0
+		BEGIN
+			SET @VP_MENSAJE='El USUARIO_PEARL no fue ingresado(INTO). [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@VP_K_USUARIO_PEARL)+']'
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
+	--============================================================================
+	--======================================INSERTAR EL USUARIO_PEARL EN BD DATA_02
+	--====================================== POR GESTION DE PERMISOS EN PANTALLAS
+	--====================================== CON CODIGO ANTERIOR
+	--============================================================================
+		DECLARE @VP_TIPO_DATA_02		VARCHAR(10)
+		SELECT	@VP_TIPO_DATA_02	= S_USUARIO_TIPO 
+		FROM	USUARIO_TIPO
+		WHERE	K_USUARIO_TIPO	=	@PP_K_USUARIO_TIPO
+		
+		INSERT INTO	[DATA_02].[dbo].[users_pearl]
+		(	
+			[nombre]
+		    ,[apellido]		,[usuario]
+			,[contrasena]	,[correo]
+			,[tipo]			,[tema]
+			,[K_USUARIO_PEARL]
+		)
+		VALUES
+		(
+			 @PP_NOMBRE
+			,@PP_APELLIDO_PATERNO	,@PP_USUARIO
+			,@PP_PASSWORD			,@PP_CORREO
+			,@VP_TIPO_DATA_02		,'Flat Nature.isl'
+			,@VP_K_USUARIO_PEARL
+		)
+
+		IF @@ROWCOUNT = 0
+		BEGIN
+			SET @VP_MENSAJE='El USUARIO_PEARL no fue ingresado(INTO) en DATA. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@VP_K_USUARIO_PEARL)+']'
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
+	--============================================================================
 -- /////////////////////////////////////////////////////////////////////
 COMMIT TRANSACTION 
 END TRY
@@ -588,7 +633,7 @@ END CATCH
 	-- /////////////////////////////////////////////////////////////////////	
 	IF @VP_MENSAJE<>''
 	BEGIN
-		SET		@VP_MENSAJE = 'Not is possible [Insert] at [USUARIO_PEARL]: ' + @VP_MENSAJE 
+		SET		@VP_MENSAJE = 'No es posible [Insertar] el [USUARIO_PEARL]: ' + @VP_MENSAJE 
 	END
 
 	SELECT	@VP_MENSAJE AS MENSAJE, @VP_K_USUARIO_PEARL AS CLAVE
@@ -670,7 +715,7 @@ BEGIN TRY
 				SET NOCOUNT OFF
 		-- ---------------SI NO HAY PIELES SELECCIONADAS GENERAMOS UN ERROR DE TRANSACCION
 				IF @VP_N_K_SISTEMA IS NULL
-					RAISERROR ('NO SE RECIBIO NINGÚN [PERMISO]. DEBE SELECCIONAR UNO.', 16, 1 ) --MENSAJE - Severity -State.
+					RAISERROR ('No se recibió ningún [PERMISO]. Debe seleccionar uno como mínimo.', 16, 1 )
 		
 			DECLARE @VP_CU_K_SISTEMA			INT
 
@@ -693,9 +738,8 @@ BEGIN TRY
 						
 							IF @@ROWCOUNT = 0
 								BEGIN
-									--DECLARE @VP_ERROR_1 VARCHAR(250)='THE USUARIO_PEARL WAS NOT INSERTED. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@VP_K_USUARIO_PEARL)+']'
-									--RAISERROR (@VP_ERROR_1, 16, 1 ) --MENSAJE - Severity -State.
-									SET @VP_MENSAJE='NO SE INSERTARON LOS PERMISOS DE USUARIO. [K_SISTEMA#'+CONVERT(VARCHAR(10),@VP_CU_K_SISTEMA)+']'
+									SET @VP_MENSAJE='No se insertaron los permisos de usuario(INTO). [K_SISTEMA#'+CONVERT(VARCHAR(10),@VP_CU_K_SISTEMA)+']'
+									RAISERROR (@VP_MENSAJE, 16, 1 )
 								END				
 
 					FETCH NEXT FROM CU_CURSOR INTO @VP_CU_K_SISTEMA
@@ -794,44 +838,71 @@ BEGIN TRY
 	--															@VP_K_USUARIO_PEARL, 
 	--															@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
 	-- /////////////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-		EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-														@PP_K_USUARIO_PEARL, @PP_USUARIO, @PP_CORREO,
-														@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
-	
-	-- //////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-	BEGIN		
-		--============================================================================
-		--======================================UPDATE EL USUARIO_PEARL
-		--============================================================================
-		UPDATE USUARIO_PEARL
-		SET
-			[D_USUARIO_PEARL]			= @PP_USUARIO					,
-			-- =========================-- ===========================	,
-			[NOMBRE]					= @PP_NOMBRE					,
-			[APELLIDO_PATERNO]			= @PP_APELLIDO_PATERNO			,
-			[APELLIDO_MATERNO]			= @PP_APELLIDO_MATERNO			,
-			-- =========================-- ===========================	,
-			[PASSWORD_USUARIO_PEARL]	= @PP_PASSWORD					,
-			[CORREO_USUARIO_PEARL]		= @PP_CORREO					,
-			[K_USUARIO_DEPARTAMENTO]	= @PP_K_USUARIO_DEPARTAMENTO	,
-			[K_USUARIO_TIPO]			= @PP_K_USUARIO_TIPO			,
-			-- =========================-- ==========================	,
-			[K_EMPLEADO_PEARL]			= @PP_K_EMPLEADO_PEARL			,
-			-- =========================-- ========================
-			[F_CAMBIO]					= GETDATE(), 
-			[K_USUARIO_CAMBIO]			= @PP_K_USUARIO_ACCION
-		WHERE   [K_USUARIO_PEARL]			= @PP_K_USUARIO_PEARL
-		AND		[K_EMPLEADO_PEARL]			= @PP_K_EMPLEADO_PEARL					
+	EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+													@PP_K_USUARIO_PEARL, @PP_USUARIO, @PP_CORREO,
+													@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
 
-				IF @@ROWCOUNT = 0
-					BEGIN
-						--DECLARE @VP_ERROR_1 VARCHAR(250)='THE USUARIO_PEARL WAS NOT INSERTED. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@VP_K_USUARIO_PEARL)+']'
-						--RAISERROR (@VP_ERROR_1, 16, 1 ) --MENSAJE - Severity -State.
-						SET @VP_MENSAJE='The USUARIO_PEARL was not update. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
-					END
+	-- //////////////////////////////////////////////////////////////
+	IF @VP_MENSAJE<>''
+	BEGIN
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END	
+	
+	--============================================================================
+	--======================================UPDATE EL USUARIO_PEARL
+	--============================================================================
+	UPDATE USUARIO_PEARL
+	SET
+		[D_USUARIO_PEARL]			= @PP_USUARIO					,
+		-- =========================-- ===========================	,
+		[NOMBRE]					= @PP_NOMBRE					,
+		[APELLIDO_PATERNO]			= @PP_APELLIDO_PATERNO			,
+		[APELLIDO_MATERNO]			= @PP_APELLIDO_MATERNO			,
+		-- =========================-- ===========================	,
+		[PASSWORD_USUARIO_PEARL]	= @PP_PASSWORD					,
+		[CORREO_USUARIO_PEARL]		= @PP_CORREO					,
+		[K_USUARIO_DEPARTAMENTO]	= @PP_K_USUARIO_DEPARTAMENTO	,
+		[K_USUARIO_TIPO]			= @PP_K_USUARIO_TIPO			,
+		-- =========================-- ==========================	,
+		[K_EMPLEADO_PEARL]			= @PP_K_EMPLEADO_PEARL			,
+		-- =========================-- ========================
+		[F_CAMBIO]					= GETDATE(), 
+		[K_USUARIO_CAMBIO]			= @PP_K_USUARIO_ACCION
+	WHERE   [K_USUARIO_PEARL]			= @PP_K_USUARIO_PEARL
+	AND		[K_EMPLEADO_PEARL]			= @PP_K_EMPLEADO_PEARL					
+
+	IF @@ROWCOUNT = 0
+	BEGIN
+		SET @VP_MENSAJE='El USUARIO_PEARL no fue modificado(UP). [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+		RAISERROR (@VP_MENSAJE, 16, 1 )
 	END
+	--============================================================================
+	--======================================ACTUALIZAR EL USUARIO_PEARL EN BD DATA_02
+	--====================================== POR GESTION DE PERMISOS EN PANTALLAS
+	--====================================== CON CODIGO ANTERIOR
+	--============================================================================
+		DECLARE @VP_TIPO_DATA_02		VARCHAR(10)
+		SELECT	@VP_TIPO_DATA_02	= S_USUARIO_TIPO 
+		FROM	USUARIO_TIPO
+		WHERE	K_USUARIO_TIPO	=	@PP_K_USUARIO_TIPO
+						
+		UPDATE	[DATA_02].[dbo].[users_pearl]
+		SET
+			[nombre]			=  @PP_NOMBRE
+		    ,[apellido]			=  @PP_APELLIDO_PATERNO	
+			,[usuario]			=  @PP_USUARIO
+			,[contrasena]		=  @PP_PASSWORD			
+			,[correo]			=  @PP_CORREO
+			,[tipo]				=  @VP_TIPO_DATA_02		
+			,[tema]				=  'Flat Nature.isl'		
+		WHERE	K_USUARIO_PEARL	=	@PP_K_USUARIO_PEARL			
+
+		IF @@ROWCOUNT = 0
+		BEGIN
+			SET @VP_MENSAJE='El USUARIO_PEARL no fue ingresado(INTO) en DATA. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
+	--============================================================================
 -- /////////////////////////////////////////////////////////////////////
 COMMIT TRANSACTION 
 END TRY
@@ -847,7 +918,7 @@ END CATCH
 	-- /////////////////////////////////////////////////////////////////////	
 	IF @VP_MENSAJE<>''
 	BEGIN
-		SET		@VP_MENSAJE = 'Not is possible [Update] at [USUARIO_PEARL]: ' + @VP_MENSAJE 
+		SET		@VP_MENSAJE = 'No es posible [Actualizar] el [USUARIO_PEARL]: ' + @VP_MENSAJE 
 	END
 
 	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_USUARIO_PEARL AS CLAVE
@@ -896,7 +967,8 @@ BEGIN TRY
 
 		IF @@ROWCOUNT = 0
 			BEGIN
-				SET @VP_MENSAJE='The USUARIO_PEARL was not delete. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+				SET @VP_MENSAJE='El USUARIO_PEARL no fue modificado(DL). [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+				RAISERROR (@VP_MENSAJE, 16, 1 )
 			END		
 	END
 	
@@ -923,7 +995,7 @@ END CATCH
 	-- /////////////////////////////////////////////////////////////////////	
 	IF @VP_MENSAJE<>''
 	BEGIN
-		SET		@VP_MENSAJE = 'Not is possible [Delete] at [USUARIO_PEARL]: ' + @VP_MENSAJE 
+		SET		@VP_MENSAJE = 'No es posible [Eliminar] el [USUARIO_PEARL]: ' + @VP_MENSAJE 
 	END
 
 	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_USUARIO_PEARL AS CLAVE
@@ -931,6 +1003,14 @@ END CATCH
 	
 	-- //////////////////////////////////////////////////////////////	
 GO
+
+
+-- =============================================================================================================================================================================================================
+-- =============================================================================================================================================================================================================
+-- =============================================================================================================================================================================================================
+-- =============================================================================================================================================================================================================
+-- =============================================================================================================================================================================================================
+-- =============================================================================================================================================================================================================
 
 
 -- //////////////////////////////////////////////////////////////
@@ -961,7 +1041,7 @@ AS
 
 	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
 		BEGIN
-			SET		@VP_MENSAJE			= 'Invalid [USER] name.'
+			SET		@VP_MENSAJE			= 'Nombre de [Usuario] inválido'	---'Invalid [USER] name.'
 			SET		@VP_K_CODIGO		=-10			
 		END
 	
@@ -1009,7 +1089,7 @@ AS
 
 	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
 		BEGIN
-			SET		@VP_MENSAJE			= 'Invalid [USER] name.'
+			SET		@VP_MENSAJE			= 'Nombre de [Usuario] inválido'	---'Invalid [USER] name.'
 			SET		@VP_K_CODIGO		=-10
 			SET		@VP_NOMBRE_APELLIDO	=NULL
 			--SET		@VP_APELLIDO_P		=NULL
@@ -1041,7 +1121,7 @@ AS
 
 			IF	@VP_K_CODIGO IS NULL
 				BEGIN
-					SET		@VP_MENSAJE			= '[PASSWORD] not valid, try again ...'
+					SET		@VP_MENSAJE			= '[PASSWORD] no válido, vuelva a intentar...'
 					SET		@VP_K_CODIGO		=-100
 					SET		@VP_NOMBRE_APELLIDO	=NULL
 					--SET		@VP_APELLIDO_P		=NULL
@@ -1092,7 +1172,7 @@ AS
 
 	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
 		BEGIN
-			SET		@VP_MENSAJE			= 'Invalid USER: ['+UPPER(@PP_D_USUARIO)+']'
+			SET		@VP_MENSAJE			= 'USUARIO Inválido: ['+UPPER(@PP_D_USUARIO)+']'
 			SET		@VP_K_CODIGO		=-10
 		END
 	ELSE
@@ -1104,7 +1184,7 @@ AS
 
 			IF	@VP_K_CODIGO IS NULL
 				BEGIN
-					SET		@VP_MENSAJE			= 'The current [PASSWORD] value is not valid, try again ...'
+					SET		@VP_MENSAJE			= 'El valor del [PASSWORD] actual no es correcto, vuelva a intentar...'
 					SET		@VP_K_CODIGO		=-100
 				END
 			ELSE
@@ -1114,9 +1194,9 @@ AS
 					WHERE	K_USUARIO_PEARL=@VP_K_CODIGO
 					AND		D_USUARIO_PEARL=@PP_D_USUARIO		
 
-						IF @@ROWCOUNT <> 0
+						IF @@ROWCOUNT > 0
 						BEGIN
-							SET @VP_MENSAJE='The [PASSWORD] was changed successfully...'
+							SET @VP_MENSAJE='El [PASSWORD] fue cambiado correctamente...'
 							SET @VP_K_CODIGO=0
 						END		
 				END
@@ -1145,9 +1225,9 @@ CREATE PROCEDURE [dbo].[PG_UP_THEME]
 AS
 -- =========================================	
 	DECLARE @VP_MENSAJE VARCHAR(500)
-	UPDATE USUARIO_PEARL
-	SET		TEMA_USUARIO_PEARL=@PP_THEME
-	WHERE	K_USUARIO_PEARL=@PP_K_USUARIO		
+	UPDATE	USUARIO_PEARL
+	SET		TEMA_USUARIO_PEARL	= @PP_THEME
+	WHERE	K_USUARIO_PEARL		= @PP_K_USUARIO		
 -- /////////////////////////////////////////////////////////////////////
 GO
 
