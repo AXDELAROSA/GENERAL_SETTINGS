@@ -62,8 +62,8 @@ AS
 				[L_BORRADO], [K_USUARIO_BAJA], [F_BAJA]  )		
 		VALUES	
 			(	@PP_K_COUNTRY, @PP_D_COUNTRY,
-				@PP_S_COUNTRY, 1, 
-				@PP_C_COUNTRY, 1,
+				@PP_S_COUNTRY, @PP_O_COUNTRY, 
+				@PP_C_COUNTRY, @PP_L_COUNTRY,
 				@PP_K_CONTINENTE,		
 			-- ============================================
 				@PP_K_USUARIO_ACCION, GETDATE(), 
@@ -83,242 +83,251 @@ AS
 	-- =========================================================
 GO
 
--- //////////////////////////////////////////////////////////////
 
 
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
 
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 0, '(NO-COUNTRY)', '( N/CT )' , 1 , '#0 // (NO-COUNTRY)' , 1,0
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 101, 'República de Angola', 'ANGOL' , 1 , '#101 // República de Angola' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 102, 'República Democrática y Popular de Argelia', 'ARGEL' , 1 , '#102 // República Democrática y Popular de Argelia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 104, 'República de Benín', 'BENÍN' , 1 , '#104 // República de Benín' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 105, 'República de Botswana', 'BOTSW' , 1 , '#105 // República de Botswana' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 106, 'Burkina Faso', 'BURKI' , 1 , '#106 // Burkina Faso' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 107, 'República de Burundi', 'BURUN' , 1 , '#107 // República de Burundi' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 108, 'República de Cabo Verde', 'CABO' , 1 , '#108 // República de Cabo Verde' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 109, 'República de Camerún', 'CAMER' , 1 , '#109 // República de Camerún' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 112, 'República de Ruanda', 'RUAND' , 1 , '#112 // República de Ruanda' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 113, 'República Popular del Congo', 'PCONGO' , 1 , '#113 // República Popular del Congo' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 114, 'República de Costa de Marfi l', 'CMARF' , 1 , '#114 // República de Costa de Marfi l' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 115, 'República de Chad', 'CHAD' , 1 , '#115 // República de Chad' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 116, 'República de Djibouti', 'DJIBO' , 1 , '#116 // República de Djibouti' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 117, 'República Árabe deEgipto', 'EGYP' , 1 , '#117 // República Árabe deEgipto' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 118, 'Estado de Eritrea', 'EERIT' , 1 , '#118 // Estado de Eritrea' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 119, 'República Federal Democrática de Etiopía', 'ETIOP' , 1 , '#119 // República Federal Democrática de Etiopía' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 120, 'República Gabonesa', 'GABON' , 1 , '#120 // República Gabonesa' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 121, 'República de Gambia', 'GAMBI' , 1 , '#121 // República de Gambia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 122, 'República de Ghana', 'GHANA' , 1 , '#122 // República de Ghana' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 123, 'República de Guinea', 'GUINE' , 1 , '#123 // República de Guinea' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 124, 'República de Guinea Bissau', 'GBISS' , 1 , '#124 // República de Guinea Bissau' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 125, 'República de Guinea Ecuatoria', 'GECUA' , 1 , '#125 // República de Guinea Ecuatoria' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 126, 'República de Kenia', 'KENIA' , 1 , '#126 // República de Kenia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 127, 'Reino de Lesotho', 'LESOT' , 1 , '#127 // Reino de Lesotho' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 128, 'República de Liberia', 'LIBER' , 1 , '#128 // República de Liberia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 129, 'Libia', 'LIBIA' , 1 , '#129 // Libia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 130, 'República de Madagascar', 'MADAG' , 1 , '#130 // República de Madagascar' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 133, 'República de Malawi', 'MALAW' , 1 , '#133 // República de Malawi' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 134, 'República de Malí', 'MALÍ' , 1 , '#134 // República de Malí' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 135, 'Reino de Marruecos', 'MARRU' , 1 , '#135 // Reino de Marruecos' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 136, 'República de Mauricio', 'MAURI' , 1 , '#136 // República de Mauricio' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 137, 'República Islámica de Maurita', 'MAURC' , 1 , '#137 // República Islámica de Maurita' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 138, 'Islas Anglonormandas', 'ANGLO' , 1 , '#138 // Islas Anglonormandas' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 139, 'República de Mozambique', 'MOZAM' , 1 , '#139 // República de Mozambique' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 140, 'República de Namibia', 'NAMIB' , 1 , '#140 // República de Namibia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 141, 'República de Níger', 'NÍGER' , 1 , '#141 // República de Níger' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 142, 'República Federal de Nigeria', 'NIGRIA' , 1 , '#142 // República Federal de Nigeria' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 143, 'República Centroafricana', 'CAFRI' , 1 , '#143 // República Centroafricana' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 145, 'Colectividad territorial de San Pedro y Miquelón', 'SPEDR' , 1 , '#145 // Colectividad territorial de San Pedro y Miquelón' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 147, 'Isla Santa Helena', 'ISELE' , 1 , '#147 // Isla Santa Helena' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 148, 'República Democrática de Santo Tome y Príncipe', 'STYPR' , 1 , '#148 // República Democrática de Santo Tome y Príncipe' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 149, 'República de Senegal', 'SENEG' , 1 , '#149 // República de Senegal' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 150, 'República de Isla Seychelles', 'SEYCH' , 1 , '#150 // República de Isla Seychelles' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 151, 'República de Sierra Leona', 'SLEON' , 1 , '#151 // República de Sierra Leona' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 152, 'Unión de las Comoras', 'UCOMO' , 1 , '#152 // Unión de las Comoras' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 153, 'República de Somalia', 'SOMAL' , 1 , '#153 // República de Somalia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 154, 'República de Sudáfrica', 'SUDÁF' , 1 , '#154 // República de Sudáfrica' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 160, 'Reino de Suazilandia', 'RSUAZ' , 1 , '#160 // Reino de Suazilandia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 161, 'República Unida de Tanzania', 'TANZA' , 1 , '#161 // República Unida de Tanzania' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 162, 'República Togolesa', 'TOGOL' , 1 , '#162 // República Togolesa' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 164, 'República de Túnez', 'TÚNEZ' , 1 , '#164 // República de Túnez' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 165, 'República de Uganda', 'UGAND' , 1 , '#165 // República de Uganda' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 167, 'República de Zambia', 'ZAMBI' , 1 , '#167 // República de Zambia' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 168, 'República de Zimbabwe', 'ZIMBA' , 1 , '#168 // República de Zimbabwe' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 169, 'República Democrática del Congo', 'DCONGO' , 1 , '#169 // República Democrática del Congo' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 170, 'República Árabe Saharaui Democrática', 'ARABE' , 1 , '#170 // República Árabe Saharaui Democrática' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 171, 'República de Sudán', 'SUDÁN' , 1 , '#171 // República de Sudán' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 172, 'República de Sudán del Sur', 'SUDSU' , 1 , '#172 // República de Sudán del Sur' , 1,100
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 201, 'Anguila', 'ANGUI' , 1 , '#201 // Anguila' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 202, 'Antigua y Barbuda', 'AYBAR' , 1 , '#202 // Antigua y Barbuda' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 204, 'República Argentina', 'ARGEN' , 1 , '#204 // República Argentina' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 205, 'Aruba', 'ARUBA' , 1 , '#205 // Aruba' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 206, 'Commonwealth de las Bahamas', 'BAHAM' , 1 , '#206 // Commonwealth de las Bahamas' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 207, 'Barbados', 'BARBA' , 1 , '#207 // Barbados' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 208, 'Belice', 'BELIC' , 1 , '#208 // Belice' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 209, 'Islas Bermudas', 'IBERM' , 1 , '#209 // Islas Bermudas' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 210, 'República de Bolivia', 'BOLIV' , 1 , '#210 // República de Bolivia' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 211, 'República Federativa de Brasil', 'BRASI' , 1 , '#211 // República Federativa de Brasil' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 212, 'Islas Caimán', 'ICAIM' , 1 , '#212 // Islas Caimán' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 213, 'Canadá', 'CANAD' , 1 , '#213 // Canadá' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 214, 'República de Colombia', 'COLOM' , 1 , '#214 // República de Colombia' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 215, 'República de Costa rica', 'CRICA' , 1 , '#215 // República de Costa rica' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 216, 'República de Cuba', 'CUBA' , 1 , '#216 // República de Cuba' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 217, 'República de Chile', 'CHILE' , 1 , '#217 // República de Chile' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 218, 'Commonwealth de Dominica', 'DMNCA' , 1 , '#218 // Commonwealth de Dominica' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 219, 'República de Ecuador', 'ECUAD' , 1 , '#219 // República de Ecuador' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 220, 'República de El Salvador', 'SALVA' , 1 , '#220 // República de El Salvador' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 221, 'Estados Unidos de América', 'USA' , 1 , '#221 // Estados Unidos de América' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 222, 'Granada', 'GRANA' , 1 , '#222 // Granada' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 223, 'Groenlandia', 'GROEN' , 1 , '#223 // Groenlandia' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 224, 'Departamento de Guadalupe', 'GDLPE' , 1 , '#224 // Departamento de Guadalupe' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 225, 'República de Guatemala', 'GUATE' , 1 , '#225 // República de Guatemala' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 226, 'República Cooperativa de Guyana', 'GUYAN' , 1 , '#226 // República Cooperativa de Guyana' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 227, 'Guayana Francesa', 'GFRAN' , 1 , '#227 // Guayana Francesa' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 228, 'República de Haití', 'HAITÍ' , 1 , '#228 // República de Haití' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 229, 'República de Honduras', 'HONDU' , 1 , '#229 // República de Honduras' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 230, 'Jamaica', 'JAMAI' , 1 , '#230 // Jamaica' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 231, 'Islas Malvinas', 'IMALV' , 1 , '#231 // Islas Malvinas' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 233, 'Isla de Montserrat', 'IMONT' , 1 , '#233 // Isla de Montserrat' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 234, 'República de Nicaragua', 'NICAR' , 1 , '#234 // República de Nicaragua' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 235, 'República de Panamá', 'PANAM' , 1 , '#235 // República de Panamá' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 236, 'República de Paraguay', 'PARAG' , 1 , '#236 // República de Paraguay' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 237, 'República de Perú', 'PERÚ' , 1 , '#237 // República de Perú' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 238, 'Estado Libre Asociado de Puerto Rico', 'PRICO' , 1 , '#238 // Estado Libre Asociado de Puerto Rico' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 239, 'República Dominicana', 'RDOMI' , 1 , '#239 // República Dominicana' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 240, 'Federación de San Cristóbal y Nieves', 'SCYNI' , 1 , '#240 // Federación de San Cristóbal y Nieves' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 241, 'Islas de Man', 'IMAN' , 1 , '#241 // Islas de Man' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 242, 'San Vicente y las Granadinas', 'SVYGR' , 1 , '#242 // San Vicente y las Granadinas' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 243, 'Santa Lucía', 'STALU' , 1 , '#243 // Santa Lucía' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 244, 'República de Surinam', 'SURIN' , 1 , '#244 // República de Surinam' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 245, 'República de Trinidad y Tobago', 'TYTOB' , 1 , '#245 // República de Trinidad y Tobago' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 246, 'Islas Turcas y Caicos', 'ITURC' , 1 , '#246 // Islas Turcas y Caicos' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 247, 'República Oriental del Uruguay', 'URUGU' , 1 , '#247 // República Oriental del Uruguay' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 248, 'Islas Vírgenes de los Estados Unidos', 'IVÍES' , 1 , '#248 // Islas Vírgenes de los Estados Unidos' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 249, 'Islas Vírgenes Británicas', 'IVÍBR' , 1 , '#249 // Islas Vírgenes Británicas' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 250, 'República Boliviana de Venezuela', 'VENEZ' , 1 , '#250 // República Boliviana de Venezuela' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 251, 'Curazao', 'CURAZ' , 1 , '#251 // Curazao' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 252, 'Isla de Saint Marteen', 'ISTMA' , 1 , '#252 // Isla de Saint Marteen' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 253, 'Bonaire, San Eustaquio, Saba', 'BEUST' , 1 , '#253 // Bonaire, San Eustaquio, Saba' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 260, 'Estados Unidos Mexicanos', 'MEX' , 1 , '#260 // Estados Unidos Mexicanos' , 1,200
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 301, 'Estado Islámico de Afganistán', 'AFGAN' , 1 , '#301 // Estado Islámico de Afganistán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 302, 'Reino de Arabia Saudita', 'ASAUD' , 1 , '#302 // Reino de Arabia Saudita' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 303, 'República de Armenia', 'ARMEN' , 1 , '#303 // República de Armenia' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 304, 'República de Azerbaiyán', 'AZERB' , 1 , '#304 // República de Azerbaiyán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 305, 'Reino de Bahréin', 'RBAHR' , 1 , '#305 // Reino de Bahréin' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 306, 'República Popular de Bangladesh', 'BANGL' , 1 , '#306 // República Popular de Bangladesh' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 307, 'Reino de Bhutan', 'BHUTA' , 1 , '#307 // Reino de Bhutan' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 308, 'Estado de Brunei Darussalam', 'BRUNE' , 1 , '#308 // Estado de Brunei Darussalam' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 309, 'Reino de Camboya', 'CAMBO' , 1 , '#309 // Reino de Camboya' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 312, 'República Popular democrática de Corea', 'RCORE' , 1 , '#312 // República Popular democrática de Corea' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 313, 'República de Corea', 'COREA' , 1 , '#313 // República de Corea' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 315, 'República Popular China', 'CHINA' , 1 , '#315 // República Popular China' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 316, 'Taiwán', 'TAIWA' , 1 , '#316 // Taiwán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 318, 'República de Chipre', 'CHIPR' , 1 , '#318 // República de Chipre' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 321, 'Emiratos Árabes Unidos', 'EAUNI' , 1 , '#321 // Emiratos Árabes Unidos' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 322, 'República de Filipinas', 'FILIP' , 1 , '#322 // República de Filipinas' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 323, 'República de Georgia', 'GEORG' , 1 , '#323 // República de Georgia' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 325, 'República de la India', 'INDIA' , 1 , '#325 // República de la India' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 326, 'República de Indonesia', 'INDON' , 1 , '#326 // República de Indonesia' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 327, 'República Islámica de Irán', 'IRÁN' , 1 , '#327 // República Islámica de Irán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 328, 'República de Iraq', 'IRAQ' , 1 , '#328 // República de Iraq' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 329, 'Estado de Israel', 'ISRAE' , 1 , '#329 // Estado de Israel' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 330, 'Estado de Japón', 'JAPÓN' , 1 , '#330 // Estado de Japón' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 331, 'Reino Hachemí de Jordania', 'JORDA' , 1 , '#331 // Reino Hachemí de Jordania' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 332, 'República de Kazajstán', 'KAZAJ' , 1 , '#332 // República de Kazajstán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 333, 'República Kirguisa', 'KIRGU' , 1 , '#333 // República Kirguisa' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 334, 'Estado de Kuwait', 'KUWAI' , 1 , '#334 // Estado de Kuwait' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 335, 'República Libanesa', 'LIBAN' , 1 , '#335 // República Libanesa' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 337, 'Malasia', 'MALAS' , 1 , '#337 // Malasia' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 338, 'República de Maldivas', 'MALDI' , 1 , '#338 // República de Maldivas' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 339, 'Mongolia', 'MONGOL' , 1 , '#339 // Mongolia' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 340, 'Unión de Myanmar', 'MYANM' , 1 , '#340 // Unión de Myanmar' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 341, 'República Federal Democrática de Nepal', 'NEPAL' , 1 , '#341 // República Federal Democrática de Nepal' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 342, 'Sultanato de Omán', 'OMÁN' , 1 , '#342 // Sultanato de Omán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 343, 'República Islámica de Pakistán', 'PAKIS' , 1 , '#343 // República Islámica de Pakistán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 344, 'Estado de Qatar', 'QATAR' , 1 , '#344 // Estado de Qatar' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 345, 'República Democrática Popular de Laos', 'LAOS' , 1 , '#345 // República Democrática Popular de Laos' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 346, 'República de Singapur', 'SINGA' , 1 , '#346 // República de Singapur' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 347, 'República árabe Siria', 'SIRIA' , 1 , '#347 // República árabe Siria' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 348, 'República Democrática Socialista Sri Lanka', 'SRILA' , 1 , '#348 // República Democrática Socialista Sri Lanka' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 349, 'Reino de Tailandia', 'TAILA' , 1 , '#349 // Reino de Tailandia' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 350, 'República de Tayikistán', 'TAYIK' , 1 , '#350 // República de Tayikistán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 351, 'Turkmenistán', 'TURKE' , 1 , '#351 // Turkmenistán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 352, 'República de Turquía', 'TURQU' , 1 , '#352 // República de Turquía' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 353, 'República de Uzbekistán', 'UZBEK' , 1 , '#353 // República de Uzbekistán' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 354, 'República Socialista de Vietnam', 'VIETN' , 1 , '#354 // República Socialista de Vietnam' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 355, 'República de Yemen', 'YEMEN' , 1 , '#355 // República de Yemen' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 356, 'República de Palaos', 'PALAO' , 1 , '#356 // República de Palaos' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 357, 'República Democrática de Timor Oriental', 'TIMOR' , 1 , '#357 // República Democrática de Timor Oriental' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 358, 'Estado de Palestina', 'PALES' , 1 , '#358 // Estado de Palestina' , 1,300
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 401, 'República de Albania', 'ALBAN' , 1 , '#401 // República de Albania' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 402, 'República Federal de Alemania', 'ALEMA' , 1 , '#402 // República Federal de Alemania' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 403, 'Principado de Andorra', 'ANDOR' , 1 , '#403 // Principado de Andorra' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 405, 'República de Austria', 'AUSTR' , 1 , '#405 // República de Austria' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 407, 'República de Bielorrusia', 'BIELO' , 1 , '#407 // República de Bielorrusia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 408, 'Reino de Bélgica', 'BELGI' , 1 , '#408 // Reino de Bélgica' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 409, 'Bosnia y Herzegovina', 'BSNHE' , 1 , '#409 // Bosnia y Herzegovina' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 410, 'República de Bulgaria', 'BULGA' , 1 , '#410 // República de Bulgaria' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 411, 'República de Croacia', 'CROAC' , 1 , '#411 // República de Croacia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 412, 'Reino de Dinamarca', 'DINAM' , 1 , '#412 // Reino de Dinamarca' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 413, 'República Eslovaca', 'SLVAC' , 1 , '#413 // República Eslovaca' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 414, 'República de Eslovenia', 'SLOVN' , 1 , '#414 // República de Eslovenia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 415, 'Reino de España', 'ESPAÑ' , 1 , '#415 // Reino de España' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 416, 'República de Estonia', 'ESTON' , 1 , '#416 // República de Estonia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 417, 'Islas Feroe', 'FEROE' , 1 , '#417 // Islas Feroe' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 418, 'República de Finlandia', 'FINLA' , 1 , '#418 // República de Finlandia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 419, 'República Francesa', 'FRANC' , 1 , '#419 // República Francesa' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 420, 'Gibraltar', 'GIBRA' , 1 , '#420 // Gibraltar' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 421, 'República Helénica', 'HELEN' , 1 , '#421 // República Helénica' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 422, 'República de Hungría', 'HUNGR' , 1 , '#422 // República de Hungría' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 423, 'República de Irlanda', 'IRLAN' , 1 , '#423 // República de Irlanda' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 424, 'República de Islandia', 'ISLAN' , 1 , '#424 // República de Islandia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 425, 'República Italiana', 'ITALI' , 1 , '#425 // República Italiana' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 426, 'República de Letonia', 'LETON' , 1 , '#426 // República de Letonia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 427, 'Principado de Liechtenstein', 'LIECH' , 1 , '#427 // Principado de Liechtenstein' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 428, 'República de Lituania', 'LITUA' , 1 , '#428 // República de Lituania' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 429, 'Gran Ducado de Luxemburgo', 'LUXEM' , 1 , '#429 // Gran Ducado de Luxemburgo' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 430, 'Antigua República Yugoslava de Macedonia', 'MACED' , 1 , '#430 // Antigua República Yugoslava de Macedonia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 431, 'República de Malta', 'MALTA' , 1 , '#431 // República de Malta' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 433, 'República de Moldavia', 'MOLDA' , 1 , '#433 // República de Moldavia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 434, 'Principado de Mónaco', 'MÓNAC' , 1 , '#434 // Principado de Mónaco' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 435, 'Reino de Noruega', 'NORUE' , 1 , '#435 // Reino de Noruega' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 436, 'Reino de los Países Bajos', 'PBAJO' , 1 , '#436 // Reino de los Países Bajos' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 437, 'República de Polonia', 'POLON' , 1 , '#437 // República de Polonia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 438, 'República Portuguesa', 'PORTU' , 1 , '#438 // República Portuguesa' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 439, 'Reino Unido de Gran Bretaña e Irlanda', 'RUNID' , 1 , '#439 // Reino Unido de Gran Bretaña e Irlanda' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 440, 'República Checa', 'CHECA' , 1 , '#440 // República Checa' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 441, 'Rumania', 'RUMAN' , 1 , '#441 // Rumania' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 442, 'Federación de Rusia', 'RUSIA' , 1 , '#442 // Federación de Rusia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 443, 'República de San Marino', 'SMARI' , 1 , '#443 // República de San Marino' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 444, 'Estado de la Ciudad del Vaticano', 'VATIC' , 1 , '#444 // Estado de la Ciudad del Vaticano' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 445, 'Reino de Suecia', 'SUECI' , 1 , '#445 // Reino de Suecia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 446, 'Confederación Suiza', 'SUIZA' , 1 , '#446 // Confederación Suiza' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 447, 'Ucrania', 'UCRAN' , 1 , '#447 // Ucrania' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 452, 'República de Serbia', 'SERBI' , 1 , '#452 // República de Serbia' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 453, 'República de Montenegro', 'MONTE' , 1 , '#453 // República de Montenegro' , 1,400
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 501, 'Commonwealth de Australia', 'ASTRL' , 1 , '#501 // Commonwealth de Australia' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 503, 'Islas Cook', 'ICOOK' , 1 , '#503 // Islas Cook' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 505, 'Guam', 'GUAM' , 1 , '#505 // Guam' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 507, 'República de Kiribati', 'KIRIB' , 1 , '#507 // República de Kiribati' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 512, 'Islas Marianas del Norte', 'IMARN' , 1 , '#512 // Islas Marianas del Norte' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 513, 'República de las Islas Marsha', 'IMARS' , 1 , '#513 // República de las Islas Marsha' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 514, 'Estados Federados de Micronesia', 'EFMIC' , 1 , '#514 // Estados Federados de Micronesia' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 516, 'República de Nauru', 'NAURU' , 1 , '#516 // República de Nauru' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 517, 'Niue', 'NIUE' , 1 , '#517 // Niue' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 520, 'Nueva Zelanda', 'NVAZE' , 1 , '#520 // Nueva Zelanda' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 522, 'Isla Wake', 'IWAKE' , 1 , '#522 // Isla Wake' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 523, 'Estado Independiente de Papúa Nueva Guinea', 'NVAGU' , 1 , '#523 // Estado Independiente de Papúa Nueva Guinea' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 524, 'islas Pitcairn', 'IPITC' , 1 , '#524 // islas Pitcairn' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 526, 'Islas Salomón', 'ISALO' , 1 , '#526 // Islas Salomón' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 527, 'Estado Independiente de Samoa', 'SAMOA' , 1 , '#527 // Estado Independiente de Samoa' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 528, 'Samoa Americana', 'SAMAM' , 1 , '#528 // Samoa Americana' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 530, 'Tokelau', 'TOKEL' , 1 , '#530 // Tokelau' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 531, 'Reino de Tonga', 'TONGA' , 1 , '#531 // Reino de Tonga' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 532, 'Tuvalu', 'TUVAL' , 1 , '#532 // Tuvalu' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 533, 'República de Vanuatu', 'VANUA' , 1 , '#533 // República de Vanuatu' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 534, 'Territorio de las Islas Walli', 'IWALL' , 1 , '#534 // Territorio de las Islas Walli' , 1,500
-EXECUTE [dbo].[PG_CI_COUNTRY] 0, 139, 535, 'República de Las Islas Fiji', 'IFIJI' , 1 , '#535 // República de Las Islas Fiji' , 1,500
+-- //////////////////////////////////////////////////////////////
+---	ÁFRICA
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 0, '(NO-COUNTRY)', '( N/CT )' , 1 ,														'(NO-COUNTRY)' , 0,0
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 101, 'REPÚBLICA DE ANGOLA', 'ANGOL' , 1 ,													'ANGOLA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 102, 'REPÚBLICA DEMOCRÁTICA Y POPULAR DE ARGELIA',										'ARGEL' , 0 , 'ARGELIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 104, 'REPÚBLICA DE BENÍN', 'BENÍN' , 1 ,													'BENÍN' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 105, 'REPÚBLICA DE BOTSWANA', 'BOTSW' , 1 ,												'BOTSWANA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 106, 'BURKINA FASO', 'BURKI' , 1 ,														'BURKINA FASO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 107, 'REPÚBLICA DE BURUNDI',		'BURUN' , 1 ,											'BURUNDI' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 108, 'REPÚBLICA DE CABO VERDE', 'CABO' , 1 ,												'CABO VERDE' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 109, 'REPÚBLICA DE CAMERÚN', 'CAMER' , 1 ,												'CAMERÚN' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 112, 'REPÚBLICA DE RUANDA', 'RUAND' , 1 ,													'RUANDA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 113, 'REPÚBLICA POPULAR DEL CONGO', 'PCONGO' , 1 ,										'REPÚBLICA POPULAR DEL CONGO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 114, 'REPÚBLICA DE COSTA DE MARFIL', 'CMARF' , 1 ,										'COSTA DE MARFIL' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 115, 'REPÚBLICA DE CHAD', 'CHAD' , 1 ,													'CHAD' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 116, 'REPÚBLICA DE DJIBOUTI', 'DJIBO' , 1 ,												'DJIBOUTI' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 117, 'REPÚBLICA ÁRABE DE EGIPTO', 'EGYP' , 1 ,											'EGIPTO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 118, 'ESTADO DE ERITREA', 'EERIT' , 1 ,													'ERITREA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 119, 'REPÚBLICA FEDERAL DEMOCRÁTICA DE ETIOPÍA', 'ETIOP' , 1 ,							'ETIOPÍA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 120, 'REPÚBLICA GABONESA', 'GABON' , 1 ,													'GABON' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 121, 'REPÚBLICA DE GAMBIA', 'GAMBI' , 1 ,													'GAMBIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 122, 'REPÚBLICA DE GHANA', 'GHANA' , 1 ,													'GHANA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 123, 'REPÚBLICA DE GUINEA', 'GUINE' , 1 ,													'GUINEA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 124, 'REPÚBLICA DE GUINEA BISSAU', 'GBISS' , 1 ,											'GUINEA BISSAU' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 125, 'REPÚBLICA DE GUINEA ECUATORIAL', 'GECUA' , 1 ,										'GUINEA ECUATORIAL' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 126, 'REPÚBLICA DE KENIA', 'KENIA' , 1 ,													'KENIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 127, 'REINO DE LESOTHO', 'LESOT' , 1 ,													'LESOTHO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 128, 'REPÚBLICA DE LIBERIA', 'LIBER' , 1 ,												'LIBERIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 129, 'LIBIA', 'LIBIA' , 1 ,																'LIBIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 130, 'REPÚBLICA DE MADAGASCAR', 'MADAG' , 1 ,												'MADAGASCAR' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 133, 'REPÚBLICA DE MALAWI', 'MALAW' , 1 ,													'MALAWI' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 134, 'REPÚBLICA DE MALÍ', 'MALÍ' , 1 ,													'MALÍ' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 135, 'REINO DE MARRUECOS', 'MARRU' , 1 ,													'MARRUECOS' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 136, 'REPÚBLICA DE MAURICIO', 'MAURI' , 1 ,												'MAURICIO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 137, 'REPÚBLICA ISLÁMICA DE MAURITANIA', 'MAURC' , 1 ,									'MAURITANIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 138, 'ISLAS ANGLONORMANDAS', 'ANGLO' , 1 ,												'ISLAS ANGLONORMANDAS' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 139, 'REPÚBLICA DE MOZAMBIQUE', 'MOZAM' , 1 ,												'MOZAMBIQUE' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 140, 'REPÚBLICA DE NAMIBIA', 'NAMIB' , 1 ,												'NAMIBIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 141, 'REPÚBLICA DE NÍGER', 'NÍGER' , 1 ,													'NÍGER' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 142, 'REPÚBLICA FEDERAL DE NIGERIA', 'NIGRIA' , 1 ,										'NIGERIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 143, 'REPÚBLICA CENTROAFRICANA', 'CAFRI' , 1 ,											'REPÚBLICA CENTROAFRICANA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 145, 'COLECTIVIDAD TERRITORIAL DE SAN PEDRO Y MIQUELÓN', 'SPEDR' , 1 ,					'SAN PEDRO Y MIQUELÓN' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 147, 'ISLA SANTA HELENA', 'ISELE' , 1 ,													'ISLA SANTA HELENA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 148, 'REPÚBLICA DEMOCRÁTICA DE SANTO TOME Y PRÍNCIPE', 'STYPR' , 1 ,						'SANTO TOME Y PRÍNCIPE' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 149, 'REPÚBLICA DE SENEGAL', 'SENEG' , 1 ,												'SENEGAL' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 150, 'REPÚBLICA DE ISLA SEYCHELLES', 'SEYCH' , 1 ,										'ISLA SEYCHELLES' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 151, 'REPÚBLICA DE SIERRA LEONA', 'SLEON' , 1 ,											'SIERRA LEONA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 152, 'UNIÓN DE LAS COMORAS', 'UCOMO' , 1 ,												'COMORAS' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 153, 'REPÚBLICA DE SOMALIA', 'SOMAL' , 1 ,												'SOMALIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 154, 'REPÚBLICA DE SUDÁFRICA', 'SUDÁF' , 1 ,												'SUDÁFRICA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 160, 'REINO DE SUAZILANDIA', 'RSUAZ' , 1 ,												'SUAZILANDIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 161, 'REPÚBLICA UNIDA DE TANZANIA', 'TANZA' , 1 ,											'TANZANIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 162, 'REPÚBLICA TOGOLESA', 'TOGOL' , 1 ,													'TOGO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 164, 'REPÚBLICA DE TÚNEZ', 'TÚNEZ' , 1 ,													'TÚNEZ' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 165, 'REPÚBLICA DE UGANDA', 'UGAND' , 1 ,													'UGANDA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 167, 'REPÚBLICA DE ZAMBIA', 'ZAMBI' , 1 ,													'ZAMBIA' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 168, 'REPÚBLICA DE ZIMBABWE', 'ZIMBA' , 1 ,												'ZIMBABWE' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 169, 'REPÚBLICA DEMOCRÁTICA DEL CONGO', 'DCONGO' , 1 ,									'REPÚBLICA DEMOCRÁTICA DEL CONGO' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 170, 'REPÚBLICA ÁRABE SAHARAUI DEMOCRÁTICA', 'ARABE' , 1 ,								'SAHARAUI' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 171, 'REPÚBLICA DE SUDÁN', 'SUDÁN' , 1 ,													'SUDÁN' , 0,100
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 172, 'REPÚBLICA DE SUDÁN DEL SUR', 'SUDSU' , 1 ,											'SUDÁN DEL SUR' , 0,100
+-- //////////////////////////////////////////////////////////////
+---	AMÉRICA
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 201, 'ANGUILA', 'ANGUI' , 1 ,																'ANGUILA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 202, 'ANTIGUA Y BARBUDA', 'AYBAR' , 1 ,													'ANTIGUA Y BARBUDA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 204, 'REPÚBLICA ARGENTINA', 'ARGEN' , 1 ,													'ARGENTINA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 205, 'ARUBA', 'ARUBA' , 1 ,																'ARUBA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 206, 'COMMONWEALTH DE LAS BAHAMAS', 'BAHAM' , 1 ,											'BAHAMAS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 207, 'BARBADOS', 'BARBA' , 1 ,															'BARBADOS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 208, 'BELICE', 'BELIC' , 1 ,																'BELICE' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 209, 'ISLAS BERMUDAS', 'IBERM' , 1 ,														'BERMUDAS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 210, 'REPÚBLICA DE BOLIVIA', 'BOLIV' , 1 ,												'BOLIVIA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 211, 'REPÚBLICA FEDERATIVA DE BRASIL', 'BRASI' , 1 ,										'BRASIL' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 212, 'ISLAS CAIMÁN', 'ICAIM' , 1 ,														'ISLAS CAIMÁN' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 213, 'CANADÁ', 'CANAD' , 1 ,																'CANADÁ' , 1,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 214, 'REPÚBLICA DE COLOMBIA', 'COLOM' , 1 ,												'COLOMBIA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 215, 'REPÚBLICA DE COSTA RICA', 'CRICA' , 1 ,												'COSTA RICA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 216, 'REPÚBLICA DE CUBA', 'CUBA' , 1 ,													'CUBA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 217, 'REPÚBLICA DE CHILE', 'CHILE' , 1 ,													'CHILE' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 218, 'COMMONWEALTH DE DOMINICA', 'DMNCA' , 1 ,											'DOMINICA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 219, 'REPÚBLICA DE ECUADOR', 'ECUAD' , 1 ,												'ECUADOR' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 220, 'REPÚBLICA DE EL SALVADOR', 'SALVA' , 1 ,											'EL SALVADOR' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 221, 'ESTADOS UNIDOS DE AMÉRICA', 'USA' , 1 ,												'ESTADOS UNIDOS DE AMÉRICA' , 1,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 222, 'GRANADA', 'GRANA' , 1 ,																'GRANADA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 223, 'GROENLANDIA', 'GROEN' , 1 ,															'GROENLANDIA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 224, 'DEPARTAMENTO DE GUADALUPE', 'GDLPE' , 1 ,											'GUADALUPE' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 225, 'REPÚBLICA DE GUATEMALA', 'GUATE' , 1 ,												'GUATEMALA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 226, 'REPÚBLICA COOPERATIVA DE GUYANA', 'GUYAN' , 1 ,										'GUYANA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 227, 'GUAYANA FRANCESA', 'GFRAN' , 1 ,													'GUAYANA FRANCESA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 228, 'REPÚBLICA DE HAITÍ', 'HAITÍ' , 1 ,													'HAITÍ' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 229, 'REPÚBLICA DE HONDURAS', 'HONDU' , 1 ,												'HONDURAS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 230, 'JAMAICA', 'JAMAI' , 1 ,																'JAMAICA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 231, 'ISLAS MALVINAS', 'IMALV' , 1 ,														'ISLAS MALVINAS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 233, 'ISLA DE MONTSERRAT', 'IMONT' , 1 ,													'ISLA DE MONTSERRAT' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 234, 'REPÚBLICA DE NICARAGUA', 'NICAR' , 1 ,												'NICARAGUA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 235, 'REPÚBLICA DE PANAMÁ', 'PANAM' , 1 ,													'PANAMÁ' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 236, 'REPÚBLICA DE PARAGUAY', 'PARAG' , 1 ,												'PARAGUAY' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 237, 'REPÚBLICA DE PERÚ', 'PERÚ' , 1 ,													'PERÚ' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 238, 'ESTADO LIBRE ASOCIADO DE PUERTO RICO', 'PRICO' , 1 ,								'PUERTO RICO' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 239, 'REPÚBLICA DOMINICANA', 'RDOMI' , 1 ,												'REPÚBLICA DOMINICANA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 240, 'FEDERACIÓN DE SAN CRISTÓBAL Y NIEVES', 'SCYNI' , 1 ,								'SAN CRISTÓBAL Y NIEVES' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 241, 'ISLAS DE MAN', 'IMAN' , 1 ,															'ISLAS DE MAN' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 242, 'SAN VICENTE Y LAS GRANADINAS', 'SVYGR' , 1 ,										'SAN VICENTE Y LAS GRANADINAS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 243, 'SANTA LUCÍA', 'STALU' , 1 ,															'SANTA LUCÍA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 244, 'REPÚBLICA DE SURINAM', 'SURIN' , 1 ,												'SURINAM' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 245, 'REPÚBLICA DE TRINIDAD Y TOBAGO', 'TYTOB' , 1 ,										'TRINIDAD Y TOBAGO' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 246, 'ISLAS TURCAS Y CAICOS', 'ITURC' , 1 ,												'ISLAS TURCAS Y CAICOS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 247, 'REPÚBLICA ORIENTAL DEL URUGUAY', 'URUGU' , 1 ,										'URUGUAY' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 248, 'ISLAS VÍRGENES DE LOS ESTADOS UNIDOS', 'IVÍES' , 1 ,								'ISLAS VÍRGENES DE LOS ESTADOS UNIDOS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 249, 'ISLAS VÍRGENES BRITÁNICAS', 'IVÍBR' , 1 ,											'ISLAS VÍRGENES BRITÁNICAS' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 250, 'REPÚBLICA BOLIVIANA DE VENEZUELA', 'VENEZ' , 1 , '									VENEZUELA' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 251, 'CURAZAO', 'CURAZ' , 1 ,																'CURAZAO' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 252, 'ISLA DE SAINT MARTEEN', 'ISTMA' , 1 ,												'ISLA DE SAINT MARTEEN' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 253, 'BONAIRE, SAN EUSTAQUIO, SABA', 'BEUST' , 1 ,										'BONAIRE' , 0,200
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 260, 'ESTADOS UNIDOS MEXICANOS', 'MEX' , 1 ,												'MÉXICO' , 1,200
+-- //////////////////////////////////////////////////////////////
+---	ASIA
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 301, 'ESTADO ISLÁMICO DE AFGANISTÁN', 'AFGAN' , 1 ,										'AFGANISTÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 302, 'REINO DE ARABIA SAUDITA', 'ASAUD' , 1 ,												'ARABIA SAUDITA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 303, 'REPÚBLICA DE ARMENIA', 'ARMEN' , 1 ,												'ARMENIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 304, 'REPÚBLICA DE AZERBAIYÁN', 'AZERB' , 1 ,												'AZERBAIYÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 305, 'REINO DE BAHRÉIN', 'RBAHR' , 1 ,													'BAHRÉIN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 306, 'REPÚBLICA POPULAR DE BANGLADESH', 'BANGL' , 1 ,										'BANGLADESH' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 307, 'REINO DE BHUTAN', 'BHUTA' , 1 ,														'BHUTAN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 308, 'ESTADO DE BRUNEI DARUSSALAM', 'BRUNE' , 1 ,											'BRUNEI DARUSSALAM' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 309, 'REINO DE CAMBOYA', 'CAMBO' , 1 ,													'CAMBOYA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 312, 'REPÚBLICA POPULAR DEMOCRÁTICA DE COREA', 'RCORE' , 1 ,								'COREA DEL NORTE' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 313, 'REPÚBLICA DE COREA', 'COREA' , 1 ,													'COREA DEL SUR' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 315, 'REPÚBLICA POPULAR CHINA','CHINA' , 1 ,												'CHINA' , 1,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 316, 'TAIWÁN', 'TAIWA' , 1 ,																'TAIWÁN' , 1,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 318, 'REPÚBLICA DE CHIPRE', 'CHIPR' , 1 ,													'CHIPRE' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 321, 'EMIRATOS ÁRABES UNIDOS', 'EAUNI' , 1 ,												'EMIRATOS ÁRABES UNIDOS' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 322, 'REPÚBLICA DE FILIPINAS', 'FILIP' , 1 ,												'FILIPINAS' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 323, 'REPÚBLICA DE GEORGIA', 'GEORG' , 1 ,												'GEORGIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 325, 'REPÚBLICA DE LA INDIA', 'INDIA' , 1 ,												'INDIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 326, 'REPÚBLICA DE INDONESIA', 'INDON' , 1 ,												'INDONESIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 327, 'REPÚBLICA ISLÁMICA DE IRÁN', 'IRÁN' , 1 ,											'IRÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 328, 'REPÚBLICA DE IRAQ', 'IRAQ' , 1 ,													'IRAQ' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 329, 'ESTADO DE ISRAEL', 'ISRAE' , 1 ,													'ISRAEL' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 330, 'ESTADO DE JAPÓN', 'JAPÓN' , 1 ,														'JAPÓN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 331, 'REINO HACHEMÍ DE JORDANIA', 'JORDA' , 1 ,											'JORDANIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 332, 'REPÚBLICA DE KAZAJSTÁN', 'KAZAJ' , 1 ,												'KAZAJSTÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 333, 'REPÚBLICA KIRGUISA', 'KIRGU' , 1 ,													'KIRGUISA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 334, 'ESTADO DE KUWAIT', 'KUWAI' , 1 ,													'KUWAIT' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 335, 'REPÚBLICA LIBANESA', 'LIBAN' , 1 ,													'REPÚBLICA LIBANESA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 337, 'MALASIA', 'MALAS' , 1 ,																'MALASIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 338, 'REPÚBLICA DE MALDIVAS', 'MALDI' , 1 ,												'MALDIVAS' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 339, 'MONGOLIA', 'MONGOL' , 1 ,															'MONGOLIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 340, 'UNIÓN DE MYANMAR', 'MYANM' , 1 ,													'MYANMAR' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 341, 'REPÚBLICA FEDERAL DEMOCRÁTICA DE NEPAL','NEPAL' , 1 ,								'NEPAL' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 342, 'SULTANATO DE OMÁN', 'OMÁN' , 1 ,													'OMÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 343, 'REPÚBLICA ISLÁMICA DE PAKISTÁN', 'PAKIS' , 1 ,										'PAKISTÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 344, 'ESTADO DE QATAR', 'QATAR' , 1 ,														'QATAR' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 345, 'REPÚBLICA DEMOCRÁTICA POPULAR DE LAOS', 'LAOS' , 1 ,								'LAOS' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 346, 'REPÚBLICA DE SINGAPUR', 'SINGA' , 1 ,												'SINGAPUR' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 347, 'REPÚBLICA ÁRABE SIRIA', 'SIRIA' , 1 ,												'SIRIA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 348, 'REPÚBLICA DEMOCRÁTICA SOCIALISTA SRI LANKA','SRILA' , 1 ,							'SRI LANKA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 349, 'REINO DE TAILANDIA', 'TAILA' , 1 ,													'TAILANDIA' , 1,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 350, 'REPÚBLICA DE TAYIKISTÁN', 'TAYIK' , 1 ,												'TAYIKISTÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 351, 'TURKMENISTÁN', 'TURKE' , 1 ,														'TURKMENISTÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 352, 'REPÚBLICA DE TURQUÍA', 'TURQU' , 1 ,												'TURQUÍA' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 353, 'REPÚBLICA DE UZBEKISTÁN', 'UZBEK' , 1 ,												'UZBEKISTÁN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 354, 'REPÚBLICA SOCIALISTA DE VIETNAM', 'VIETN' , 1 ,										'VIETNAM' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 355, 'REPÚBLICA DE YEMEN', 'YEMEN' , 1 ,													'YEMEN' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 356, 'REPÚBLICA DE PALAOS', 'PALAO' , 1 ,													'PALAOS' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 357, 'REPÚBLICA DEMOCRÁTICA DE TIMOR ORIENTAL', 'TIMOR' , 1 ,								'TIMOR ORIENTAL' , 0,300
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 358, 'ESTADO DE PALESTINA', 'PALES' , 1 ,													'PALESTINA' , 0,300
+-- //////////////////////////////////////////////////////////////
+---	EUROPA
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 401, 'REPÚBLICA DE ALBANIA', 'ALBAN' , 1 ,												'ALBANIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 402, 'REPÚBLICA FEDERAL DE ALEMANIA', 'ALEMA' , 1 ,										'ALEMANIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 403, 'PRINCIPADO DE ANDORRA', 'ANDOR' , 1 ,												'ANDORRA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 405, 'REPÚBLICA DE AUSTRIA', 'AUSTR' , 1 ,												'AUSTRIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 407, 'REPÚBLICA DE BIELORRUSIA', 'BIELO' , 1 ,											'BIELORRUSIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 408, 'REINO DE BÉLGICA', 'BELGI' , 1 ,													'BÉLGICA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 409, 'BOSNIA Y HERZEGOVINA', 'BSNHE' , 1 ,												'BOSNIA Y HERZEGOVINA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 410, 'REPÚBLICA DE BULGARIA', 'BULGA' , 1 ,												'BULGARIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 411, 'REPÚBLICA DE CROACIA', 'CROAC' , 1 ,												'CROACIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 412, 'REINO DE DINAMARCA', 'DINAM' , 1 ,													'DINAMARCA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 413, 'REPÚBLICA ESLOVACA', 'SLVAC' , 1 ,													'ESLOVAQUIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 414, 'REPÚBLICA DE ESLOVENIA', 'SLOVN' , 1 ,												'ESLOVENIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 415, 'REINO DE ESPAÑA', 'ESPAÑ' , 1 ,														'ESPAÑA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 416, 'REPÚBLICA DE ESTONIA', 'ESTON' , 1 ,												'ESTONIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 417, 'ISLAS FEROE', 'FEROE' , 1 ,															'ISLAS FEROE' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 418, 'REPÚBLICA DE FINLANDIA', 'FINLA' , 1 ,												'FINLANDIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 419, 'REPÚBLICA FRANCESA', 'FRANC' , 1 ,													'FRANCIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 420, 'GIBRALTAR', 'GIBRA' , 1 ,															'GIBRALTAR' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 421, 'REPÚBLICA HELÉNICA', 'HELEN' , 1 ,													'GRECIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 422, 'REPÚBLICA DE HUNGRÍA', 'HUNGR' , 1 ,												'HUNGRÍA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 423, 'REPÚBLICA DE IRLANDA', 'IRLAN' , 1 ,												'IRLANDA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 424, 'REPÚBLICA DE ISLANDIA', 'ISLAN' , 1 ,												'ISLANDIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 425, 'REPÚBLICA ITALIANA', 'ITALI' , 1 ,													'ITALIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 426, 'REPÚBLICA DE LETONIA', 'LETON' , 1 ,												'LETONIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 427, 'PRINCIPADO DE LIECHTENSTEIN', 'LIECH' , 1 ,											'LIECHTENSTEIN' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 428, 'REPÚBLICA DE LITUANIA', 'LITUA' , 1 ,												'LITUANIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 429, 'GRAN DUCADO DE LUXEMBURGO', 'LUXEM' , 1 ,											'LUXEMBURGO' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 430, 'ANTIGUA REPÚBLICA YUGOSLAVA DE MACEDONIA', 'MACED' , 1 ,							'MACEDONIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 431, 'REPÚBLICA DE MALTA', 'MALTA' , 1 ,													'MALTA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 433, 'REPÚBLICA DE MOLDAVIA', 'MOLDA' , 1 ,												'MOLDAVIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 434, 'PRINCIPADO DE MÓNACO', 'MÓNAC' , 1 ,												'MÓNACO' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 435, 'REINO DE NORUEGA', 'NORUE' , 1 ,													'NORUEGA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 436, 'REINO DE LOS PAÍSES BAJOS', 'PBAJO' , 1 ,											'PAÍSES BAJOS' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 437, 'REPÚBLICA DE POLONIA', 'POLON' , 1 ,												'POLONIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 438, 'REPÚBLICA PORTUGUESA', 'PORTU' , 1 ,												'PORTUGAL' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 439, 'REINO UNIDO DE GRAN BRETAÑA E IRLANDA', 'RUNID' , 1 ,								'GRAN BRETAÑA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 440, 'REPÚBLICA CHECA', 'CHECA' , 1 ,														'REPÚBLICA CHECA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 441, 'RUMANIA', 'RUMAN' , 1 ,																'RUMANIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 442, 'FEDERACIÓN DE RUSIA', 'RUSIA' , 1 ,													'RUSIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 443, 'REPÚBLICA DE SAN MARINO', 'SMARI' , 1 ,												'SAN MARINO' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 444, 'ESTADO DE LA CIUDAD DEL VATICANO', 'VATIC' , 1 ,									'VATICANO' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 445, 'REINO DE SUECIA', 'SUECI' , 1 ,														'SUECIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 446, 'CONFEDERACIÓN SUIZA', 'SUIZA' , 1 ,													'SUIZA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 447, 'UCRANIA', 'UCRAN' , 1 ,																'UCRANIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 452, 'REPÚBLICA DE SERBIA', 'SERBI' , 1 ,													'SERBIA' , 0,400
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 453, 'REPÚBLICA DE MONTENEGRO', 'MONTE' , 1 ,												'MONTENEGRO' , 0,400
+-- //////////////////////////////////////////////////////////////
+---	OCEANÍA
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 501, 'COMMONWEALTH DE AUSTRALIA', 'ASTRL' , 1 ,											'AUSTRALIA' , 1,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 503, 'ISLAS COOK', 'ICOOK' , 1 ,															'ISLAS COOK' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 505, 'GUAM', 'GUAM' , 1 ,																	'GUAM' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 507, 'REPÚBLICA DE KIRIBATI', 'KIRIB' , 1 ,												'KIRIBATI' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 512, 'ISLAS MARIANAS DEL NORTE', 'IMARN' , 1 ,											'ISLAS MARIANAS DEL NORTE' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 513, 'REPÚBLICA DE LAS ISLAS MARSHAL', 'IMARS' , 1 ,										'ISLAS MARSHAL' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 514, 'ESTADOS FEDERADOS DE MICRONESIA', 'EFMIC' , 1 ,										'MICRONESIA' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 516, 'REPÚBLICA DE NAURU', 'NAURU' , 1 ,													'NAURU' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 517, 'NIUE', 'NIUE' , 1 ,																	'NIUE' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 520, 'NUEVA ZELANDA', 'NVAZE' , 1 ,														'NUEVA ZELANDA' , 1,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 522, 'ISLA WAKE', 'IWAKE' , 1 ,															'ISLA WAKE' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 523, 'ESTADO INDEPENDIENTE DE PAPÚA NUEVA GUINEA', 'NVAGU' , 1 ,							'PAPÚA NUEVA GUINEA' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 524, 'ISLAS PITCAIRN', 'IPITC' , 1 ,														'ISLAS PITCAIRN' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 526, 'ISLAS SALOMÓN', 'ISALO' , 1 ,														'ISLAS SALOMÓN' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 527, 'ESTADO INDEPENDIENTE DE SAMOA', 'SAMOA' , 1 ,										'SAMOA' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 528, 'SAMOA AMERICANA', 'SAMAM' , 1 ,														'SAMOA AMERICANA' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 530, 'TOKELAU', 'TOKEL' , 1 ,																'TOKELAU' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 531, 'REINO DE TONGA', 'TONGA' , 1 ,														'TONGA' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 532, 'TUVALU', 'TUVAL' , 1 ,																'TUVALU' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 533, 'REPÚBLICA DE VANUATU', 'VANUA' , 1 ,												'VANUATU' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 534, 'TERRITORIO DE LAS ISLAS WALLI', 'IWALL' , 1 ,										'WALLI' , 0,500
+EXECUTE [DBO].[PG_CI_COUNTRY] 0, 139, 535, 'REPÚBLICA DE LAS ISLAS FIJI', 'IFIJI' , 1 ,											'FIJI' , 0,500
 
 
 

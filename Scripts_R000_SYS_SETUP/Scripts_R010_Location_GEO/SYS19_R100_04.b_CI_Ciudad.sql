@@ -35,7 +35,9 @@ CREATE PROCEDURE [dbo].[PG_CI_CITY]
 	@PP_S_CITY					VARCHAR(10),
 	@PP_C_CITY					VARCHAR(255),
 	-- =========================================
-	@PP_K_STATE_GEO			INT
+	@PP_K_STATE_GEO				INT,
+	-- =========================================
+	@PP_L_CITY					INT
 AS
 	
 	-- ===============================
@@ -61,7 +63,7 @@ AS
 		VALUES	
 			(	@PP_K_CITY, @PP_D_CITY,
 				@PP_S_CITY, 1, 
-				@PP_C_CITY, 1,
+				@PP_C_CITY, @PP_L_CITY,
 				@PP_K_STATE_GEO,		
 			-- ============================================
 				@PP_K_USUARIO_ACCION, GETDATE(), 
@@ -73,6 +75,7 @@ AS
 				[D_CITY]				= @PP_D_CITY,					
 				[S_CITY]				= @PP_S_CITY,					
 				[C_CITY]				= @PP_C_CITY,
+				[L_CITY]				= @PP_L_CITY,
 				[K_STATE_GEO]				= @PP_K_STATE_GEO,
 			-- ===========================
 				[K_USUARIO_CAMBIO]			= @PP_K_USUARIO_ACCION, 
@@ -87,7 +90,7 @@ GO
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
-EXECUTE [dbo].[PG_CI_CITY] 0,139,001,'AHUMADA','','',08
+EXECUTE [dbo].[PG_CI_CITY] 0,139,001,'AHUMADA','','',08									
 EXECUTE [dbo].[PG_CI_CITY] 0,139,002,'ALDAMA','','',08
 EXECUTE [dbo].[PG_CI_CITY] 0,139,003,'ALLENDE','','',08
 EXECUTE [dbo].[PG_CI_CITY] 0,139,004,'AQUILES SERDÁN','','',08

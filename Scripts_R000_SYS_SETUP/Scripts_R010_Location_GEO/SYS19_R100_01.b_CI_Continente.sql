@@ -60,8 +60,8 @@ AS
 				[L_BORRADO], [K_USUARIO_BAJA], [F_BAJA]  )		
 		VALUES	
 			(	@PP_K_CONTINENTE, @PP_D_CONTINENTE,
-				@PP_S_CONTINENTE, 1, 
-				@PP_C_CONTINENTE, 1,
+				@PP_S_CONTINENTE, @PP_O_CONTINENTE, 
+				@PP_C_CONTINENTE, @PP_L_CONTINENTE,
 			-- ============================================
 				@PP_K_USUARIO_ACCION, GETDATE(), 
 				@PP_K_USUARIO_ACCION, GETDATE(),
@@ -86,12 +86,12 @@ GO
 SET NOCOUNT ON
 -- ===============================================
 
-EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 0, '(NO-CONTINENTE)', '( N/CN )' , 1 , '#0 // (NO-CONTINENTE)' , 1
-EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 100, 'ÁFRICA', 'CNII01      ' , 1 , '#100 // ÁFRICA' , 1
-EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 200, 'AMÉRICA', 'EBIN01      ' , 1 , '#200 // AMÉRICA' , 1
-EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 300, 'ASIA', 'ENSA01      ' , 1 , '#300 // ASIA' , 1
-EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 400, 'EUROPA', 'FIND01      ' , 1 , '#400 // EUROPA' , 1
-EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 500, 'OCEANÍA', 'FIND02      ' , 1 , '#500 // OCEANÍA' , 1
+EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 0, '(NO-CONTINENTE)', '( N/CN )' , 1 , '#0 // (NO-CONTINENTE)' , 0
+EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 100, 'ÁFRICA', 'ÁFRICA' , 1 , '#100 // ÁFRICA' , 0
+EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 200, 'AMÉRICA', 'AMÉRICA' , 1 , '#200 // AMÉRICA' , 1
+EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 300, 'ASIA', 'ASIA' , 1 , '#300 // ASIA' , 1
+EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 400, 'EUROPA', 'EUROPA' , 1 , '#400 // EUROPA' , 0
+EXECUTE [dbo].[PG_CI_CONTINENTE] 0,139, 500, 'OCEANÍA', 'OCEANÍA' , 1 , '#500 // OCEANÍA' , 1
 
 
 

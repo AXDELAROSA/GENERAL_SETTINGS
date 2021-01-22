@@ -75,17 +75,4 @@ ALTER TABLE [dbo].[CITY]
 GO
 
 
---ALTER TABLE [dbo].[CITY] ADD 
---	CONSTRAINT [FK_CITY_USUARIO_ALTA]  
---		FOREIGN KEY ([K_USUARIO_ALTA]) 
---		REFERENCES [dbo].[USUARIO] ([K_USUARIO]),
---	CONSTRAINT [FK_CITY_USUARIO_CAMBIO]  
---		FOREIGN KEY ([K_USUARIO_CAMBIO]) 
---		REFERENCES [dbo].[USUARIO] ([K_USUARIO]),
---	CONSTRAINT [FK_CITY_USUARIO_BAJA]  
---		FOREIGN KEY ([K_USUARIO_BAJA]) 
---		REFERENCES [dbo].[USUARIO] ([K_USUARIO])
---GO
-
-
 -- //////////////////////////////////////////////////////////////
