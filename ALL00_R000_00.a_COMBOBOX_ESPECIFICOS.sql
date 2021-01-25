@@ -181,7 +181,10 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
+-- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 0
+-- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 1
 -- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 2
+-- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 3
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE CLIENTES */
 -- //////////////////////////////////////////////////////////////
@@ -211,6 +214,8 @@ AS
 					0 AS L_DELETED, 
 					1 AS L_ACTIVO
 			FROM	[DATA_02].[dbo].ARCUSFIL_SQL
+			WHERE	L_BORRADO=0
+			AND		L_ARCUSFIL=1
 			ORDER BY TA_D_CATALOGO
 		END
 
@@ -223,6 +228,8 @@ AS
 					0 AS L_DELETED, 
 					1 AS L_ACTIVO
 			FROM	[DATA_02].[dbo].ARCUSFIL_SQL
+			WHERE	L_BORRADO=0
+			AND		L_ARCUSFIL=1
 			ORDER BY TA_D_CATALOGO
 
 			INSERT INTO @VP_TA_CATALOGO
@@ -249,6 +256,26 @@ AS
 				VALUES
 					( -1,				'( TODOS )',	-999,		   0,			 1				)
 		END
+		
+	IF @PP_L_CON_TODOS=3
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO 
+		SELECT	DISTINCT(A4GLIDENTITY) AS TA_K_CATALOGO,
+				LTRIM(RTRIM(CUS_NO)) AS TA_D_CATALOGO, 
+				0 AS TA_O_CATALOGO,
+				0 AS L_DELETED, 
+				1 AS L_ACTIVO
+		FROM	[DATA_02].[dbo].ARCUSFIL_SQL, COT19_Cotizaciones_V9999_R0.DBO.QUOTE
+		WHERE	K_CUSTOMER=A4GLIDENTITY
+		AND		ARCUSFIL_SQL.L_BORRADO=0
+		AND		L_ARCUSFIL=1
+		ORDER BY TA_D_CATALOGO
+
+		INSERT INTO @VP_TA_CATALOGO
+				( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+			VALUES
+				( -1,				'( TODOS )',	-999,		   0,			 1				)
+	END
 
 	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
 				TA_D_CATALOGO	AS D_COMBOBOX 
@@ -266,7 +293,7 @@ GO
 -- //////////////////////////////////////////////////////////////
 
 -- SELECT * FROM	[DATA_02].[dbo].IMCATFIL_SQL WHERE A4GLIDENTITY = 212
--- EXECUTE [dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL] 0,0, 2
+-- EXECUTE [dbo].[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL] 0,0, 0
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE PRODUCT_CATEGORY */
 -- //////////////////////////////////////////////////////////////
@@ -357,7 +384,7 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE COLORES */
 -- //////////////////////////////////////////////////////////////
--- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 139, 5
+-- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 139, 0
 -- USE [BD_GENERAL]
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_COLOR_IMITMIDX_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_COLOR_IMITMIDX_SQL]
@@ -678,7 +705,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_
 	DROP PROCEDURE [dbo].[PG_CB_HIDESHDR_SQL_TYPE]
 GO
 /*
- EXECUTE [dbo].[PG_CB_HIDESHDR_SQL_TYPE] 0,0, 2
+ EXECUTE [dbo].[PG_CB_HIDESHDR_SQL_TYPE] 0,0, 1
 */
 CREATE PROCEDURE [dbo].[PG_CB_HIDESHDR_SQL_TYPE]
 	@PP_K_SISTEMA_EXE			INT,
@@ -692,20 +719,21 @@ AS
 					TA_O_CATALOGO		INT DEFAULT 1
 					)
 	
-	--IF @PP_L_CON_TODOS=1
-	--INSERT INTO @VP_TA_CATALOGO 
-	--SELECT	DISTINCT LTRIM(RTRIM(TYPE)) , 0
-	--FROM	[DATA_02].[dbo].HIDESHDR_SQL 
-
 	IF @PP_L_CON_TODOS=1
-		INSERT INTO @VP_TA_CATALOGO 
-		SELECT DISTINCT
-				LTRIM(RTRIM(search_desc))	AS TA_D_CATALOGO,
-				0
-		FROM [DATA_02].[dbo].IMITMIDX_SQL 
-		WHERE ITEM_NO LIKE 'F%'
-		AND LEN(RTRIM(LTRIM(ITEM_NO)))=7
-		ORDER BY TA_D_CATALOGO 
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT	DISTINCT LTRIM(RTRIM(TYPE)) , 0
+	FROM	[DATA_02].[dbo].HIDESHDR_SQL 
+	WHERE	[TYPE] IS NOT NULL
+
+	--IF @PP_L_CON_TODOS=1
+	--	INSERT INTO @VP_TA_CATALOGO 
+	--	SELECT DISTINCT
+	--			LTRIM(RTRIM(search_desc))	AS TA_D_CATALOGO,
+	--			0
+	--	FROM [DATA_02].[dbo].IMITMIDX_SQL 
+	--	WHERE ITEM_NO LIKE 'F%'
+	--	AND LEN(RTRIM(LTRIM(ITEM_NO)))=7
+	--	ORDER BY TA_D_CATALOGO 
 			-- ==========================================
 	--IF @PP_L_CON_TODOS=1
 	--	INSERT INTO @VP_TA_CATALOGO
