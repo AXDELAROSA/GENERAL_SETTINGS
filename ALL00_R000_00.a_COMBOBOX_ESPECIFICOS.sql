@@ -285,7 +285,7 @@ AS
 			INSERT INTO @VP_TA_CATALOGO
 				( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
 			VALUES
-				( -1,				'( ALL )',	-999,		   0,			 1				)
+				( -1,				'( TODOS )',	-999,		   0,			 1				)
 	END
 
 	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
