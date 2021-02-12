@@ -21,85 +21,6 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UNIT_C
 	DROP TABLE [dbo].[UNIT_CLASS]
 GO
 
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CONVERT_UNIT_OF_MEASURE]') AND type in (N'U'))
-	DROP TABLE [dbo].[CONVERT_UNIT_OF_MEASURE]
-GO
--- ////////////////////////////////////////////////////////////////
--- //					CONVERT_UNIT_OF_MEASURE				 
--- ////////////////////////////////////////////////////////////////
-
-CREATE TABLE [dbo].[CONVERT_UNIT_OF_MEASURE] (
-	[K_CONVERT_UNIT_OF_MEASURE]			[INT] IDENTITY (1,1) NOT NULL,
-	[D_CONVERT_UNIT_OF_MEASURE]			[VARCHAR](100)	NOT NULL,
-	[C_CONVERT_UNIT_OF_MEASURE]			[VARCHAR](255)	NOT NULL DEFAULT '',
-	[S_CONVERT_UNIT_OF_MEASURE]			[VARCHAR](10)	NOT NULL,
-	[O_CONVERT_UNIT_OF_MEASURE]			[INT]			NOT NULL DEFAULT 10,
-	[L_CONVERT_UNIT_OF_MEASURE]			[INT]			NOT NULL DEFAULT 1,
-	-- ===========================
-	[K_UNIT_01]							[VARCHAR](100)	NOT NULL,
-	[K_UNIT_02]							[VARCHAR](100)	NOT NULL,
-	[TOTAL_CONVERT_PER_UNIT]			[DECIMAL](16,8)	NOT NULL,	-- TOTAL EN REALACIÓN [1 A 1] EJ: 1 in = 0.02778 yd
-	[TOTAL_UNIT2_01]					[DECIMAL](16,2)	NOT NULL,
-	[TOTAL_UNIT2_02]					[DECIMAL](16,2)	NOT NULL
-) ON [PRIMARY]
-GO
--- //////////////////////////////////////////////////////
-ALTER TABLE [dbo].[CONVERT_UNIT_OF_MEASURE]
-	ADD CONSTRAINT [PK_CONVERT_UNIT_OF_MEASURE]
-		PRIMARY KEY CLUSTERED ([K_CONVERT_UNIT_OF_MEASURE])
-GO
-
-
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]
-GO
-
--- //////////////////////////////////////////////////////////////
--- //				CI - CONVERT_UNIT_OF_MEASURE
--- //////////////////////////////////////////////////////////////
-
-CREATE PROCEDURE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]
-	@PP_K_SISTEMA_EXE			INT,
-	@PP_K_USUARIO_ACCION		INT,
-	-- ===========================
-	@PP_D_CONVERT_UNIT_OF_MEASURE		VARCHAR(100),
-	@PP_C_CONVERT_UNIT_OF_MEASURE		VARCHAR(255),
-	@PP_S_CONVERT_UNIT_OF_MEASURE		VARCHAR(10),
-	@PP_O_CONVERT_UNIT_OF_MEASURE		INT,
-	@PP_L_CONVERT_UNIT_OF_MEASURE		INT,
-	-- ===========================
-	@PP_K_UNIT_01						INT,
-	@PP_K_UNIT_02						INT,
-	@PP_TOTAL_CONVERT_PER_UNIT			DECIMAL(16,5),
-	@PP_TOTAL_UNIT2_03					DECIMAL(16,2),
-	@PP_TOTAL_UNIT2_04					DECIMAL(16,2)
-AS				
-	-- ===========================
-	
-	INSERT INTO CONVERT_UNIT_OF_MEASURE
-			(	[D_CONVERT_UNIT_OF_MEASURE]	,	[C_CONVERT_UNIT_OF_MEASURE]	,
-				[S_CONVERT_UNIT_OF_MEASURE]	,	[O_CONVERT_UNIT_OF_MEASURE]	,
-				[L_CONVERT_UNIT_OF_MEASURE]	,
-				-- ===========================
-				[K_UNIT_01]					,	[K_UNIT_02]					,
-				[TOTAL_CONVERT_PER_UNIT]	,
-				[TOTAL_UNIT2_01]			,	[TOTAL_UNIT2_02]				)
-	VALUES	
-			(	@PP_D_CONVERT_UNIT_OF_MEASURE,	@PP_C_CONVERT_UNIT_OF_MEASURE,	
-				@PP_S_CONVERT_UNIT_OF_MEASURE,	@PP_O_CONVERT_UNIT_OF_MEASURE,		
-				@PP_L_CONVERT_UNIT_OF_MEASURE,		
-				-- ===========================
-				@PP_K_UNIT_01				,	@PP_K_UNIT_02				,		
-				@PP_TOTAL_CONVERT_PER_UNIT	,
-				@PP_TOTAL_UNIT2_03			,	@PP_TOTAL_UNIT2_04				)		
-		
-	-- //////////////////////////////////////////////////////////////
-GO
-
-EXECUTE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]  0, 139,  'INCH-YARD'		,'CONVERT INCH TO YARD'		, 'in-yd', 10 , 1, 5,24	,0.0277778, 1,9
-EXECUTE [dbo].[PG_CI_CONVERT_UNIT_OF_MEASURE]  0, 139,  'INCH-METER'	,'CONVERT INCH TO METER'	, 'in-mt', 10 , 1, 5,9	,0.02540,	1,10.7639
-GO
-
 
 -- ////////////////////////////////////////////////////////////////
 -- //					UNIT_CLASS				 
@@ -278,6 +199,7 @@ EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  22, 'CUBETA'						,'CUBETA'	, 'C
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  24, 'YARDA			- YARD'			,'Y'		, 'yd'   , 10 , 1, 3
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  25, 'YARDA CUADRADA- SQ YARD'		,'Y'		, 'sqyd'   , 10 , 1, 3
 EXECUTE [dbo].[PG_CI_UNIT_OF_MEASURE]  0, 139,  26, 'METRO CUADRADO - SQ METER'	,'m2'		, 'm2', 10 , 1, 2
+
 
 GO
 
