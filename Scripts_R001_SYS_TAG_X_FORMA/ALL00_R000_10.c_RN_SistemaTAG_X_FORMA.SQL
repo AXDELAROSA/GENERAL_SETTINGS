@@ -165,11 +165,11 @@ AS
 	--													1, -- @PP_K_DATA_SISTEMA,	
 	--													@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
 	-- //////////////////////////////////////
-	IF @VP_RESULTADO=''
-		EXECUTE [dbo].[PG_RN_SISTEMA_TAG_DESCRIPCION_EXISTE]	@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-																@PP_K_SISTEMA_TAG, 
-																@PP_D_SISTEMA_TAG, @PP_D_SISTEMA_TAG_MENU,
-																@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
+	--IF @VP_RESULTADO=''
+	--	EXECUTE [dbo].[PG_RN_SISTEMA_TAG_DESCRIPCION_EXISTE]	@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+	--															@PP_K_SISTEMA_TAG, 
+	--															@PP_D_SISTEMA_TAG, @PP_D_SISTEMA_TAG_MENU,
+	--															@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
 	-- //////////////////////////////////////
 	IF	@VP_RESULTADO<>''
 		SET	@VP_RESULTADO = @VP_RESULTADO + ' //INS//'	
@@ -210,11 +210,11 @@ AS
 													@PP_K_SISTEMA_TAG,	 
 													@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
 	-- ///////////////////////////////////////////
-	IF @VP_RESULTADO=''
-		EXECUTE [dbo].[PG_RN_SISTEMA_TAG_DESCRIPCION_EXISTE]	@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-																@PP_K_SISTEMA_TAG, 
-																@PP_D_SISTEMA_TAG, @PP_D_SISTEMA_TAG_MENU,
-																@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
+	--IF @VP_RESULTADO=''
+	--	EXECUTE [dbo].[PG_RN_SISTEMA_TAG_DESCRIPCION_EXISTE]	@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
+	--															@PP_K_SISTEMA_TAG, 
+	--															@PP_D_SISTEMA_TAG, @PP_D_SISTEMA_TAG_MENU,
+	--															@OU_RESULTADO_VALIDACION = @VP_RESULTADO		OUTPUT
 	-- //////////////////////////////////////	
 	IF	@VP_RESULTADO<>''
 		SET	@VP_RESULTADO = @VP_RESULTADO + ' //UPD//'	
