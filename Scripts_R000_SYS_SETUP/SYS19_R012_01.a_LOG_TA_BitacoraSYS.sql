@@ -321,85 +321,85 @@ GO
 
 
 
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_BITACORA_SYS]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_CI_BITACORA_SYS]
-GO
+--IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_BITACORA_SYS]') AND type in (N'P', N'PC'))
+--	DROP PROCEDURE [dbo].[PG_CI_BITACORA_SYS]
+--GO
 
 
-CREATE PROCEDURE [dbo].[PG_CI_BITACORA_SYS]
---	@PP_L_DEBUG						[INT],
-	@PP_K_SISTEMA_EXE				[INT],
-	@PP_K_USUARIO					[INT],
-	-- ===========================================
-	@PP_K_CLASE_BITACORA_SYS		[INT],
-	@PP_K_IMPORTANCIA_BITACORA_SYS	[INT],	
-	@PP_K_GRUPO_BITACORA_SYS		[INT],
-	@PP_D_BITACORA_SYS				[VARCHAR] (100),
-	@PP_C_BITACORA_SYS				[VARCHAR] (100),
-	-- ===========================================
-	@PP_STORED_PROCEDURE			[VARCHAR] (100),
-	@PP_K_FOLIO_1					[INT],
-	@PP_K_FOLIO_2					[INT],
-	-- ===========================================
-	@PP_VALOR_1_INT					[INT],
-	@PP_VALOR_2_INT					[INT],
-	@PP_VALOR_3_STR					[VARCHAR] (100),
-	@PP_VALOR_4_STR					[VARCHAR] (100),
-	@PP_VALOR_5_DEC					DECIMAL(19,4),
-	@PP_VALOR_6_DEC					DECIMAL(19,4),
-	-- ===========================================
-	@PP_VALOR_1_DATO				[VARCHAR] (20),
-	@PP_VALOR_2_DATO				[VARCHAR] (20),
-	@PP_VALOR_3_DATO				[VARCHAR] (20),
-	@PP_VALOR_4_DATO				[VARCHAR] (20),
-	@PP_VALOR_5_DATO				[VARCHAR] (20),
-	@PP_VALOR_6_DATO				[VARCHAR] (20)
-AS
+--CREATE PROCEDURE [dbo].[PG_CI_BITACORA_SYS]
+----	@PP_L_DEBUG						[INT],
+--	@PP_K_SISTEMA_EXE				[INT],
+--	@PP_K_USUARIO					[INT],
+--	-- ===========================================
+--	@PP_K_CLASE_BITACORA_SYS		[INT],
+--	@PP_K_IMPORTANCIA_BITACORA_SYS	[INT],	
+--	@PP_K_GRUPO_BITACORA_SYS		[INT],
+--	@PP_D_BITACORA_SYS				[VARCHAR] (100),
+--	@PP_C_BITACORA_SYS				[VARCHAR] (100),
+--	-- ===========================================
+--	@PP_STORED_PROCEDURE			[VARCHAR] (100),
+--	@PP_K_FOLIO_1					[INT],
+--	@PP_K_FOLIO_2					[INT],
+--	-- ===========================================
+--	@PP_VALOR_1_INT					[INT],
+--	@PP_VALOR_2_INT					[INT],
+--	@PP_VALOR_3_STR					[VARCHAR] (100),
+--	@PP_VALOR_4_STR					[VARCHAR] (100),
+--	@PP_VALOR_5_DEC					DECIMAL(19,4),
+--	@PP_VALOR_6_DEC					DECIMAL(19,4),
+--	-- ===========================================
+--	@PP_VALOR_1_DATO				[VARCHAR] (20),
+--	@PP_VALOR_2_DATO				[VARCHAR] (20),
+--	@PP_VALOR_3_DATO				[VARCHAR] (20),
+--	@PP_VALOR_4_DATO				[VARCHAR] (20),
+--	@PP_VALOR_5_DATO				[VARCHAR] (20),
+--	@PP_VALOR_6_DATO				[VARCHAR] (20)
+--AS
 
-	DECLARE @VP_F_BITACORA_SYS			[DATETIME] 
+--	DECLARE @VP_F_BITACORA_SYS			[DATETIME] 
 	
-	SET @VP_F_BITACORA_SYS = GETDATE()
+--	SET @VP_F_BITACORA_SYS = GETDATE()
 
-	-- ========================================
+--	-- ========================================
 
-	INSERT INTO F_BITACORA_SYS
-		(	K_SISTEMA,
-			F_BITACORA_SYS, F_BITACORA_SYS_EVENTO,
-			K_USUARIO,
-			-- ===========================================
-			K_CLASE_BITACORA_SYS, K_IMPORTANCIA_BITACORA_SYS, K_GRUPO_BITACORA_SYS,
-			D_BITACORA_SYS, C_BITACORA_SYS,
-			-- ===========================================
-			STORED_PROCEDURE, K_FOLIO_1, K_FOLIO_2,
-			-- ===========================================
-			VALOR_1_INT,	VALOR_2_INT,
-			VALOR_3_STR,	VALOR_4_STR,
-			VALOR_5_DEC,	VALOR_6_DEC,
-			-- ===========================================
-			VALOR_1_DATO,	VALOR_2_DATO,
-			VALOR_3_DATO,	VALOR_4_DATO,
-			VALOR_5_DATO,	VALOR_6_DATO		)
+--	INSERT INTO F_BITACORA_SYS
+--		(	K_SISTEMA,
+--			F_BITACORA_SYS, F_BITACORA_SYS_EVENTO,
+--			K_USUARIO,
+--			-- ===========================================
+--			K_CLASE_BITACORA_SYS, K_IMPORTANCIA_BITACORA_SYS, K_GRUPO_BITACORA_SYS,
+--			D_BITACORA_SYS, C_BITACORA_SYS,
+--			-- ===========================================
+--			STORED_PROCEDURE, K_FOLIO_1, K_FOLIO_2,
+--			-- ===========================================
+--			VALOR_1_INT,	VALOR_2_INT,
+--			VALOR_3_STR,	VALOR_4_STR,
+--			VALOR_5_DEC,	VALOR_6_DEC,
+--			-- ===========================================
+--			VALOR_1_DATO,	VALOR_2_DATO,
+--			VALOR_3_DATO,	VALOR_4_DATO,
+--			VALOR_5_DATO,	VALOR_6_DATO		)
 
-	VALUES	
-		(	@PP_K_SISTEMA_EXE,
-			@VP_F_BITACORA_SYS, @VP_F_BITACORA_SYS, 
-			@PP_K_USUARIO,
-			-- ===========================================
-			@PP_K_CLASE_BITACORA_SYS, @PP_K_IMPORTANCIA_BITACORA_SYS, @PP_K_GRUPO_BITACORA_SYS,
-			@PP_D_BITACORA_SYS, @PP_C_BITACORA_SYS,
-			-- ===========================================
-			@PP_STORED_PROCEDURE, @PP_K_FOLIO_1, @PP_K_FOLIO_2,
-			-- ===========================================
-			@PP_VALOR_1_INT,	@PP_VALOR_2_INT,
-			@PP_VALOR_3_STR,	@PP_VALOR_4_STR,
-			@PP_VALOR_5_DEC,	@PP_VALOR_6_DEC,
-			-- ===========================================
-			@PP_VALOR_1_DATO,	@PP_VALOR_2_DATO,
-			@PP_VALOR_3_DATO,	@PP_VALOR_4_DATO,
-			@PP_VALOR_5_DATO,	@PP_VALOR_6_DATO		)
+--	VALUES	
+--		(	@PP_K_SISTEMA_EXE,
+--			@VP_F_BITACORA_SYS, @VP_F_BITACORA_SYS, 
+--			@PP_K_USUARIO,
+--			-- ===========================================
+--			@PP_K_CLASE_BITACORA_SYS, @PP_K_IMPORTANCIA_BITACORA_SYS, @PP_K_GRUPO_BITACORA_SYS,
+--			@PP_D_BITACORA_SYS, @PP_C_BITACORA_SYS,
+--			-- ===========================================
+--			@PP_STORED_PROCEDURE, @PP_K_FOLIO_1, @PP_K_FOLIO_2,
+--			-- ===========================================
+--			@PP_VALOR_1_INT,	@PP_VALOR_2_INT,
+--			@PP_VALOR_3_STR,	@PP_VALOR_4_STR,
+--			@PP_VALOR_5_DEC,	@PP_VALOR_6_DEC,
+--			-- ===========================================
+--			@PP_VALOR_1_DATO,	@PP_VALOR_2_DATO,
+--			@PP_VALOR_3_DATO,	@PP_VALOR_4_DATO,
+--			@PP_VALOR_5_DATO,	@PP_VALOR_6_DATO		)
 
-	-- ============================================
-GO
+--	-- ============================================
+--GO
 
 
 
