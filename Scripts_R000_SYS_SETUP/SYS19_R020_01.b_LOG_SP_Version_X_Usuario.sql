@@ -139,7 +139,7 @@ AS
 													'LOG_ACCESO_SYS',
 													@PP_DATOS,
 													-- ===========================================
-													'[PG_IN_ACCESO_SYS] MENU_ACCESO , K, VERSION_SYS',	-- @PP_STORED_PROCEDURE		[VARCHAR] (100),
+													'[PG_IN_ACCESO_SYS] MENU_ACCESO , K_SISTEMA, VERSION_SYS',	-- @PP_STORED_PROCEDURE		[VARCHAR] (100),
 													0, 0, 	-- @PP_K_FOLIO_1, @PP_K_FOLIO_2, 
 													-- ===========================================			
 													-- === DATOS A INSERTAR Y TIPO DE DATO

@@ -358,12 +358,9 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> INSERT
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_IN_BITACORA_SYS_OPERACION]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_IN_BITACORA_SYS_OPERACION]
 GO
-
-
 CREATE PROCEDURE [dbo].[PG_IN_BITACORA_SYS_OPERACION]
 --	@PP_L_DEBUG						[INT],
 	@PP_K_SISTEMA_EXE				[INT],
@@ -441,7 +438,6 @@ AS
 			VALOR_1_DATO,	VALOR_2_DATO,
 			VALOR_3_DATO,	VALOR_4_DATO,
 			VALOR_5_DATO,	VALOR_6_DATO		)
-
 	VALUES	
 		(	@PP_K_SISTEMA_EXE,
 			@VP_F_BITACORA_SYS, @VP_F_BITACORA_SYS, 
@@ -459,7 +455,6 @@ AS
 			@PP_VALOR_1_DATO,	@PP_VALOR_2_DATO,
 			@PP_VALOR_3_DATO,	@PP_VALOR_4_DATO,
 			@PP_VALOR_5_DATO,	@PP_VALOR_6_DATO		)
-
 	-- ========================================
 GO
 

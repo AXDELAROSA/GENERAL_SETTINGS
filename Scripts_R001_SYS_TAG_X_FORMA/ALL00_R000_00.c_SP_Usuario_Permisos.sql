@@ -27,21 +27,7 @@ CREATE PROCEDURE [dbo].[PG_LI_USUARIO_PEARL]
 	-- ===========================
 	@PP_COMODIN						VARCHAR(10)
 AS
---	DECLARE @VP_MENSAJE				VARCHAR(300) = ''
---	DECLARE @VP_L_APLICAR_MAX_ROWS	INT=1		
-	-- ///////////////////////////////////////////
-	--DECLARE @VP_LI_N_REGISTROS	INT=5000
-	-- =========================================	
-	--DECLARE @VP_L_VER_BORRADOS		INT			
-	--EXECUTE [dbo].[PG_RN_DATA_VER_BORRADOS]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-	--											@OU_L_VER_BORRADOS = @VP_L_VER_BORRADOS			OUTPUT--	
---	DECLARE @VP_K_FOLIO				INT
---
---	EXECUTE [BD_GENERAL].DBO.[PG_RN_OBTENER_ID_X_REFERENCIA]			
---											@PP_BUSCAR,	@OU_K_ELEMENTO = @VP_K_FOLIO	OUTPUT
 	-- =========================================
-		
---	IF @VP_MENSAJE<>''
 	SELECT	TOP (5000)
 			K_USUARIO_PEARL AS K_CODIGO,
 			K_EMPLEADO_PEARL AS K_EMPLEADO,
@@ -50,44 +36,29 @@ AS
 			NOMBRE AS NOMBRE,
 			K_USUARIO_DEPARTAMENTO AS K_DEPARTAMENTO,
 			D_USUARIO_PEARL AS USUARIO,
-			----CORREO_USUARIO_PEARL AS CORREO,
-			--(	CASE 
-			--		WHEN CHARINDEX('@',CORREO_USUARIO_PEARL)<>1 THEN SUBSTRING( CORREO_USUARIO_PEARL,1,(CHARINDEX('@',CORREO_USUARIO_PEARL))-1)
-			--		WHEN CHARINDEX('@',CORREO_USUARIO_PEARL)=1  THEN 'SIN CORREO'	
-			--	END	) AS CORREO,
 			(	CASE
 					WHEN	LEN(CORREO_USUARIO_PEARL)=0		THEN	'SIN CORREO'
 					WHEN	LEN(CORREO_USUARIO_PEARL)>=1	THEN	CORREO_USUARIO_PEARL
 				END ) AS CORREO,
-
-			--(	CASE 
-			--		WHEN CHARINDEX('@',CORREO_USUARIO_PEARL)<>1 THEN 1
-			--		WHEN CHARINDEX('@',CORREO_USUARIO_PEARL)=1  THEN 0
-			--	END	) AS L_CORREO,
 			K_USUARIO_TIPO AS K_USUARIO_TIPO,			
 			PASSWORD_USUARIO_PEARL AS [PASSWORD],
---			L_USUARIO_PEARL,
 			TEMA_USUARIO_PEARL AS TEMA
 	FROM    USUARIO_PEARL
 	LEFT JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
-	WHERE	L_BORRADO=0	--OR	@VP_L_VER_BORRADOS=1 )	
+	WHERE	L_BORRADO=0
 	ORDER BY APELLIDO_PATERNO ASC
 	-- /////////////////////////////////////////////////////////////////////
 GO
 
 
 -- //////////////////////////////////////////////////////////////
-
--- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- // SE UTILIZA EN LA FORMA DE USUARIO
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]
 GO
-
--- EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG] 0,139,139
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG] 0,139,139
 CREATE PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -112,17 +83,13 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
-
--- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]
 GO
-
--- EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU] 0,139,139,70
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU] 0,139,139,70
 CREATE PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -151,7 +118,6 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USUARIO_PEARL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_SK_USUARIO_PEARL]
 GO
@@ -164,44 +130,24 @@ CREATE PROCEDURE [dbo].[PG_SK_USUARIO_PEARL]
 	-- ===========================
 	@PP_K_CODIGO					VARCHAR(10)
 AS
---	DECLARE @VP_MENSAJE				VARCHAR(300) = ''
---	DECLARE @VP_L_USUARIO_LOCAL		INT=1		
-	-- ///////////////////////////////////////////
-	--DECLARE @VP_LI_N_REGISTROS	INT=5000
-	-- =========================================	
-
---	SELECT	@VP_L_USUARIO_LOCAL=COUNT(K_USUARIO_PEARL)
---	FROM	USUARIO_PEARL
---	WHERE	K_USUARIO_PEARL=@PP_K_CODIGO
-	
-
---	IF @VP_L_USUARIO_LOCAL<>0
---	BEGIN
-		SELECT	TOP (1)
-				K_USUARIO_PEARL AS K_CODIGO,
-				ISNULL(EN_NUM_EMP,0) AS K_EMPLEADO,
-				ISNULL(EP_APELLIDO_PATERNO,'') AS APELLIDO_PATERNO,
-				ISNULL(EP_APELLIDO_MATERNO,'') AS APELLIDO_MATERNO,
-				ISNULL(EP_NOMBRE,'') AS NOMBRE,
-				D_USUARIO_PEARL AS USUARIO,
-				--CORREO_USUARIO_PEARL AS CORREO,
-				(	CASE
-						WHEN	LEN(CORREO_USUARIO_PEARL)=0		THEN	'SIN CORREO'
-						WHEN	LEN(CORREO_USUARIO_PEARL)>=1	THEN	CORREO_USUARIO_PEARL
-					END ) AS CORREO,
-				--(	CASE 
-				--		WHEN CHARINDEX('@',CORREO_USUARIO_PEARL)<>1 THEN 1
-				--		WHEN CHARINDEX('@',CORREO_USUARIO_PEARL)=1  THEN 0
-				--	END	) AS L_CORREO,
-				K_USUARIO_TIPO AS K_USUARIO_TIPO,
-				PASSWORD_USUARIO_PEARL AS [PASSWORD],
---				L_USUARIO_PEARL,
-				TEMA_USUARIO_PEARL AS TEMA
-		FROM    USUARIO_PEARL
-		LEFT JOIN	HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
-		WHERE	L_BORRADO<>1
-		AND		K_USUARIO_PEARL=@PP_K_CODIGO
---	END
+	SELECT	TOP (1)
+			K_USUARIO_PEARL AS K_CODIGO,
+			ISNULL(EN_NUM_EMP,0) AS K_EMPLEADO,
+			ISNULL(EP_APELLIDO_PATERNO,'') AS APELLIDO_PATERNO,
+			ISNULL(EP_APELLIDO_MATERNO,'') AS APELLIDO_MATERNO,
+			ISNULL(EP_NOMBRE,'') AS NOMBRE,
+			D_USUARIO_PEARL AS USUARIO,
+			(	CASE
+					WHEN	LEN(CORREO_USUARIO_PEARL)=0		THEN	'SIN CORREO'
+					WHEN	LEN(CORREO_USUARIO_PEARL)>=1	THEN	CORREO_USUARIO_PEARL
+				END ) AS CORREO,
+			K_USUARIO_TIPO AS K_USUARIO_TIPO,
+			PASSWORD_USUARIO_PEARL AS [PASSWORD],
+			TEMA_USUARIO_PEARL AS TEMA
+	FROM    USUARIO_PEARL
+	LEFT JOIN	HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
+	WHERE	L_BORRADO<>1
+	AND		K_USUARIO_PEARL=@PP_K_CODIGO
 	-- /////////////////////////////////////////////////////////////////////
 GO
 
@@ -209,7 +155,6 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / FICHA
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USUARIO_INCONVENIENTE]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_SK_USUARIO_INCONVENIENTE]
 GO
@@ -280,14 +225,11 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 		@VP_S_APELLIDO_P VARCHAR(30), @VP_S_APELLIDO_M VARCHAR(30)
 	--==========================================	--==========================================
 	-- PARA UTILIZAR EN EL CURSOR
-	DECLARE @VP_CU_D_USUARIO_FINAL NVARCHAR(MAX)='',	@VP_EXISTE	INT=0,	@VP_INCONVENIENTE	INT=0
-		
+	DECLARE @VP_CU_D_USUARIO_FINAL NVARCHAR(MAX)='',	@VP_EXISTE	INT=0,	@VP_INCONVENIENTE	INT=0		
 	--==========================================	--==========================================
 	-- PARA ALMACENAR LOS D_USUARIOS
-	DECLARE @Tablausuario TABLE	
-	( TA_D_USUARIO VARCHAR(250) )
-	--==========================================	--==========================================
-	
+	DECLARE @Tablausuario TABLE	( TA_D_USUARIO VARCHAR(250) )
+	--==========================================	--==========================================	
 	--==============================================================================================================================
 	SELECT	TOP  (1)
 	@VP_D_USUARIO_1=(	CASE WHEN CHARINDEX(' ',EP_NOMBRE)=0 
@@ -304,9 +246,6 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 						+	SUBSTRING( EP_NOMBRE,(CHARINDEX(' ',EP_NOMBRE))+1,1)	END	),
 	@VP_S_APELLIDO_P=SUBSTRING(EP_APELLIDO_PATERNO,1,1),
 	@VP_S_APELLIDO_M=SUBSTRING(EP_APELLIDO_MATERNO,1,1)
-	--FROM    USUARIO_PEARL
-	--INNER JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
-	--WHERE	K_EMPLEADO_PEARL=@PP_K_EMPLEADO_PEARL		--12602
 	FROM	HOWE.DBO.VISTA_GAFETES
 	WHERE	EN_NUM_EMP=@PP_K_EMPLEADO_PEARL
 	IF @@ROWCOUNT>0 
@@ -319,7 +258,6 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 				INSERT INTO		@Tablausuario (	TA_D_USUARIO )
 				VALUES	(	@VP_D_USUARIO_1 + @VP_S_APELLIDO_P	),
 						(	@VP_D_USUARIO_1 + @VP_S_APELLIDO_M	)
-				--GOTO INCONVENIENTE
 			END
 			ELSE
 			BEGIN
@@ -341,8 +279,7 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 				   BEGIN
 						EXECUTE	[dbo].[PG_SK_USUARIO_INCONVENIENTE]	@PP_K_SISTEMA_EXE , @PP_K_USUARIO_ACCION,
 																	-- ===========================
-																	@VP_CU_D_USUARIO_FINAL,	@VP_INCONVENIENTE			OUTPUT
-						
+																	@VP_CU_D_USUARIO_FINAL,	@VP_INCONVENIENTE			OUTPUT						
 							--==========================================--==========================================
 							--	SE VERIFICA SI EXISTE EL USUARIO EN EL SISTEMA
 							IF(SELECT	COUNT(D_USUARIO_PEARL)	
@@ -356,8 +293,7 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 							BEGIN
 								SET @VP_EXISTE=0
 							END
-							--==========================================--==========================================
-					
+							--==========================================--==========================================					
 						IF (@VP_INCONVENIENTE=0 AND @VP_EXISTE=0)
 						BEGIN
 							BREAK
@@ -375,24 +311,20 @@ DECLARE @VP_D_USUARIO_1 VARCHAR(30),  @VP_D_USUARIO_2 VARCHAR(30), @VP_D_USUARIO
 	ELSE
 	BEGIN
 		SET @VP_CU_D_USUARIO_FINAL='ASIGNAR_MANUALMENTE'
-	END
-	
+	END	
 --==============================================================================================================================
 	IF @VP_EXISTE <> 0	OR	@VP_INCONVENIENTE <> 0	OR @VP_CU_D_USUARIO_FINAL='' OR @VP_CU_D_USUARIO_FINAL IS NULL
 	BEGIN
 		SET @VP_CU_D_USUARIO_FINAL='ASIGNAR_MANUALMENTE'
 	END
---==============================================================================================================================	
-	--SELECT @VP_CU_D_USUARIO_FINAL
+--==============================================================================================================================
 	SET @PP_D_USUARIO = @VP_CU_D_USUARIO_FINAL
 GO
-
 
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / FICHA
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USUARIO_PEARL_NUEVO]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_SK_USUARIO_PEARL_NUEVO]
 GO
@@ -403,7 +335,6 @@ GO
 -- EXECUTE [dbo].[PG_SK_USUARIO_PEARL_NUEVO] 0,139,5337
 -- EXECUTE [dbo].[PG_SK_USUARIO_PEARL_NUEVO] 0,139,11879
 -- EXECUTE [dbo].[PG_SK_USUARIO_PEARL_NUEVO] 0,139,14131
-
 CREATE PROCEDURE [dbo].[PG_SK_USUARIO_PEARL_NUEVO]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -412,28 +343,20 @@ CREATE PROCEDURE [dbo].[PG_SK_USUARIO_PEARL_NUEVO]
 AS
 DECLARE @VP_D_USUARIO		NVARCHAR(MAX)
 DECLARE @VP_MENSAJE			NVARCHAR(MAX) = ''	, @VP_L_EXISTE		INT
---BEGIN TRY
+
 	EXECUTE [DBO].[PG_RN_USUARIO_PEARL_EXISTS]	@PP_K_SISTEMA_EXE , @PP_K_USUARIO_ACCION,
 												-- ===========================
 												@PP_K_EMPLEADO_PEARL, 
 												@VP_MENSAJE			OUTPUT,
 												@VP_L_EXISTE		OUTPUT
---IF ( SELECT	COUNT(K_USUARIO_PEARL) 
---	FROM	USUARIO_PEARL 
---	WHERE	K_EMPLEADO_PEARL = @PP_K_EMPLEADO_PEARL 
---	AND		L_USUARIO_PEARL = 1 ) > 0 
---BEGIN
---SET @VP_MENSAJE=''
---END
+
 	IF @VP_MENSAJE=''
 	BEGIN
 		EXECUTE [dbo].[PG_ASIGNAR_D_USUARIO]	@PP_K_SISTEMA_EXE , @PP_K_USUARIO_ACCION,
 												-- ===========================
-												@PP_K_EMPLEADO_PEARL,	@VP_D_USUARIO OUTPUT
-													
+												@PP_K_EMPLEADO_PEARL,	@VP_D_USUARIO OUTPUT													
 		-- ///////////////////////////////////////////
 			SELECT	TOP  (1)
---				K_USUARIO_PEARL AS CODIGO,
 				EN_NUM_EMP AS EMPLEADO,
 				@VP_D_USUARIO AS USUARIO,
 				EP_NOMBRE AS NOMBRE,
@@ -443,19 +366,8 @@ DECLARE @VP_MENSAJE			NVARCHAR(MAX) = ''	, @VP_L_EXISTE		INT
 				--==========================================
 				(	CASE WHEN	@VP_D_USUARIO = 'ASIGNAR_MANUALMENTE'	THEN 'ASIGNAR_MANUALMENTE' 
 					ELSE		@VP_D_USUARIO+'@PEARLLEATHER.COM.MX'	END)	AS CORREO,
-					--ELSE		@VP_D_USUARIO+'@PEARLLEATHER.COM.MX'	END)	AS CORREO,
-				--@VP_D_USUARIO AS USUARIO,
-				--==========================================
-				--USUARIO_TIPO AS TIPO,
-				--'Password1' AS [PASSWORD],
-				--PASSWORD_USUARIO_PEARL AS [PASSWORD],
-				--TEMA_USUARIO_PEARL AS TEMA,
 				'Pass' + CONVERT(VARCHAR(10),EN_NUM_EMP)		AS [PASSWORD_PROVISIONAL],
 				'' AS MENSAJE
-			--FROM    USUARIO_PEARL
-			--INNER JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
-			--WHERE	K_EMPLEADO_PEARL=@PP_K_EMPLEADO_PEARL
-			--ORDER BY EP_APELLIDO_PATERNO ASC
 			FROM HOWE.DBO.VISTA_GAFETES
 			WHERE	EN_NUM_EMP=@PP_K_EMPLEADO_PEARL
 	END
@@ -470,7 +382,6 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> INSERT
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_IN_USUARIO_PEARL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_IN_USUARIO_PEARL]
 GO
@@ -646,12 +557,9 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> INSERT
 -- //////////////////////////////////////////////////////////////
-
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_INUP_USUARIO_PERMISOS]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_INUP_USUARIO_PERMISOS]
 GO
-
 -- EXECUTE [dbo].[PG_INUP_USUARIO_PERMISOS] 0, 139, 139, '23/31/51/52/53'
 CREATE PROCEDURE [dbo].[PG_INUP_USUARIO_PERMISOS]
 	@PP_K_SISTEMA_EXE				INT,
@@ -776,15 +684,11 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> INSERT
 -- //////////////////////////////////////////////////////////////
-
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_USUARIO_PEARL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_UP_USUARIO_PEARL]
 GO
-
 -- EXECUTE [dbo].[PG_UP_USUARIO_PEARL] 0,139,  11879 , 'EDITHL' , 'Password1' , '0' , 'EDITHL' , 30
--- EXECUTE [dbo].[PG_UP_USUARIO_PEARL] 0,139,  11879 , 'EDITHL' , 'Password1' , 'EDITHL' , '4' , 30 
-
+-- EXECUTE [dbo].[PG_UP_USUARIO_PEARL] 0,139,  11879 , 'EDITHL' , 'Password1' , 'EDITHL' , '4' , 30
 CREATE PROCEDURE [dbo].[PG_UP_USUARIO_PEARL]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -810,36 +714,11 @@ DECLARE @VP_MENSAJE								VARCHAR(500) = ''
 --DECLARE @VP_K_USUARIO_PEARL						INT = 0;	
 --DECLARE @VP_K_USUARIO_PEARL_EXISTE_PEARL		INT = 0;	
 --DECLARE @VP_K_ADDRESS_USUARIO_PEARL	INT = 0;	
---DECLARE @VP_K_CONTACT_USUARIO_PEARL	INT = 0
-	
+--DECLARE @VP_K_CONTACT_USUARIO_PEARL	INT = 0	
 BEGIN TRANSACTION 
 BEGIN TRY
 -- /////////////////////////////////////////////////////////////////////
-	--IF @PP_K_EMPLEADO_PEARL>0
-	--	BEGIN
-	--		SELECT  @VP_K_USUARIO_PEARL_EXISTE_PEARL=COUNT(K_EMPLEADO_PEARL)
-	--		FROM	USUARIO_PEARL
-	--		WHERE	K_EMPLEADO_PEARL=@PP_K_EMPLEADO_PEARL
-	--		AND		K_EMPLEADO_PEARL>0
-	--	END
-
-	--IF @VP_K_USUARIO_PEARL_EXISTE_PEARL<>0
-	--BEGIN
-	--	SET @VP_MENSAJE= 'EL USUARIO YA TIENE UN REGISTRO EN EL SISTEMA'
-	--END
-	----IF @PP_K_EMPLEADO_PEARL<1 AND @PP_L_EMPLEADO_PEARL=1
-	----	SET @VP_MENSAJE= 'EL USUARIO YA TIENE UN REGISTRO EN EL SISTEMA'
-
-	--IF @VP_MENSAJE=''
-	--	EXECUTE [BD_GENERAL].dbo.[PG_SK_CATALOGO_K_MAX_GET]		@PP_K_SISTEMA_EXE, 'BD_GENERAL',
-	--															'USUARIO_PEARL', 'K_USUARIO_PEARL',
-	--															@OU_K_TABLA_DISPONIBLE = @VP_K_USUARIO_PEARL	OUTPUT
-	-- /////////////////////////////////////////////////////////////////////
-	--IF @VP_MENSAJE=''
-	--	EXECUTE [dbo].[PG_RN_USUARIO_PEARL_CLAVE_EXISTE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
-	--															@VP_K_USUARIO_PEARL, 
-	--															@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
-	-- /////////////////////////////////////////////////////////////////////
+-- /////////////////////////////////////////////////////////////////////
 	EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
 													@PP_K_USUARIO_PEARL, @PP_USUARIO, @PP_CORREO,
 													@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT
@@ -848,8 +727,7 @@ BEGIN TRY
 	IF @VP_MENSAJE<>''
 	BEGIN
 		RAISERROR (@VP_MENSAJE, 16, 1 )
-	END	
-	
+	END		
 	--============================================================================
 	--======================================UPDATE EL USUARIO_PEARL
 	--============================================================================
@@ -928,16 +806,13 @@ END CATCH
 GO
 
 
-
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> DELETE / FICHA
 -- //////////////////////////////////////////////////////////////
-
 --	EXECUTE [dbo].[PG_DL_USUARIO_PEARL] 0,139,380,2,2
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_DL_USUARIO_PEARL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_DL_USUARIO_PEARL]
 GO
-
 CREATE PROCEDURE [dbo].[PG_DL_USUARIO_PEARL]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -1124,7 +999,6 @@ BEGIN TRY
 		BEGIN
 			SET		@VP_K_CODIGO		=-10
 			SET		@VP_NOMBRE_APELLIDO	=NULL
-			--SET		@VP_APELLIDO_P		=NULL
 			SET		@VP_TEMA			=NULL
 			SET		@VP_D_USUARIO		=NULL
 			SET		@VP_D_USUARIO_TIPO	=NULL
@@ -1136,8 +1010,6 @@ BEGIN TRY
 	ELSE
 		BEGIN
 			SELECT	@VP_K_CODIGO		=	K_USUARIO_PEARL,
-					--@VP_NOMBRE_APELLIDO	=CONCAT(NOMBRE,' ',APELLIDO_PATERNO),
-					
 					
 					@VP_NOMBRE_APELLIDO	=	CONCAT((
 													CASE 
@@ -1149,8 +1021,8 @@ BEGIN TRY
 					@VP_D_USUARIO_TIPO	=D_USUARIO_TIPO,
 					@VP_S_USUARIO_TIPO	=S_USUARIO_TIPO
 			FROM	USUARIO_PEARL, USUARIO_TIPO
-			WHERE	D_USUARIO_PEARL=		@PP_D_USUARIO
-			AND		PASSWORD_USUARIO_PEARL=	@PP_PASSWORD
+			WHERE	D_USUARIO_PEARL			= @PP_D_USUARIO
+			AND		PASSWORD_USUARIO_PEARL	= @PP_PASSWORD
 			--=======================================================
 			AND		USUARIO_PEARL.K_USUARIO_TIPO=USUARIO_TIPO.K_USUARIO_TIPO
 
@@ -1158,7 +1030,6 @@ BEGIN TRY
 				BEGIN
 					SET		@VP_K_CODIGO		=-100
 					SET		@VP_NOMBRE_APELLIDO	=NULL
-					--SET		@VP_APELLIDO_P		=NULL
 					SET		@VP_TEMA			=NULL
 					SET		@VP_D_USUARIO		=NULL
 					SET		@VP_D_USUARIO_TIPO	=NULL
@@ -1185,8 +1056,6 @@ END CATCH
 		BEGIN
 			SET	@VP_MENSAJE = '!!!! ' + @VP_MENSAJE 
 		END
-
-	--SELECT	@VP_MENSAJE AS MENSAJE, @VP_K_ARCUSFIL_PROGRAM AS CLAVE
 
 	SELECT	@VP_MENSAJE			AS MENSAJE,
 			@VP_K_CODIGO		AS USUARIO_CODIGO,	
