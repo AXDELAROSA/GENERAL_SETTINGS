@@ -1,0 +1,72 @@
+-- Borrar informacion del LOG de la base de datos....
+
+ 
+
+--USE DATA_02;
+--GO
+---- Truncate the log by changing the database recovery model to SIMPLE.
+--ALTER DATABASE data_02
+--SET RECOVERY SIMPLE;
+--GO
+---- Shrink the truncated log file to 1 MB.
+--DBCC SHRINKFILE (defaultdb_log, 1);
+--GO
+---- Reset the database recovery model.
+--ALTER DATABASE Data_02
+--SET RECOVERY FULL;
+--GO 
+----------------------------------------------------------------------------
+--USE DATA_02Pruebas;
+--GO
+--ALTER DATABASE DATA_02Pruebas
+--SET RECOVERY SIMPLE;
+--GO
+--DBCC SHRINKFILE (defaultdb_log, 1);
+--GO
+--ALTER DATABASE DATA_02Pruebas
+--SET RECOVERY FULL;
+--GO 
+----------------------------------------------------------------------------
+--USE PPMS_PEARL;
+--GO
+--ALTER DATABASE PPMS_PEARL
+--SET RECOVERY SIMPLE;
+--GO
+--DBCC SHRINKFILE (PPMS_PEARL_log, 1);
+--GO
+--ALTER DATABASE PPMS_PEARL
+--SET RECOVERY FULL;
+--GO 
+----------------------------------------------------------------------------
+--USE BD_GENERAL;
+--GO
+--ALTER DATABASE BD_GENERAL
+--SET RECOVERY SIMPLE;
+--GO
+--DBCC SHRINKFILE (BD_GENERAL_log, 1);
+--GO
+--ALTER DATABASE BD_GENERAL
+--SET RECOVERY FULL;
+--GO 
+----------------------------------------------------------------------------
+--USE PPatterns;
+--GO
+--ALTER DATABASE PPatterns
+--SET RECOVERY SIMPLE;
+--GO
+--DBCC SHRINKFILE (PPatterns_log, 1);
+--GO
+--ALTER DATABASE PPatterns
+--SET RECOVERY FULL;
+--GO 
+----------------------------------------------------------------------------
+--USE msllockdb;
+--GO
+--ALTER DATABASE msllockdb
+--SET RECOVERY SIMPLE;
+--GO
+--DBCC SHRINKFILE (msllockdb_log, 1);
+--GO
+--ALTER DATABASE msllockdb
+--SET RECOVERY FULL;
+--GO 
