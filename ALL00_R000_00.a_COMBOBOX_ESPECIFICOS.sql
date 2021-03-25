@@ -156,7 +156,7 @@ AS
 			LTRIM(RTRIM(loc)) AS TA_D_CATALOGO
 	FROM	[DATA_02].[dbo].imlocfil_sql
 	WHERE	LTRIM(RTRIM(alt1_type))=''
-	AND		SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G','R')
+	AND		SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G', 'R', 'J')
 	AND		LOC NOT IN ('MCT','MEP','MFP','MHH','MIT','MOB','MOS','MRD','MTR')
 	ORDER BY TA_D_CATALOGO
 	--SELECT	*	FROM	[DATA_02].[dbo].imlocfil_sql
