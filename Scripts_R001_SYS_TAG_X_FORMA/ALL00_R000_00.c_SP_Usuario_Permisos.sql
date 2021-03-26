@@ -942,6 +942,7 @@ GO
 -- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ALEJANDRO','11111111'
 -- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ROSARIOM','DEREK10'
 -- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'PLG','9plg'
+-- EXECUTE [dbo].[PG_SK_USUARIO_LOGIN] 'ADRIANC','Password02'
 CREATE PROCEDURE [dbo].[PG_SK_USUARIO_LOGIN]
 	--@PP_K_SISTEMA_EXE				INT,
 	--@PP_K_USUARIO_ACCION			INT,
@@ -966,15 +967,31 @@ AS
 
 BEGIN TRANSACTION 
 BEGIN TRY
-
-	SELECT	 @PP_K_USUARIO			=	K_USUARIO_PEARL
-			,@VP_K_EMPLEADO_PEARL	=	K_EMPLEADO_PEARL
+	SELECT	 @PP_K_USUARIO			= K_USUARIO_PEARL
+			,@VP_K_EMPLEADO_PEARL	= K_EMPLEADO_PEARL
 	FROM	USUARIO_PEARL
-	WHERE	D_USUARIO_PEARL=@PP_D_USUARIO
+	WHERE	D_USUARIO_PEARL			= @PP_D_USUARIO
+	AND		L_BORRADO				<> 1
 	
-	IF @VP_K_EMPLEADO_PEARL	<> 0
+	---- ========================================================================================
+	--	PRIMERO SE VERIFICA QUE EL USUARIO NO SE ENCUENTRE ELIMINADO...
+	IF @PP_K_USUARIO IS NULL
 	BEGIN
-	
+		SET		@VP_K_CODIGO		=-10
+		SET		@VP_NOMBRE_APELLIDO	=NULL
+		SET		@VP_TEMA			=NULL
+		SET		@VP_D_USUARIO		=NULL
+		SET		@VP_D_USUARIO_TIPO	=NULL
+		SET		@VP_S_USUARIO_TIPO	=NULL
+		--SET		@VP_MENSAJE			= 'The [User] was down...'	---'Invalid [USER] name.'
+		SET		@VP_MENSAJE			= 'Invalid User: ['+ UPPER(@PP_D_USUARIO) +']'
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END
+
+	---- ========================================================================================
+	--	SE VERIFICA QUE EL USUARIO TENGA ALTA EN LA EMPRESA, LOS QUE TIENEN VALOR [0], SON AQUELLOS QUE SON GENERICOS O FORANEOS...
+	IF @VP_K_EMPLEADO_PEARL	<> 0
+	BEGIN	
 		IF @VP_K_EMPLEADO_PEARL	<> -1
 		BEGIN
 			SELECT  @VP_EXISTE_EMPLEADO=	COUNT(EN_NUM_EMP)
@@ -990,59 +1007,71 @@ BEGIN TRY
 				SET		@VP_D_USUARIO		=NULL
 				SET		@VP_D_USUARIO_TIPO	=NULL
 				SET		@VP_S_USUARIO_TIPO	=NULL
-				SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
+				--SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
+				SET		@VP_MENSAJE			= 'There was a problem with the [User] account report to Systems ...'	---'Invalid [USER] name.'
 				
-					RAISERROR (@VP_MENSAJE, 16, 1 )
+				RAISERROR (@VP_MENSAJE, 16, 1 )
 			END
 		END
 	END
 
+	--IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
+	--	BEGIN
+	--		SET		@VP_K_CODIGO		=-10
+	--		SET		@VP_NOMBRE_APELLIDO	=NULL
+	--		SET		@VP_TEMA			=NULL
+	--		SET		@VP_D_USUARIO		=NULL
+	--		SET		@VP_D_USUARIO_TIPO	=NULL
+	--		SET		@VP_S_USUARIO_TIPO	=NULL
+	--		--SET		@VP_MENSAJE			= 'Nombre de [Usuario] inválido...'	---'Invalid [USER] name.'
+	--		SET		@VP_MENSAJE			= 'Invalid User: ['+ UPPER(@PP_D_USUARIO)+']'
+			
+	--		RAISERROR (@VP_MENSAJE, 16, 1 )
+	--	END
+	--ELSE
+	--	BEGIN
+		SELECT	@VP_K_CODIGO		=	K_USUARIO_PEARL,
+				
+				@VP_NOMBRE_APELLIDO	=	CONCAT((
+												CASE 
+												WHEN CHARINDEX(' ',NOMBRE)=0  THEN NOMBRE
+												WHEN CHARINDEX(' ',NOMBRE)<>0 THEN SUBSTRING( NOMBRE,1,(CHARINDEX(' ',NOMBRE))-1)
+												END),' ',APELLIDO_PATERNO),
+				@VP_TEMA			=TEMA_USUARIO_PEARL,
+				@VP_D_USUARIO		=lower(D_USUARIO_PEARL),
+				@VP_D_USUARIO_TIPO	=D_USUARIO_TIPO,
+				@VP_S_USUARIO_TIPO	=S_USUARIO_TIPO
+		FROM	USUARIO_PEARL, USUARIO_TIPO
+		WHERE	D_USUARIO_PEARL							= @PP_D_USUARIO
+		AND		LTRIM(RTRIM(PASSWORD_USUARIO_PEARL))	= LTRIM(RTRIM(@PP_PASSWORD))
+		--=======================================================
+		AND		USUARIO_PEARL.K_USUARIO_TIPO=USUARIO_TIPO.K_USUARIO_TIPO
 
-	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
+		IF	@VP_K_CODIGO IS NULL
 		BEGIN
-			SET		@VP_K_CODIGO		=-10
+			SET		@VP_K_CODIGO		=-100
 			SET		@VP_NOMBRE_APELLIDO	=NULL
 			SET		@VP_TEMA			=NULL
 			SET		@VP_D_USUARIO		=NULL
 			SET		@VP_D_USUARIO_TIPO	=NULL
 			SET		@VP_S_USUARIO_TIPO	=NULL
-			SET		@VP_MENSAJE			= 'Nombre de [Usuario] inválido...'	---'Invalid [USER] name.'
+			--SET		@VP_MENSAJE			= '[PASSWORD] no válido, vuelva a intentar...'
+			SET		@VP_MENSAJE			= 'Invalid [PASSWORD], please try again...'				
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
+		--END
+
+		------ ========================================================================================
+		----	SE VERIFICA QUE EL PASSWORD NO CONTENGA LA PALABRA "PASS"...
+		IF	UPPER(@PP_PASSWORD) LIKE '%PASS%'
+		BEGIN
+			--SET @VP_MENSAJE='El [PASSWORD] no puede contener el texto PASS, verifique y vuelva a intenar...'
+			SET @VP_MENSAJE='It´s necessary change the [PASSWORD] cannot contain the [PASS] text...'
+			SET @VP_K_CODIGO=-100
 
 			RAISERROR (@VP_MENSAJE, 16, 1 )
 		END
-	ELSE
-		BEGIN
-			SELECT	@VP_K_CODIGO		=	K_USUARIO_PEARL,
-					
-					@VP_NOMBRE_APELLIDO	=	CONCAT((
-													CASE 
-													WHEN CHARINDEX(' ',NOMBRE)=0  THEN NOMBRE
-													WHEN CHARINDEX(' ',NOMBRE)<>0 THEN SUBSTRING( NOMBRE,1,(CHARINDEX(' ',NOMBRE))-1)
-													END),' ',APELLIDO_PATERNO),
-					@VP_TEMA			=TEMA_USUARIO_PEARL,
-					@VP_D_USUARIO		=lower(D_USUARIO_PEARL),
-					@VP_D_USUARIO_TIPO	=D_USUARIO_TIPO,
-					@VP_S_USUARIO_TIPO	=S_USUARIO_TIPO
-			FROM	USUARIO_PEARL, USUARIO_TIPO
-			WHERE	D_USUARIO_PEARL			= @PP_D_USUARIO
-			AND		PASSWORD_USUARIO_PEARL	= @PP_PASSWORD
-			--=======================================================
-			AND		USUARIO_PEARL.K_USUARIO_TIPO=USUARIO_TIPO.K_USUARIO_TIPO
-
-			IF	@VP_K_CODIGO IS NULL
-				BEGIN
-					SET		@VP_K_CODIGO		=-100
-					SET		@VP_NOMBRE_APELLIDO	=NULL
-					SET		@VP_TEMA			=NULL
-					SET		@VP_D_USUARIO		=NULL
-					SET		@VP_D_USUARIO_TIPO	=NULL
-					SET		@VP_S_USUARIO_TIPO	=NULL
-
-					SET		@VP_MENSAJE			= '[PASSWORD] no válido, vuelva a intentar...'
-						RAISERROR (@VP_MENSAJE, 16, 1 )
-				END
-		END
-
+		
 	-- /////////////////////////////////////////////////////////////////////
 COMMIT TRANSACTION 
 END TRY
@@ -1078,7 +1107,7 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_USUARIO_LOGIN]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_UP_USUARIO_LOGIN]
 GO
--- EXECUTE [dbo].[PG_UP_USUARIO_LOGIN] 'ALEJANDROD','11111111','XXX'
+-- EXECUTE [dbo].[PG_UP_USUARIO_LOGIN] 'ALEJANDROD','XXX','YYY'
 CREATE PROCEDURE [dbo].[PG_UP_USUARIO_LOGIN]
 	--@PP_K_SISTEMA_EXE				INT,
 	--@PP_K_USUARIO_ACCION			INT,
@@ -1088,51 +1117,108 @@ CREATE PROCEDURE [dbo].[PG_UP_USUARIO_LOGIN]
 	@PP_PASSWORD_NEW				VARCHAR(50)
 AS
 -- =========================================	
-	DECLARE @PP_K_USUARIO INTEGER
-	DECLARE @VP_MENSAJE VARCHAR(500)
+	DECLARE  @PP_K_USUARIO			INTEGER
+			,@VP_MENSAJE			VARCHAR(500)
+			,@VP_K_CODIGO			INTEGER
+			,@VP_K_EMPLEADO_PEARL	INTEGER
+			,@VP_EXISTE_EMPLEADO	INTEGER
 
-	DECLARE @VP_K_CODIGO		INTEGER
-
-	SELECT	@PP_K_USUARIO=(K_USUARIO_PEARL)
+BEGIN TRANSACTION 
+BEGIN TRY
+	---- ========================================================================================
+	--	PRIMERO SE VERIFICA QUE EXISTA EL USUARIO...
+	SELECT	 @PP_K_USUARIO			= K_USUARIO_PEARL
+			,@VP_K_EMPLEADO_PEARL	= K_EMPLEADO_PEARL
 	FROM	USUARIO_PEARL
-	WHERE	D_USUARIO_PEARL=@PP_D_USUARIO
+	WHERE	D_USUARIO_PEARL			= @PP_D_USUARIO
 	
-
 	IF @PP_K_USUARIO IS NULL OR @PP_K_USUARIO=-1
-		BEGIN
-			SET		@VP_MENSAJE			= 'USUARIO Inválido: ['+UPPER(@PP_D_USUARIO)+']'
-			SET		@VP_K_CODIGO		=-10
-		END
+	BEGIN
+		--SET		@VP_MENSAJE			= 'USUARIO Inválido: ['+UPPER(@PP_D_USUARIO)+']'
+		SET		@VP_MENSAJE			= 'Invalid User: ['+UPPER(@PP_D_USUARIO)+']'
+		SET		@VP_K_CODIGO		=-10
+
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END
 	ELSE
+	BEGIN
+		---- ========================================================================================
+		--	SE VERIFICA QUE EL EMPLEADO NO TENGA BAJA EN LA EMPRESA...
+		SELECT  @VP_EXISTE_EMPLEADO	= COUNT(EN_NUM_EMP)
+		FROM    USUARIO_PEARL
+		LEFT JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP	= K_EMPLEADO_PEARL
+		WHERE	EN_NUM_EMP			= @VP_K_EMPLEADO_PEARL
+
+		IF @VP_EXISTE_EMPLEADO= 0
 		BEGIN
-			SELECT	@VP_K_CODIGO		=K_USUARIO_PEARL
-			FROM	USUARIO_PEARL, USUARIO_TIPO
-			WHERE	D_USUARIO_PEARL=		@PP_D_USUARIO
-			AND		PASSWORD_USUARIO_PEARL=	@PP_PASSWORD_OLD
+			--SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
+			SET		@VP_MENSAJE			= 'There was a problem with the [User] account report to Systems ...'	---'Invalid [USER] name.'
+			SET		@VP_K_CODIGO		=-10
+			
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
 
-			IF	@VP_K_CODIGO IS NULL
-				BEGIN
-					SET		@VP_MENSAJE			= 'El valor del [PASSWORD] actual no es correcto, vuelva a intentar...'
-					SET		@VP_K_CODIGO		=-100
-				END
-			ELSE
-				BEGIN
-					UPDATE USUARIO_PEARL
-					SET		PASSWORD_USUARIO_PEARL=@PP_PASSWORD_NEW
-					WHERE	K_USUARIO_PEARL=@VP_K_CODIGO
-					AND		D_USUARIO_PEARL=@PP_D_USUARIO		
+		---- ========================================================================================
+		--	SE VERIFICA EL PASSWORD ACTUAL ANTES DE REALIZAR EL CAMBIO...
+		SELECT	@VP_K_CODIGO			= K_USUARIO_PEARL
+		FROM	USUARIO_PEARL, USUARIO_TIPO
+		WHERE	D_USUARIO_PEARL			= @PP_D_USUARIO
+		AND		PASSWORD_USUARIO_PEARL	= @PP_PASSWORD_OLD
 
-						IF @@ROWCOUNT > 0
-						BEGIN
-							SET @VP_MENSAJE='El [PASSWORD] fue cambiado correctamente...'
-							SET @VP_K_CODIGO=0
-						END		
-				END
+		IF	@VP_K_CODIGO IS NULL
+		BEGIN
+			--SET		@VP_MENSAJE			= 'El valor del [PASSWORD] actual no es correcto, vuelva a intentar...'
+			SET		@VP_MENSAJE			= 'The current [PASSWORD] value is not correct, please try again ...'
+			SET		@VP_K_CODIGO		=-100
+
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
+		ELSE
+		BEGIN
+			------ ========================================================================================
+			----	SE VERIFICA QUE EL PASSWORD NO CONTENGA LA PALABRA "PASS"...
+			IF	UPPER(@PP_PASSWORD_NEW) LIKE '%PASS%'
+			BEGIN
+				--SET @VP_MENSAJE='El [PASSWORD] no puede contener el texto PASS, verifique y vuelva a intenar...'
+				SET @VP_MENSAJE='The [NEW PASSWORD] cannot contain the [PASS] text, please check and try again...'
+				SET @VP_K_CODIGO=-500
+
+				RAISERROR (@VP_MENSAJE, 16, 1 )
+			END
+
+			UPDATE	USUARIO_PEARL
+			SET		PASSWORD_USUARIO_PEARL	= @PP_PASSWORD_NEW
+			WHERE	K_USUARIO_PEARL			= @VP_K_CODIGO
+			AND		D_USUARIO_PEARL			= @PP_D_USUARIO		
+						
+			IF @@ROWCOUNT > 0
+			BEGIN
+				--SET @VP_MENSAJE='El [PASSWORD] fue cambiado correctamente...'
+				SET @VP_MENSAJE='The [PASSWORD] was changed correctly...'
+				SET @VP_K_CODIGO=0
+			END		
+		END
+	END
+	-- /////////////////////////////////////////////////////////////////////
+COMMIT TRANSACTION 
+END TRY
+
+BEGIN CATCH
+	/* Ocurrió un error, deshacemos los cambios*/ 
+	ROLLBACK TRANSACTION
+	DECLARE @VP_ERROR_TRANS NVARCHAR(4000);
+	SET @VP_ERROR_TRANS = ERROR_MESSAGE() 
+	SET @VP_MENSAJE = 'ERROR:// ' + @VP_ERROR_TRANS
+END CATCH
+	
+	IF @VP_MENSAJE<>''
+		BEGIN
+			SET	@VP_MENSAJE = '!!!! ' + @VP_MENSAJE 
 		END
 
 	SELECT	@VP_MENSAJE			AS MENSAJE,
 			@VP_K_CODIGO		AS USUARIO_CODIGO
--- /////////////////////////////////////////////////////////////////////
+	-- //////////////////////////////////////////////////////////////
 GO
 
 
