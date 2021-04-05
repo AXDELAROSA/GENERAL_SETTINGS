@@ -1142,21 +1142,43 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		---- ========================================================================================
-		--	SE VERIFICA QUE EL EMPLEADO NO TENGA BAJA EN LA EMPRESA...
-		SELECT  @VP_EXISTE_EMPLEADO	= COUNT(EN_NUM_EMP)
-		FROM    USUARIO_PEARL
-		LEFT JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP	= K_EMPLEADO_PEARL
-		WHERE	EN_NUM_EMP			= @VP_K_EMPLEADO_PEARL
 
-		IF @VP_EXISTE_EMPLEADO= 0
+		---- ========================================================================================
+	--	SE VERIFICA QUE EL USUARIO TENGA ALTA EN LA EMPRESA, LOS QUE TIENEN VALOR [0], SON AQUELLOS QUE SON GENERICOS O FORANEOS...
+	IF @VP_K_EMPLEADO_PEARL	<> 0
+	BEGIN	
+		IF @VP_K_EMPLEADO_PEARL	<> -1
 		BEGIN
-			--SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
-			SET		@VP_MENSAJE			= 'There was a problem with the [User] account report to Systems ...'	---'Invalid [USER] name.'
-			SET		@VP_K_CODIGO		=-10
-			
-			RAISERROR (@VP_MENSAJE, 16, 1 )
+			SELECT  @VP_EXISTE_EMPLEADO=	COUNT(EN_NUM_EMP)
+			FROM    USUARIO_PEARL
+			LEFT JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP=K_EMPLEADO_PEARL
+			WHERE	EN_NUM_EMP	=	@VP_K_EMPLEADO_PEARL	--K_EMPLEADO_PEARL
+
+			IF @VP_EXISTE_EMPLEADO= 0
+			BEGIN
+				SET		@VP_K_CODIGO		=-10
+				--SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
+				SET		@VP_MENSAJE			= 'There was a problem with the [User] account report to Systems ...'	---'Invalid [USER] name.'
+				
+				RAISERROR (@VP_MENSAJE, 16, 1 )
+			END
 		END
+	END	
+		------ ========================================================================================
+		----	SE VERIFICA QUE EL EMPLEADO NO TENGA BAJA EN LA EMPRESA...
+		--SELECT  @VP_EXISTE_EMPLEADO	= COUNT(EN_NUM_EMP)
+		--FROM    USUARIO_PEARL
+		--LEFT JOIN HOWE.DBO.VISTA_GAFETES ON EN_NUM_EMP	= K_EMPLEADO_PEARL
+		--WHERE	EN_NUM_EMP			= @VP_K_EMPLEADO_PEARL
+
+		--IF @VP_EXISTE_EMPLEADO= 0
+		--BEGIN
+		--	--SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
+		--	SET		@VP_MENSAJE			= 'There was a problem with the [User] account report to Systems ...'	---'Invalid [USER] name.'
+		--	SET		@VP_K_CODIGO		=-10
+			
+		--	RAISERROR (@VP_MENSAJE, 16, 1 )
+		--END
 
 		---- ========================================================================================
 		--	SE VERIFICA EL PASSWORD ACTUAL ANTES DE REALIZAR EL CAMBIO...
