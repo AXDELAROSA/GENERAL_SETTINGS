@@ -105,6 +105,48 @@ GO
 
 
 
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> 
+-- //////////////////////////////////////////////////////////////
+--	USE BD_GENERAL
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_VALIDA_USUARIO_MRD]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_VALIDA_USUARIO_MRD]
+GO
+
+--	EXEC [PG_RN_VALIDA_USUARIO_MRD] 0,0,144
+
+CREATE PROCEDURE [dbo].[PG_RN_VALIDA_USUARIO_MRD]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO_ACCION		INT,
+	-- ===========================		
+	@PP_CODIGO_USUARIO			INT
+	-- ===========================		
+AS
+
+	DECLARE @VP_RESULTADO		VARCHAR(300) = '' 
+	
+	-- /////////////////////////////////////////////////////
+
+	IF @VP_RESULTADO=''
+		IF NOT EXISTS(	SELECT	K_GRUPO_APROBADOR 
+					FROM	BD_GENERAL.DBO.[GRUPO_APROBADOR] 
+					WHERE	K_USUARIO = @PP_CODIGO_USUARIO	
+					AND		D_GRUPO_APROBADOR = 'AUTORIZAR SALIDA MRD'
+					AND		K_ESTATUS_GRUPO_APROBADOR = 1 -- ACTIVO
+					AND		K_TIPO_GRUPO_APROBADOR = 30 --  MQU SALIDA
+				)
+			BEGIN
+				SET @VP_RESULTADO =  'No es posible transferir: Usuario  <NO AUTORIZADO>...' 
+			END
+	-- /////////////////////////////////////////////////////
+	
+	SELECT @VP_RESULTADO AS MENSAJE
+
+	-- /////////////////////////////////////////////////////
+GO
+
+
+
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> 

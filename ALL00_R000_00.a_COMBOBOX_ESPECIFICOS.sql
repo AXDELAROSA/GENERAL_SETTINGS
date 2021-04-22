@@ -12,7 +12,7 @@ GO
 
 
 /* CARGA COMBO DE LOCACIONES */
--- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 3
+-- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 8
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_IMLOCFIL_SQL]
 GO
@@ -92,6 +92,17 @@ AS
 			FROM	DATA_02.DBO.imlocfil_sql 
 			WHERE	SUBSTRING(LTRIM(RTRIM(loc_desc)),1,1) = 'G'
 
+		END
+
+	IF @PP_L_CON_TODOS=8
+		BEGIN
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT	LTRIM(RTRIM(loc_desc))		AS D_COMBOBOX	
+			FROM	DATA_02.DBO.imlocfil_sql 
+			WHERE	SUBSTRING(LTRIM(RTRIM(loc_desc)),1,1) = 'T'
+
+			INSERT INTO @VP_TA_CATALOGO (TA_D_CATALOGO)
+			VALUES ( '( TODOS )'	)
 		END
 
 		-- ====================================================================================
@@ -441,7 +452,7 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE COLORES */
 -- //////////////////////////////////////////////////////////////
--- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 139, 0
+-- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 139, 7
 -- USE [BD_GENERAL]
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_COLOR_IMITMIDX_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_COLOR_IMITMIDX_SQL]
@@ -603,6 +614,21 @@ AS
 				VALUES
 					( -1,				'( TODOS )',	-999,		   0,			 1				)
 
+		END
+			-- ==========================================
+
+		-- COMBO UTILIZA EN PANTALLA FO_PLANNING
+		IF @PP_L_CON_TODOS=7
+		BEGIN
+			INSERT INTO @VP_TA_CATALOGO 
+			SELECT	DISTINCT
+					1			AS TA_K_CATALOGO,
+					LTRIM(RTRIM(COLOUR))	AS TA_D_CATALOGO,
+					0						AS TA_O_CATALOGO,
+					0						AS L_DELETED, 
+					1						AS L_ACTIVO
+			FROM [DATA_02].[dbo].COLORES_ACTIVOS 
+			ORDER BY TA_D_CATALOGO 
 		END
 			-- ==========================================
 
