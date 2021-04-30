@@ -452,7 +452,7 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE COLORES */
 -- //////////////////////////////////////////////////////////////
--- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 139, 7
+-- EXECUTE [dbo].[PG_CB_COLOR_IMITMIDX_SQL] 1, 144, 4
 -- USE [BD_GENERAL]
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_COLOR_IMITMIDX_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_COLOR_IMITMIDX_SQL]
@@ -555,6 +555,11 @@ AS
 					( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
 				VALUES
 					( 1,				'FGMPAA6',	0,		   0,			 1				)
+
+			INSERT INTO @VP_TA_CATALOGO
+					( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+				VALUES
+					( 1,				'FCSL5B8',	0,		   0,			 1				)
 
 			INSERT INTO @VP_TA_CATALOGO
 					( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
