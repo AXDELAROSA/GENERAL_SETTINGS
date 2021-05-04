@@ -16,6 +16,47 @@ GO
 
 
 
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> 
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_GRUPO_UP_DL_ORDEN_PLANNING]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_GRUPO_UP_DL_ORDEN_PLANNING]
+GO
+/*
+	EXEC [PG_RN_GRUPO_UP_DL_ORDEN_PLANNING] 0,0, 144
+*/
+CREATE PROCEDURE [dbo].[PG_RN_GRUPO_UP_DL_ORDEN_PLANNING]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO_ACCION		INT,
+	-- ===========================		
+	@PP_CODIGO_USUARIO			INT
+	-- ===========================		
+AS
+
+	DECLARE @VP_RESULTADO		VARCHAR(300) = '' 
+	
+	-- /////////////////////////////////////////////////////
+
+	IF @VP_RESULTADO=''
+		IF NOT EXISTS(	SELECT	K_GRUPO_APROBADOR 
+					FROM	BD_GENERAL.DBO.[GRUPO_APROBADOR] 
+					WHERE	K_USUARIO = @PP_CODIGO_USUARIO	
+					AND		D_GRUPO_APROBADOR = 'MODIFICAR/ELIMINAR ORDEN EN PLANNING'
+					AND		K_ESTATUS_GRUPO_APROBADOR = 1 -- ACTIVO
+					AND		K_TIPO_GRUPO_APROBADOR = 400 --  MODIFICAR/ELIMANAR ORDEN
+				)
+			BEGIN
+				SET @VP_RESULTADO =  'Usuario  <NO AUTORIZADO>...' 
+			END
+
+	-- /////////////////////////////////////////////////////
+	SELECT @VP_RESULTADO AS MENSAJE
+	-- /////////////////////////////////////////////////////
+GO
+
+
+
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> 
