@@ -750,6 +750,7 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 420, 171,	98	-- MONICAG		/ B
 
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 421, 172,	182	-- JOSER		/ TACCONTROL DE PACKING/INVOICE.
 
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 422, 170,	87	-- DIANAN		/ BTN_REIMPRIMIR_PACKING_INVOICE
 -- ===============================================
 
 -- ===================FORMA FoliosV2============================ Parte 2
