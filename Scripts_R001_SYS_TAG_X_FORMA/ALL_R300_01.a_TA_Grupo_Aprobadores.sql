@@ -176,6 +176,11 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 7901, 'MATERIAL RECIBIDO CON EX
 -- ================================= NOTIFICACIONES COMPATIBILIDAD DE LOTES	================================== AX
 -- =============================================== -- ===============================================	
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9200, 'USUARIO PARA NOTIFICACION DE LOTES COMPATIBLES',		'LOT_COMPAT',	9200, '', 1		-- AX: 20210301
+
+-- ================================= NOTIFICACIONES INVENTARIO MATERIAL CONTROLADO	================================== AX
+-- ================================= CUANDO EL STOCK DE MATERIAL(PRODUCCIÓN) SE ENCUENTRA EN CANTIDADES MÍNIMAS.
+-- =============================================== -- ===============================================	
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9600, 'NOTIFICACION CANTIDADES MÍNIMAS EN STOCK HILO',			'STOCK_HILO',	9600, '', 1		-- AX: 20210519
 GO
 
 
@@ -671,6 +676,8 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 804, 'COMPATIBILIDAD LOTES',							'
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 805, 'COMPATIBILIDAD LOTES',							'LOT_COMPAT', 48,	9200, 1		-- IVAND		: 20210303
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 806, 'COMPATIBILIDAD LOTES',							'LOT_COMPAT', 140,	9200, 1		-- JORGEJ		: 20210303
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 807, 'COMPATIBILIDAD LOTES',							'LOT_COMPAT', 173,	9200, 1		-- PEDROS		: 20210308
+-- =============================================== -- ===============================================
+-- =============================================== -- ===============================================
 
 --	SELECT * FROM BD_GENERAL.DBO.GRUPO_APROBADOR	WHERE	K_GRUPO_APROBADOR=800		
 --	DELETE	BD_GENERAL.DBO.GRUPO_APROBADOR	WHERE	K_GRUPO_APROBADOR=800		
@@ -691,12 +698,28 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1103, 'LEER TICKES DE PIEL',					'LE
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1104, 'LEER TICKES DE PIEL',					'LEE_TICKET', 87, 450, 1 -- DIANAN
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1105, 'LEER TICKES DE PIEL',					'LEE_TICKET', 98, 450, 1 -- MONICAG	
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1106, 'LEER TICKES DE PIEL',					'LEE_TICKET', 90, 450, 1 -- TANIAC 
+
+
+-- =============================================== -- ===============================================
+-- ================================= NOTIFICACIONES INVENTARIO MATERIAL CONTROLADO	================================== AX
+-- =============================================== -- ===============================================
+-- ================================= CUANDO EL STOCK DE MATERIAL(PRODUCCIÓN) SE ENCUENTRA EN CANTIDADES MÍNIMAS.
+-- #9600- 'STOCK_HILO'
+-- =================================			CREACIÓN / MODIFICACIÓN		   ==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1201, 'COMPATIBILIDAD LOTES',							'STOCK_HILO', 139,	9600, 1		-- AX			:20210519
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1202, 'COMPATIBILIDAD LOTES',							'STOCK_HILO', 56,	9600, 1		-- MANUELG		:20210519
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1203, 'COMPATIBILIDAD LOTES',							'STOCK_HILO', 87,	9600, 1		-- DIANAN		:20210519
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1204, 'COMPATIBILIDAD LOTES',							'STOCK_HILO', 44,	9600, 1		-- GUILLERMOM	:20210519
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1205, 'COMPATIBILIDAD LOTES',							'STOCK_HILO', 92,	9600, 1		-- ELENAP		:20210519	PENDIENTE AGREGAR USUARIO PEARL
+
+-- =============================================== -- ===============================================
+-- =============================================== -- ===============================================
 -- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
 
 GO
-
+SELECT * FROM USUARIO_PEARL
 
 
 -- //////////////////////////////////////////////////////////////
