@@ -663,6 +663,13 @@ AS
 						1						AS L_ACTIVO
 				FROM [DATA_02].[dbo].COLORES_ACTIVOS 
 				ORDER BY TA_D_CATALOGO 
+
+				INSERT INTO @VP_TA_CATALOGO 
+				SELECT	1,
+						'FWLROT3',
+						0,
+						0,
+						1
 			END
 
 		SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
