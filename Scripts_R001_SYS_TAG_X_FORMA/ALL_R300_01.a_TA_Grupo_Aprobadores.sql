@@ -159,7 +159,7 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 400, 'MODIFICAR/ELIMANAR ORDEN'
 
 -- USE BD_GENERAL
 --=========PARA LEER TICKES DE PIELES DE ORDEN PANTALLA IMPOR HIDE========================================
-EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 450, 'LEER TICKET',					'LEE_TICKET', 400, '', 1
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 450, 'LEER TICKET',					'LEE_TICKET', 450, '', 1
 
 -- =============================================== USE BD_GENERAL===============================================
 -- ================================= GRUPOS APROBADORES PARA PO	================================== AX
