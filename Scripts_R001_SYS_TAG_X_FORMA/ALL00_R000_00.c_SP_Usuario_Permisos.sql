@@ -11,6 +11,23 @@ USE [BD_GENERAL]
 GO
 
 -- //////////////////////////////////////////////////////////////
+-- ////////					CONTENIDO DEL SP
+--	[PG_LI_USUARIO_PEARL]
+--	[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]
+--	[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]
+--	[PG_SK_USUARIO_PEARL]
+--	[PG_SK_USUARIO_INCONVENIENTE]
+--	[PG_ASIGNAR_D_USUARIO]
+--	[PG_SK_USUARIO_PEARL_NUEVO]
+--	[PG_IN_USUARIO_PEARL]
+--	[PG_INUP_USUARIO_PERMISOS]
+--	[PG_UP_USUARIO_PEARL]
+--	[PG_DL_USUARIO_PEARL]
+--	[PG_SK_USUARIO_EXIST]
+--	[PG_SK_USUARIO_LOGIN]
+--	[PG_UP_USUARIO_LOGIN]
+--	[PG_UP_THEME]
+
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
@@ -403,7 +420,7 @@ CREATE PROCEDURE [dbo].[PG_IN_USUARIO_PEARL]
 	@PP_APELLIDO_MATERNO			VARCHAR(100),
 	-- ===========================
 	@PP_USUARIO						VARCHAR(50),
-	@PP_PASSWORD					VARCHAR(10),
+	@PP_PASSWORD					VARCHAR(15),
 	-- ===========================
 --	@PP_L_USUARIO_PEARL				INT,
 	@PP_CORREO						VARCHAR(50),
@@ -705,7 +722,7 @@ CREATE PROCEDURE [dbo].[PG_UP_USUARIO_PEARL]
 	@PP_APELLIDO_MATERNO			VARCHAR(100),
 	-- ===========================
 	@PP_USUARIO						VARCHAR(50),
-	@PP_PASSWORD					VARCHAR(10),
+	@PP_PASSWORD					VARCHAR(15),
 	-- ===========================
 	@PP_CORREO						VARCHAR(50),
 	-- ===========================
