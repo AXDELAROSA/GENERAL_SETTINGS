@@ -15,6 +15,67 @@ GO
 -- //////////////////////////////////////////////////////////////
 
 
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> 
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION]
+GO
+/*
+	EXEC [PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION] 0,0, 13367, ''
+	EXEC [PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION] 0,0, 13367, 'FR@NC15C03'
+*/
+CREATE PROCEDURE [dbo].[PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO_ACCION		INT,
+	-- ===========================		
+	@PP_NUMERO_RELOJ			INT,
+	@PP_PASSWORD				VARCHAR(100)
+	-- ===========================		
+AS
+
+	DECLARE @VP_RESULTADO		VARCHAR(300) = '' 
+	
+	-- /////////////////////////////////////////////////////
+
+	IF @PP_PASSWORD <> ''
+		BEGIN
+			IF NOT EXISTS(	SELECT	K_GRUPO_APROBADOR 
+						FROM	BD_GENERAL.DBO.[GRUPO_APROBADOR] 
+						WHERE	K_USUARIO = @PP_NUMERO_RELOJ	
+						AND		S_GRUPO_APROBADOR = @PP_PASSWORD
+						AND		D_GRUPO_APROBADOR = 'PRD MARCAR PIEL PARA DEVOLUCION'
+						AND		K_ESTATUS_GRUPO_APROBADOR = 1 -- ACTIVO
+						AND		K_TIPO_GRUPO_APROBADOR = 500 --  MARCAR PIEL PARA DEVOLUCION
+					)
+				BEGIN
+					SET @VP_RESULTADO =  'Usuario  <NO AUTORIZADO>...' 
+				END
+		END
+	ELSE
+		BEGIN
+			IF NOT EXISTS(	SELECT	K_GRUPO_APROBADOR 
+						FROM	BD_GENERAL.DBO.[GRUPO_APROBADOR] 
+						WHERE	K_USUARIO = @PP_NUMERO_RELOJ	
+						AND		D_GRUPO_APROBADOR = 'PRD MARCAR PIEL PARA DEVOLUCION'
+						AND		K_ESTATUS_GRUPO_APROBADOR = 1 -- ACTIVO
+						AND		K_TIPO_GRUPO_APROBADOR = 500 --  MARCAR PIEL PARA DEVOLUCION
+					)
+				BEGIN
+					SET @VP_RESULTADO =  'Usuario  <NO AUTORIZADO>...' 
+				END
+		END
+	-- /////////////////////////////////////////////////////
+	
+	SELECT @VP_RESULTADO AS MENSAJE
+
+	-- /////////////////////////////////////////////////////
+GO
+
+
+
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> 
 -- //////////////////////////////////////////////////////////////

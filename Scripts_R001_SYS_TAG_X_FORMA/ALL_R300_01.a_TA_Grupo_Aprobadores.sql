@@ -164,6 +164,10 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 400, 'MODIFICAR/ELIMANAR ORDEN'
 --=========PARA LEER TICKES DE PIELES DE ORDEN PANTALLA IMPOR HIDE========================================
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 450, 'LEER TICKET',					'LEE_TICKET', 450, '', 1
 
+-- USE BD_GENERAL
+--=========MARCAR PIEL PARA DEVOLUCION EN MESA========================================
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 500, 'MARCAR PIEL PARA DEVOLUCION',					'DEVOL_MESA', 500, '', 1
+
 -- =============================================== USE BD_GENERAL===============================================
 -- ================================= GRUPOS APROBADORES PARA PO	================================== AX
 -- =============================================== -- ===============================================
@@ -730,6 +734,9 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1104, 'LEER TICKES DE PIEL',					'LE
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1105, 'LEER TICKES DE PIEL',					'LEE_TICKET', 98, 450, 1 -- MONICAG	
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1106, 'LEER TICKES DE PIEL',					'LEE_TICKET', 90, 450, 1 -- TANIAC 
 
+--=========GRUPO PARA MARCAR PIELES PARA DEVOLUCION EN MESAS========================================
+ -- USE BD_GENERAL
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1150, 'PRD MARCAR PIEL PARA DEVOLUCION',					'ESTEBAN12', 13367, 500, 1 -- FEG
 
 -- =============================================== -- ===============================================
 -- ================================= NOTIFICACIONES INVENTARIO MATERIAL CONTROLADO	================================== AX
