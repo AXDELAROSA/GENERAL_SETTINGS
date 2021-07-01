@@ -168,6 +168,10 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 450, 'LEER TICKET',					'LEE_TI
 --=========MARCAR PIEL PARA DEVOLUCION EN MESA========================================
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 500, 'MARCAR PIEL PARA DEVOLUCION',					'DEVOL_MESA', 500, '', 1
 
+-- USE BD_GENERAL
+--=========PARA TRASPASAR PIEL ENTRE ORDENES EN PRD========================================
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 550, 'TRASPASAR PIEL A ORDEN',					'TRSPSO_PRD', 550, '', 1
+
 -- =============================================== USE BD_GENERAL===============================================
 -- ================================= GRUPOS APROBADORES PARA PO	================================== AX
 -- =============================================== -- ===============================================
@@ -736,7 +740,12 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1106, 'LEER TICKES DE PIEL',					'LE
 
 --=========GRUPO PARA MARCAR PIELES PARA DEVOLUCION EN MESAS========================================
  -- USE BD_GENERAL
-EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1150, 'PRD MARCAR PIEL PARA DEVOLUCION',					'ESTEBAN12', 13367, 500, 1 -- FEG
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1120, 'PRD DEVOLUCION/TRASPASO PIEL',					'ESTEBAN12', 13367, 500, 1 -- FEG
+
+--=========GRUPO PARA TRASPASAR PIELES ENTRE ORDENES EN MESAS========================================
+ -- USE BD_GENERAL
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1150, 'PRD DEVOLUCION/TRASPASO PIEL',					'ESTEBAN', 44, 550, 1 -- FEG
+
 
 -- =============================================== -- ===============================================
 -- ================================= NOTIFICACIONES INVENTARIO MATERIAL CONTROLADO	================================== AX
