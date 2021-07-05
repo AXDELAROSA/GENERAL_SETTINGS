@@ -744,8 +744,7 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1120, 'PRD DEVOLUCION/TRASPASO PIEL'
 
 --=========GRUPO PARA TRASPASAR PIELES ENTRE ORDENES EN MESAS========================================
  -- USE BD_GENERAL
-EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1150, 'PRD DEVOLUCION/TRASPASO PIEL',					'ESTEBAN', 44, 550, 1 -- FEG
-
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1150, 'PRD DEVOLUCION/TRASPASO PIEL',					'ESTEBAN', 22, 550, 1 -- FEG
 
 -- =============================================== -- ===============================================
 -- ================================= NOTIFICACIONES INVENTARIO MATERIAL CONTROLADO	================================== AX

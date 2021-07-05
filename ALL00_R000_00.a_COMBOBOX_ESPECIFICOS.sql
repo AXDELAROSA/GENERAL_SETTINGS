@@ -995,3 +995,49 @@ AS
 		
 	-- ////////////////////////////////////////////////////
 GO
+
+
+
+
+-- USE BD_GENERAL
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_TURNO]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_TURNO]
+GO
+/*
+ EXECUTE [dbo].[PG_CB_TURNO] 0,0, 1
+*/
+CREATE PROCEDURE [dbo].[PG_CB_TURNO]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT 
+					)
+					
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT 1, 'Turno 1', 1
+
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT 2, 'Turno 2', 2
+
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT 3, 'Turno 3', 3
+
+	IF @PP_L_CON_TODOS=1
+		INSERT INTO @VP_TA_CATALOGO
+		SELECT	-1, '( TODOS )', -1 
+
+	-- ==========================================	
+	SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM	@VP_TA_CATALOGO
+		ORDER BY TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+		
+	-- ////////////////////////////////////////////////////
+GO
