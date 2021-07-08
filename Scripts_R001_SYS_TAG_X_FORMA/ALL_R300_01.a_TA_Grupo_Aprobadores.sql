@@ -200,8 +200,8 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 8300, 'NOTIFICACION CANTIDADES 
 -- ================================= NOTIFICACIONES RMA Y PES	================================== AX
 -- ================================= CUANDO SE GENERA UNA ORDEN POR RECHAZO O POR UN PEDIDO ESPECIAL DE PARTE DEL CLIENTE.
 -- =============================================== -- ===============================================	
-EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9702, 'AUTORIZAR RMA/PES',									'AUTORIZAR RMA/PES',	9702, '', 1		-- AX: 20210519
-EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9703, 'NOTIFICAR RMA/PES',									'NOTIFICAR RMA/PES',	9703, '', 1		-- AX: 20210519
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9702, 'NOTIFICAR CORREO RMA/PES',							'NOTIFICAR CORREO RMA/PES',	9702, '', 1		-- AX: 20210708
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9703, 'NOTIFICAR RMA/PES',									'NOTIFICAR RMA/PES',		9703, '', 1		-- AX: 20210519
 GO
 
 
@@ -789,10 +789,24 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1258, 'NOTIFICACION MINIMOS DE MULLE
 -- =============================================== -- ===============================================
 -- ================================= CUANDO SE GENERA UNA ORDEN POR RECHAZO O POR UN PEDIDO ESPECIAL DE PARTE DEL CLIENTE.
 -- #9703- ORDEN RMA / PES	GENERADA
--- =================================			CREACIÓN / MODIFICACIÓN		   ==================================
+-- =================================			NOTIFICACIÓN PARA AUTORIZAR EN MENU		   ==================================
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1301, 'AUTORIZAR RMA/PES',							'AUTORIZAR RMA/PES', 139,	9703, 1		-- AX			:2021621
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1302, 'AUTORIZAR RMA/PES',							'AUTORIZAR RMA/PES', 47,	9703, 1		-- MIGUELC		:2021621
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1303, 'AUTORIZAR RMA/PES',							'AUTORIZAR RMA/PES', 43,	9703, 1		-- JORGEH		:2021621
+
+-- =================================			NOTIFICACIÓN POR CORREO						==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1340, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 139,	9702, 1		-- AX			:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1341, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 140,	9702, 1		-- JORGEJ		:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1342, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 129,	9702, 1		-- MARIOS		:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1343, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 86,		9702, 1		-- JORGEO		:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1344, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 92,		9702, 1		-- JOSES		:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1345, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 48,		9702, 1		-- IVAND		:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1346, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 185,	9702, 1		-- DELIAH		:2021708
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1347, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 186,	9702, 1		-- JANETHG		:2021708
+
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1348, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 98,		9702, 1		-- MONICAG		:2021708
+
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1349, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 44,		9702, 1		-- GUILLERMOM	:2021708
 -- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
@@ -804,3 +818,4 @@ SELECT * FROM USUARIO_PEARL
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
+
