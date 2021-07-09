@@ -181,7 +181,7 @@ use BD_GENERAL
 select * from USUARIO_PEARL
 SELECT * FROM NOTIFICACION_PANTALLA
 */
--- ===================FORMA FoliosV2============================
+-- ===============================================
 EXECUTE [dbo].[PG_CI_NOTIFICACION_PANTALLA] 0, 0, 64	,6003	,1
 EXECUTE [dbo].[PG_CI_NOTIFICACION_PANTALLA] 0, 0, 97	,9703	,1
 
