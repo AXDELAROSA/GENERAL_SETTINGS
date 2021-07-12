@@ -11,19 +11,25 @@ USE [BD_GENERAL]
 GO
 
 -- //////////////////////////////////////////////////////////////
--- /// PARA LOS SP ALTA DE NUEVAS FORMAS EN LA BD PASAR A LA LINEA
--- /// 169 APROXIMADAMENTE. ( #ALTAFORMAS )
+-- //////////////////	CONTENIDO DEL SP:
+--	[PG_LI_SISTEMA_TAG]
+--	[PG_LI_SISTEMA_TAG_MENU]
+--	[PG_LI_GRUPO_TAG]
+--	[PG_SK_SISTEMA_TAG_MENU]
+--	[PG_LI_SISTEMA]
+--	[PG_SK_SISTEMA]
+--	[PG_IN_SISTEMA]
+--	[PG_UP_SISTEMA]
+--	[PG_DL_SISTEMA]
 -- //////////////////////////////////////////////////////////////
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- // SE UTILIZA EN LA FORMA DE USUARIO
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_SISTEMA_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_SISTEMA_TAG]
 GO
-
 CREATE PROCEDURE [dbo].[PG_LI_SISTEMA_TAG]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -51,13 +57,12 @@ GO
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_SISTEMA_TAG_MENU]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_SISTEMA_TAG_MENU]
 GO
-
 -- EXECUTE [dbo].[PG_LI_SISTEMA_TAG_MENU] 1,139,87,60
 -- EXECUTE [dbo].[PG_LI_SISTEMA_TAG_MENU] 0,139,87,60
+-- EXECUTE [dbo].[PG_LI_SISTEMA_TAG_MENU] 0,139,139,10
 CREATE PROCEDURE [dbo].[PG_LI_SISTEMA_TAG_MENU]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -87,11 +92,9 @@ GO
 -- // SE UTILIZA EN LA FORMA DE USUARIO
 -- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_GRUPO_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_GRUPO_TAG]
 GO
-
 -- EXECUTE [dbo].[PG_LI_GRUPO_TAG] 0,139,139
 -- EXECUTE [dbo].[PG_LI_GRUPO_TAG] 1,87,87
 CREATE PROCEDURE [dbo].[PG_LI_GRUPO_TAG]
@@ -129,7 +132,6 @@ GO
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER
 -- //////////////////////////////////////////////////////////////
-
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_SISTEMA_TAG_MENU]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_SK_SISTEMA_TAG_MENU]
 GO
@@ -194,7 +196,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_SISTEMA]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_SISTEMA]
 GO
-
 --	execute [dbo].[PG_LI_SISTEMA] 0,139,''
 CREATE PROCEDURE [dbo].[PG_LI_SISTEMA]
 	@PP_K_SISTEMA_EXE					INT,
@@ -273,7 +274,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_IN_SISTEMA]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_IN_SISTEMA]
 GO
-
 CREATE PROCEDURE [dbo].[PG_IN_SISTEMA]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -362,7 +362,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_SISTEMA]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_UP_SISTEMA]
 GO
-
 CREATE PROCEDURE [dbo].[PG_UP_SISTEMA]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -437,7 +436,6 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_DL_SISTEMA]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_DL_SISTEMA]
 GO
-
 CREATE PROCEDURE [dbo].[PG_DL_SISTEMA]
 	@PP_K_SISTEMA_EXE			INT,
 	@PP_K_USUARIO_ACCION		INT,
