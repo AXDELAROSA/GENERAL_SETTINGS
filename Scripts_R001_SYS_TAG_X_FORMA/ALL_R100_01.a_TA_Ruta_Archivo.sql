@@ -223,6 +223,7 @@ SET NOCOUNT ON
 EXECUTE [dbo].[PG_CI_TIPO_RUTA_ARCHIVO] 0, 0, 1, '.PNG',		'PNG', 1, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_RUTA_ARCHIVO] 0, 0, 2, '.JPG',		'JPG', 2, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_RUTA_ARCHIVO] 0, 0, 3, '.PDF',		'PDF', 3, '', 1
+EXECUTE [dbo].[PG_CI_TIPO_RUTA_ARCHIVO] 0, 0, 4, '.JPEG',		'PDF', 4, '', 1
 
 GO
 
