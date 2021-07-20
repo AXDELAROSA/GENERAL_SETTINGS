@@ -750,7 +750,12 @@ BEGIN TRY
 	IF @VP_MENSAJE<>''
 	BEGIN
 		RAISERROR (@VP_MENSAJE, 16, 1 )
-	END		
+	END
+
+	DECLARE	@VP_K_DEPARTAMENTO	INT
+	SELECT	@VP_K_DEPARTAMENTO	= K_USUARIO_DEPARTAMENTO 
+	FROM	BD_GENERAL.DBO.USUARIO_PEARL 
+	WHERE	K_USUARIO_PEARL	=	@PP_K_USUARIO_PEARL
 	--============================================================================
 	--======================================UPDATE EL USUARIO_PEARL
 	--============================================================================
@@ -764,7 +769,7 @@ BEGIN TRY
 		-- =========================-- ===========================	,
 		[PASSWORD_USUARIO_PEARL]	= @PP_PASSWORD					,
 		[CORREO_USUARIO_PEARL]		= @PP_CORREO					,
-		[K_USUARIO_DEPARTAMENTO]	= @PP_K_USUARIO_DEPARTAMENTO	,
+		[K_USUARIO_DEPARTAMENTO]	= @VP_K_DEPARTAMENTO			,
 		[K_USUARIO_TIPO]			= @PP_K_USUARIO_TIPO			,
 		-- =========================-- ==========================	,
 		[K_EMPLEADO_PEARL]			= @PP_K_EMPLEADO_PEARL			,
