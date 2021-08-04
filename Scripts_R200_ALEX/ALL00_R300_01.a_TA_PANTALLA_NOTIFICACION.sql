@@ -178,8 +178,8 @@ SET NOCOUNT ON
 -- ===============================================
 /*
 use BD_GENERAL
-select * from USUARIO_PEARL
-SELECT * FROM NOTIFICACION_PANTALLA
+select * from bd_general.dbo.USUARIO_PEARL
+SELECT * FROM bd_general.dbo.NOTIFICACION_PANTALLA
 */
 -- ===============================================
 EXECUTE [dbo].[PG_CI_NOTIFICACION_PANTALLA] 0, 0, 64	,6003	,1
