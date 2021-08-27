@@ -627,7 +627,7 @@ AS
 			--INSERT INTO @VP_TA_CATALOGO
 			--		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
 			--	VALUES
-			--		( 1,				'FWLROT3',	0,		   0,			 1				)
+			--		( 1,				'FPABLUE',	0,		   0,			 1				)
 
 			INSERT INTO @VP_TA_CATALOGO
 					( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
@@ -741,7 +741,7 @@ AS
 
 				--INSERT INTO @VP_TA_CATALOGO 
 				--SELECT	1,
-				--		'FWLROT3',
+				--		'FPABLUE',
 				--		0,
 				--		0,
 				--		1
