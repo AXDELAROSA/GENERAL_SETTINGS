@@ -165,7 +165,7 @@ EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 67, 'Ohio', 'OH' , 1 , '#67 // Ohio' , 0
 EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 68, 'Oklahoma ', 'OK' , 1 , '#68 // Oklahoma ' , 0,221
 EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 69, 'Oregon ', 'OR' , 1 , '#69 // Oregon ' , 0,221
 EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 70, 'Pennsylvania ', 'PA' , 1 , '#70 // Pennsylvania ' , 0,221
-EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 71, 'Rhode Island ', 'RI' , 1 , '#71 // Rhode Island ' , 0,221
+EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 71, 'Rhode Island ', 'RI' , 1 , '#71 // Rhode Island ' , 1,221
 EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 72, 'South Carolina ', 'SC' , 1 , '#72 // South Carolina ' , 0,221
 EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 73, 'South Dakota ', 'SD' , 1 , '#73 // South Dakota ' , 0,221
 EXECUTE [dbo].[PG_CI_STATE_GEO] 0, 139, 74, 'Tennessee ', 'TN' , 1 , '#74 // Tennessee ' , 0,221
