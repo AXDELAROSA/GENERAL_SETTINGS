@@ -23,6 +23,8 @@ GO
 ---------	--(4) PARA INDICAR LOS CLIENTES CARGADOS EN LOS PROGRAMAS.
 ---------	--(5) PARA CARGAR LOS CLIENTES DEL SISTEMA.	KIT_MASTER
 ---------	--(6) SE USA EN PANTALLA FO_SUMARY_INVOICE
+---------	--(7) COMBO NORMAL DE CLIENTES CON EL DISPLAY EN INGLES (MUESTRA TODOS LOS CLIENTES)
+---------	--(8) COMBO NORMAL DE CLIENTES CON EL DISPLAY EN INGLES (MUESTRA TODOS LOS CLIENTES)
 --	------------------------------------------------------------------------
 --	[PG_CB_PRODUCT_CATEGORY_IMCATFIL_SQL]
 --	[PG_CB_COLOR_IMITMIDX_SQL]
@@ -32,6 +34,11 @@ GO
 --	[PG_CB_HIDESHDR_SQL_TYPE]
 --	[PG_CB_IMPRESORA_ETIQUETA]
 --	[PG_CB_TURNO]
+--	[PG_CB_CURRENCY]
+--	[PG_CB_FOB_POINT]
+--	[PG_CB_FREIGHT_CHARGES]
+--	[PG_CB_TAXABLE]
+--	[PG_CB_ARCUSFIL_TERMS_PERIOD]
 -- //////////////////////////////////////////////////////////////
 
 -- //////////////////////////////////////////////////////////////
@@ -78,7 +85,7 @@ GO
 
 
 /* CARGA COMBO DE LOCACIONES */
--- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 8
+-- EXECUTE [PG_CB_IMLOCFIL_SQL] 001,144, 4
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_IMLOCFIL_SQL]
 GO
@@ -210,10 +217,10 @@ GO
 -- //	CARGA COMBO DE LOCACIONES PARA LA FO_INVENTARIO
 -- //	AX : 20201203
 -- ////////////////////////////////////////////////////
--- EXECUTE [PG_CB_IMLOCFIL_INVENTARIO_SQL] 001,144, 10
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]
 GO
+--		 EXECUTE [dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL] 001,139, 1
 CREATE PROCEDURE [dbo].[PG_CB_IMLOCFIL_INVENTARIO_SQL]
 	@PP_K_SISTEMA_EXE			INT,
 	@PP_K_USUARIO				INT,
@@ -265,6 +272,8 @@ GO
 -- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 4
 -- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 5
 -- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 6
+-- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 7
+-- EXECUTE [dbo].[PG_CB_CUSTOMER_ARCUSFIL_SQL] 0,0, 8
 -- //////////////////////////////////////////////////////////////
 -- // /* CARGA COMBO DE CLIENTES */
 -- //////////////////////////////////////////////////////////////
@@ -424,8 +433,45 @@ AS
 				( -1,				'( TODOS )',	-999,		   0,			 1				)
 	END
 
+	IF @PP_L_CON_TODOS IN (7)				--AX:20210902
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO 
+		SELECT	A4GLIDENTITY			AS TA_K_CATALOGO,
+				LTRIM(RTRIM(CUS_NO))	AS TA_D_CATALOGO, 
+				0						AS TA_O_CATALOGO,
+				0						AS L_DELETED, 
+				1						AS L_ACTIVO
+		FROM	[DATA_02].[dbo].ARCUSFIL_SQL (NOLOCK)
+		WHERE	L_BORRADO	= 0
+		AND		L_ARCUSFIL	= 1
+		ORDER	BY TA_D_CATALOGO
 
-	IF @PP_L_CON_TODOS	IN	(0,1,2,3,4,6)		--AX:20210812
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+		VALUES
+			( -1,				'( SELECT ONE OPTION )',	-999,		   0,			 1				)
+	END
+
+		IF @PP_L_CON_TODOS IN (8)			--AX:20210902
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO 
+		SELECT	A4GLIDENTITY			AS TA_K_CATALOGO,
+				LTRIM(RTRIM(CUS_NO))	AS TA_D_CATALOGO, 
+				0						AS TA_O_CATALOGO,
+				0						AS L_DELETED, 
+				1						AS L_ACTIVO
+		FROM	[DATA_02].[dbo].ARCUSFIL_SQL (NOLOCK)
+		WHERE	L_BORRADO	= 0
+		AND		L_ARCUSFIL	= 1
+		ORDER	BY TA_D_CATALOGO
+
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+		VALUES
+			( -1,				'( ALL )',	-999,		   0,			 1				)
+	END
+
+	IF @PP_L_CON_TODOS	IN	(0,1,2,3,4,6,7,8)		--AX:20210812
 	BEGIN
 		SELECT	TA_K_CATALOGO	AS K_COMBOBOX,
 				TA_D_CATALOGO	AS D_COMBOBOX 
@@ -1113,5 +1159,340 @@ AS
 
 	-- ==========================================
 		
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+--	SE UTILIZA EN: 
+--				1)	FO PURCHASE_ORDER
+--				2)	PO_CUSTOMER
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_CURRENCY]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_CURRENCY]
+GO
+-- EXECUTE [dbo].[PG_CB_CURRENCY] 0,0,1
+-- EXECUTE [dbo].[PG_CB_CURRENCY] 0,0,0
+CREATE PROCEDURE [dbo].[PG_CB_CURRENCY]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT		K_CURRENCY				AS K_COMBOBOX,
+				S_CURRENCY				 AS D_COMBOBOX,
+				0						AS TA_O_CATALOGO,
+				0						AS L_DELETED, 
+				1						AS L_ACTIVO
+	FROM		BD_GENERAL.DBO.CURRENCY	(NOLOCK)
+	WHERE		L_CURRENCY<>0
+	ORDER BY	O_CURRENCY
+
+	IF @PP_L_CON_TODOS=1
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( ALL )',	-999,		   0,			 1				)
+	SELECT		TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM		@VP_TA_CATALOGO
+	ORDER BY	TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+--	SE UTILIZA EN: 
+--				1)	PO_CUSTOMER
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_FOB_POINT]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_FOB_POINT]
+GO
+--		 EXECUTE [dbo].[PG_CB_FOB_POINT] 0,0,1
+--		 EXECUTE [dbo].[PG_CB_FOB_POINT] 0,0,0
+CREATE PROCEDURE [dbo].[PG_CB_FOB_POINT]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT		K_FOB_POINT				AS K_COMBOBOX,
+				D_FOB_POINT				 AS D_COMBOBOX,
+				0						AS TA_O_CATALOGO,
+				0						AS L_DELETED, 
+				1						AS L_ACTIVO
+	FROM		BD_GENERAL.DBO.FOB_POINT	(NOLOCK)
+	WHERE		L_FOB_POINT<>0
+	ORDER BY	O_FOB_POINT
+
+	IF @PP_L_CON_TODOS=1
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( ALL )',	-999,		   0,			 1				)
+
+	IF @PP_L_CON_TODOS=0
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( SELECT ONE OPTION )',	-999,		   0,			 1				)
+
+	SELECT		TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM		@VP_TA_CATALOGO
+	ORDER BY	TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+--	SE UTILIZA EN: 
+--				1)	PO_CUSTOMER
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_FREIGHT_CHARGES]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_FREIGHT_CHARGES]
+GO
+--		 EXECUTE [dbo].[PG_CB_FREIGHT_CHARGES] 0,0,1
+--		 EXECUTE [dbo].[PG_CB_FREIGHT_CHARGES] 0,0,0
+CREATE PROCEDURE [dbo].[PG_CB_FREIGHT_CHARGES]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT		K_FREIGHT_CHARGES				AS K_COMBOBOX,
+				D_FREIGHT_CHARGES				 AS D_COMBOBOX,
+				0						AS TA_O_CATALOGO,
+				0						AS L_DELETED, 
+				1						AS L_ACTIVO
+	FROM		BD_GENERAL.DBO.FREIGHT_CHARGES	(NOLOCK)
+	WHERE		L_FREIGHT_CHARGES<>0
+	ORDER BY	O_FREIGHT_CHARGES
+
+	IF @PP_L_CON_TODOS=1
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( ALL )',	-999,		   0,			 1				)
+
+	IF @PP_L_CON_TODOS=0
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( SELECT ONE OPTION )',	-999,		   0,			 1				)
+
+	SELECT		TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM		@VP_TA_CATALOGO
+	ORDER BY	TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+--	SE UTILIZA EN: 
+--				1)	PO_CUSTOMER
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_TAXABLE]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_TAXABLE]
+GO
+--		 EXECUTE [dbo].[PG_CB_TAXABLE] 0,0,1
+--		 EXECUTE [dbo].[PG_CB_TAXABLE] 0,0,0
+CREATE PROCEDURE [dbo].[PG_CB_TAXABLE]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT,
+					TA_L_DELETED		INT,	
+					TA_L_ACTIVO			INT			 )	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT		K_TAXABLE				AS K_COMBOBOX,
+				D_TAXABLE				 AS D_COMBOBOX,
+				0						AS TA_O_CATALOGO,
+				0						AS L_DELETED, 
+				1						AS L_ACTIVO
+	FROM		BD_GENERAL.DBO.TAXABLE	(NOLOCK)
+	WHERE		L_TAXABLE<>0
+	ORDER BY	O_TAXABLE
+
+	IF @PP_L_CON_TODOS=1
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( ALL )',	-999,		   0,			 1				)
+
+	IF @PP_L_CON_TODOS=0
+	INSERT INTO @VP_TA_CATALOGO
+		( TA_K_CATALOGO,	TA_D_CATALOGO,	TA_O_CATALOGO, TA_L_DELETED, TA_L_ACTIVO	)
+	VALUES
+		( -1,				'( SELECT ONE OPTION )',	-999,		   0,			 1				)
+
+	SELECT		TA_K_CATALOGO	AS K_COMBOBOX,
+				TA_D_CATALOGO	AS D_COMBOBOX 
+	FROM		@VP_TA_CATALOGO
+	ORDER BY	TA_O_CATALOGO, TA_D_CATALOGO 
+
+	-- ==========================================
+
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+--	SE UTILIZAN EN:
+--				1)	FO_ARCUSFIL
+--				2)	PO_CUSTOMER
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> PARA CARGAR LOS ESTADOS
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_ARCUSFIL_TERMS_PERIOD]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_ARCUSFIL_TERMS_PERIOD]
+GO
+--		 EXECUTE [dbo].[PG_CB_ARCUSFIL_TERMS_PERIOD] 0,139,0
+--		 EXECUTE [dbo].[PG_CB_ARCUSFIL_TERMS_PERIOD] 0,139,1
+CREATE PROCEDURE [dbo].[PG_CB_ARCUSFIL_TERMS_PERIOD]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT	)	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT		K_ARCUSFIL_TERMS_PERIOD				AS K_COMBOBOX,
+				D_ARCUSFIL_TERMS_PERIOD				AS D_COMBOBOX,
+				O_ARCUSFIL_TERMS_PERIOD				AS O_COMBOBOX
+	FROM	BD_GENERAL.DBO.ARCUSFIL_TERMS_PERIOD
+	WHERE	L_ARCUSFIL_TERMS_PERIOD =	1
+	ORDER BY O_ARCUSFIL_TERMS_PERIOD
+
+
+	IF @PP_L_CON_TODOS=0
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO	)
+		VALUES
+			( -1,				'( SELECT ONE OPTION )'	)
+	END
+
+	IF @PP_L_CON_TODOS=1
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO	)
+		VALUES
+			( -1,				'( ALL )'	)
+	END
+
+		SELECT		TA_K_CATALOGO	AS K_COMBOBOX,
+					TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM		@VP_TA_CATALOGO
+		ORDER BY	TA_O_CATALOGO 
+	-- ==========================================
+
+	-- ////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+--	SE UTILIZAN EN:
+--				1)	FO_PURCHASE_ORDER
+--				2)	PO_CUSTOMER
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> PARA CARGAR LOS ESTADOS
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CB_TERMS]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CB_TERMS]
+GO
+--		 EXECUTE [dbo].[PG_CB_TERMS] 0,139,0
+--		 EXECUTE [dbo].[PG_CB_TERMS] 0,139,1
+CREATE PROCEDURE [dbo].[PG_CB_TERMS]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO				INT,
+	--============================
+	@PP_L_CON_TODOS				INT
+AS
+	DECLARE @VP_TA_CATALOGO	AS TABLE
+				(	TA_K_CATALOGO		INT,
+					TA_D_CATALOGO		VARCHAR(50),
+					TA_O_CATALOGO		INT	)	
+	INSERT INTO @VP_TA_CATALOGO 
+	SELECT		K_TERMS				AS K_COMBOBOX,
+				D_TERMS				AS D_COMBOBOX,
+				O_TERMS				AS O_COMBOBOX
+	FROM	BD_GENERAL.DBO.TERMS
+	WHERE	L_TERMS				=	1
+	ORDER BY O_TERMS
+
+	IF @PP_L_CON_TODOS=0
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO	)
+		VALUES
+			( -1,				'( SELECT ONE OPTION )'	)
+	END
+
+	IF @PP_L_CON_TODOS=1
+	BEGIN
+		INSERT INTO @VP_TA_CATALOGO
+			( TA_K_CATALOGO,	TA_D_CATALOGO	)
+		VALUES
+			( -1,				'( ALL )'	)
+	END
+
+		SELECT		TA_K_CATALOGO	AS K_COMBOBOX,
+					TA_D_CATALOGO	AS D_COMBOBOX 
+		FROM		@VP_TA_CATALOGO
+		ORDER BY	TA_O_CATALOGO 
+	-- ==========================================
+
 	-- ////////////////////////////////////////////////////
 GO

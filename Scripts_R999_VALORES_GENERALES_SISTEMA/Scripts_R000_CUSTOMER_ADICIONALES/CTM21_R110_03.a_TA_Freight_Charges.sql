@@ -124,7 +124,7 @@ SET NOCOUNT ON
 EXECUTE [dbo].[PG_CI_FREIGHT_CHARGES] 0, 139, 0, '(NO-Freight Charges)'		,'( N/FOB )'	, 00, '', 1
 EXECUTE [dbo].[PG_CI_FREIGHT_CHARGES] 0, 139, 1, 'COLLECT'					,'ACTIV'		, 10, '', 1
 EXECUTE [dbo].[PG_CI_FREIGHT_CHARGES] 0, 139, 2, 'INVOICE'					,'INACT'		, 20, '', 1
-EXECUTE [dbo].[PG_CI_FREIGHT_CHARGES] 0, 139, 3, 'PREPAID'					,'INACT'		, 30, '', 1
+EXECUTE [dbo].[PG_CI_FREIGHT_CHARGES] 0, 139, 3, 'PREPAID'					,'PRPAID'		, 30, '', 1
 GO
 -- ===============================================
 SET NOCOUNT OFF
