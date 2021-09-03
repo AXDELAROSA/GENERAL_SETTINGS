@@ -118,7 +118,7 @@ GO
 -- ===============================================
 SET NOCOUNT ON
 -- ===============================================
-EXECUTE [dbo].[PG_CI_TAXABLE] 0, 139, 0, '(Unknown)'				,'( UNK )'		, 00, '', 0
+EXECUTE [dbo].[PG_CI_TAXABLE] 0, 139, 0, '(Unknown)'				,'( UNK )'		, 00, '', 1
 EXECUTE [dbo].[PG_CI_TAXABLE] 0, 139, 1, 'NO TAXABLE'				,'NO-TAX'		, 10, '', 1
 EXECUTE [dbo].[PG_CI_TAXABLE] 0, 139, 2, 'TAXABLE'					,'TXABLE'		, 20, '', 1
 GO
