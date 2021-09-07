@@ -841,9 +841,11 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1366, 'NOTIFICAR CORREO RMA/PES',			
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1369, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 44,		9704, 1		-- GUILLERMOM	:2021709
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1370, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 56,		9704, 1		-- MANUELG		:2021709
 
---=========GRUPO PARA TRASPASAR PIELES ENTRE ORDENES EN MESAS========================================
+--=========GRUPO PARA MODIFICAR UTILIZACION========================================
  -- USE BD_GENERAL
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1500, 'FAKE UTIL',					'FAKE_UTIL', 179, 600, 1 -- FEG
+
+
 -- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
