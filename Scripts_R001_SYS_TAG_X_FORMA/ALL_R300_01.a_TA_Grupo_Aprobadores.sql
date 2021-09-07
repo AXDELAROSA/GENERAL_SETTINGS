@@ -172,6 +172,10 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 500, 'MARCAR PIEL PARA DEVOLUCI
 --=========PARA TRASPASAR PIEL ENTRE ORDENES EN PRD========================================
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 550, 'TRASPASAR PIEL A ORDEN',					'TRSPSO_PRD', 550, '', 1
 
+-- USE BD_GENERAL
+--=========PARA MODIFICAR UTILIZACION========================================
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 600, 'MODIFICAR_UTILIZACION',					'MOD_UTIL', 600, '', 1
+
 -- =============================================== USE BD_GENERAL===============================================
 -- ================================= GRUPOS APROBADORES PARA PO	================================== AX
 -- =============================================== -- ===============================================
@@ -203,6 +207,7 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 8300, 'NOTIFICACION CANTIDADES 
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9702, 'NOTIFICAR CORREO RMA/PES',							'NOTIFICAR CORREO RMA/PES',	9702, '', 1		-- AX: 20210708
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9703, 'NOTIFICAR RMA/PES',									'NOTIFICAR RMA/PES',		9703, '', 1		-- AX: 20210519
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9704, 'NOTIFICAR CORREO MAT RMA/PES',						'NOTIFICAR CORREO MAT RMA/PES',	9704, '', 1		-- AX: 20210707
+
 GO
 
 
@@ -835,6 +840,10 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1366, 'NOTIFICAR CORREO RMA/PES',			
 
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1369, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 44,		9704, 1		-- GUILLERMOM	:2021709
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1370, 'NOTIFICAR CORREO RMA/PES',					'NOTIFICAR CORREO RMA/PES', 56,		9704, 1		-- MANUELG		:2021709
+
+--=========GRUPO PARA TRASPASAR PIELES ENTRE ORDENES EN MESAS========================================
+ -- USE BD_GENERAL
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1500, 'FAKE UTIL',					'FAKE_UTIL', 179, 600, 1 -- FEG
 -- ===============================================
 SET NOCOUNT OFF
 -- ===============================================

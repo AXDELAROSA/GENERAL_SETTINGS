@@ -20,6 +20,50 @@ GO
 -- // STORED PROCEDURE ---> 
 -- //////////////////////////////////////////////////////////////
 
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_VALIDA_USUARIO_FAKE_UTIL]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_RN_VALIDA_USUARIO_FAKE_UTIL]
+GO
+
+--	EXEC [PG_RN_VALIDA_USUARIO_FAKE_UTIL] 0,0,179
+
+CREATE PROCEDURE [dbo].[PG_RN_VALIDA_USUARIO_FAKE_UTIL]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO_ACCION		INT,
+	-- ===========================		
+	@PP_CODIGO_USUARIO			INT
+	-- ===========================		
+AS
+
+	DECLARE @VP_RESULTADO		VARCHAR(300) = '' 
+	
+	-- /////////////////////////////////////////////////////
+
+	IF @VP_RESULTADO=''
+		IF NOT EXISTS(	SELECT	K_GRUPO_APROBADOR 
+					FROM	BD_GENERAL.DBO.[GRUPO_APROBADOR] 
+					WHERE	K_USUARIO = @PP_CODIGO_USUARIO	
+					AND		D_GRUPO_APROBADOR = 'FAKE UTIL'
+					AND		K_ESTATUS_GRUPO_APROBADOR = 1 -- ACTIVO
+					AND		K_TIPO_GRUPO_APROBADOR = 600 --  MODIFICAR_UTILIZACION
+				)
+			BEGIN
+				SET @VP_RESULTADO =  'Usuario  <NO AUTORIZADO>...' 
+			END
+	-- /////////////////////////////////////////////////////
+	
+	SELECT @VP_RESULTADO AS MENSAJE
+
+	-- /////////////////////////////////////////////////////
+GO
+
+
+
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> 
+-- //////////////////////////////////////////////////////////////
+
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_RN_GRUPO_PRD_MARCAR_PIEL_X_DEVOLUCION]
 GO
