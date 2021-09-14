@@ -844,6 +844,8 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1370, 'NOTIFICAR CORREO RMA/PES',			
 --=========GRUPO PARA MODIFICAR UTILIZACION========================================
  -- USE BD_GENERAL
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1500, 'FAKE UTIL',					'FAKE_UTIL', 179, 600, 1 -- FEG
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1501, 'FAKE UTIL',					'FAKE_UTIL', 43,  600, 1 -- JORGEH
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1502, 'FAKE UTIL',					'FAKE_UTIL', 44,  600, 1 -- GUILLERMOM
 
 
 -- ===============================================

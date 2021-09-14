@@ -17,8 +17,10 @@ GO
 --	[PG_LI_GRUPO_TAG]
 --	[PG_SK_SISTEMA_TAG_MENU]
 --	[PG_LI_SISTEMA]
+--	[PG_LI_SISTEMA_TAG_X_USUARIO]
 --	[PG_SK_SISTEMA]
 --	[PG_IN_SISTEMA]
+--	[PG_INDL_SISTEMA_X_USUARIO_PERMISO]
 --	[PG_UP_SISTEMA]
 --	[PG_DL_SISTEMA]
 -- //////////////////////////////////////////////////////////////
@@ -26,6 +28,8 @@ GO
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
 -- // SE UTILIZA EN LA FORMA DE USUARIO
+-- // ES LA VISTA PARA LAS SECCIONES EN EL MENÚ DE LAS APLICACIONES
+-- // DEL SISTEMA DE PEARL.
 -- //////////////////////////////////////////////////////////////
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_SISTEMA_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_SISTEMA_TAG]
@@ -70,7 +74,8 @@ AS
 				SISTEMA_TAG.K_GRUPO_TAG,
 				SISTEMA_TAG.K_SISTEMA_TAG,
 				D_SISTEMA_TAG,
-				D_SISTEMA_TAG_MENU
+				D_SISTEMA_TAG_MENU,
+				O_SISTEMA_TAG
 		FROM	SISTEMA_TAG				(NOLOCK)
 		WHERE	SISTEMA_TAG.K_GRUPO_TAG	=	@PP_K_GRUPO_TAG
 		AND		K_GRUPO_TAG				<>	0
@@ -126,7 +131,8 @@ AS
 				SISTEMA_TAG.K_SISTEMA_TAG,
 				CONCAT(D_SISTEMA_TAG,' ',S_SISTEMA_TAG) AS D_SISTEMA_TAG,
 				CONCAT(D_SISTEMA_TAG_MENU,' ',S_SISTEMA_TAG) AS D_SISTEMA_TAG_MENU,
-				K_IMAGEN_SISTEMA_TAG
+				K_IMAGEN_SISTEMA_TAG,
+				O_SISTEMA_TAG
 		FROM	SISTEMA_TAG				(NOLOCK)
 		WHERE	SISTEMA_TAG.K_GRUPO_TAG	=	@PP_K_GRUPO_TAG
 		AND		K_GRUPO_TAG				<>	0
@@ -140,8 +146,10 @@ GO
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
--- // SE UTILIZA EN LA FORMA DE USUARIO
--- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER
+-- // SE UTILIZA EN LA FORMA DE USUARIO:
+-- //			PARA CARGAR LOS NODOS DE CADA UNA DE LAS SECCIONES.
+-- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER:
+-- //			
 -- //////////////////////////////////////////////////////////////
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_GRUPO_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_GRUPO_TAG]
@@ -175,6 +183,44 @@ AS
 		AND		L_BORRADO		=	0
 		ORDER	BY	K_GRUPO_TAG
 	END
+	-- /////////////////////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- // MUESTRA LOS USUARIOS QUE TIENEN ACCESO A CADA UNA DE LAS
+-- // PANTALLAS DEL SISTEMA
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_SISTEMA_TAG_X_USUARIO]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_LI_SISTEMA_TAG_X_USUARIO]
+GO
+--		 EXECUTE [dbo].[PG_LI_SISTEMA_TAG_X_USUARIO] 0,139, 0
+--		 EXECUTE [dbo].[PG_LI_SISTEMA_TAG_X_USUARIO] 0,139, 10
+--		 EXECUTE [dbo].[PG_LI_SISTEMA_TAG_X_USUARIO] 0,139, 70
+CREATE PROCEDURE [dbo].[PG_LI_SISTEMA_TAG_X_USUARIO]
+	@PP_K_SISTEMA_EXE				INT,
+	@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_K_SISTEMA_TAG				INT
+AS
+	-- =========================================
+	SELECT	USUARIO_PEARL.K_USUARIO_PEARL,
+			--@PP_K_SISTEMA_TAG	AS K_SISTEMA_TAG,
+			S_DEPARTAMENTO,
+			D_USUARIO_PEARL,
+			CONCAT(NOMBRE, ' ', APELLIDO_PATERNO) AS NOMBRE_USUARIO,
+			(CASE
+				WHEN	ISNULL(USUARIO_PERMISOS.K_SISTEMA_TAG,0)	<> 0 THEN	1
+				ELSE	0
+			END)		AS L_HABILITADO
+	FROM	USUARIO_PEARL	(NOLOCK)
+	LEFT JOIN	USUARIO_PERMISOS		(NOLOCK) ON USUARIO_PEARL.K_USUARIO_PEARL	= USUARIO_PERMISOS.K_USUARIO_PEARL
+	--AND			K_SISTEMA_TAG	IN (SELECT K_SISTEMA_TAG FROM USUARIO_PERMISOS (NOLOCK) WHERE USUARIO_PERMISOS.K_USUARIO_PEARL	= USUARIO_PEARL.K_USUARIO_PEARL)
+	AND		K_SISTEMA_TAG	= @PP_K_SISTEMA_TAG
+	LEFT JOIN	DEPARTAMENTO		(NOLOCK) ON DEPARTAMENTO.DP_DEPTO_HOWE		= USUARIO_PEARL.K_USUARIO_DEPARTAMENTO
+	--LEFT JOIN	SISTEMA_TAG			(NOLOCK) ON SISTEMA_TAG.K_SISTEMA_TAG		= USUARIO_PERMISOS.K_SISTEMA_TAG
+	ORDER BY	D_USUARIO_PEARL
 	-- /////////////////////////////////////////////////////////////////////
 GO
 
@@ -263,12 +309,13 @@ AS
 			D_SISTEMA_TAG_MENU,			D_SISTEMA_TAG,
 			R_SISTEMA_TAG,				C_SISTEMA_TAG,
 			S_GRUPO_TAG,				K_IMAGEN_SISTEMA_TAG,
+			O_SISTEMA_TAG,
 			(	CASE
 				WHEN	L_SISTEMA_TAG=0		THEN	'NO'
 				WHEN	L_SISTEMA_TAG>=1	THEN	'SI'
 			END ) AS L_SISTEMA_TAG
 			-- =====================
-	FROM	SISTEMA_TAG, GRUPO_TAG		
+	FROM	SISTEMA_TAG		(NOLOCK),	GRUPO_TAG	(NOLOCK)
 			-- =====================
 	WHERE	SISTEMA_TAG.K_GRUPO_TAG=GRUPO_TAG.K_GRUPO_TAG
 			-- =====================
@@ -303,9 +350,10 @@ AS
 				R_SISTEMA_TAG,				C_SISTEMA_TAG,
 				L_ARCHIVO_TAG,				L_SISTEMA_TAG,
 				GRUPO_TAG.K_GRUPO_TAG,		S_GRUPO_TAG,
-				K_IMAGEN_SISTEMA_TAG				
+				K_IMAGEN_SISTEMA_TAG,
+				O_SISTEMA_TAG
 			-- =====================
-	FROM		SISTEMA_TAG, GRUPO_TAG		
+	FROM	SISTEMA_TAG		(NOLOCK),	GRUPO_TAG	(NOLOCK)
 			-- =====================
 	WHERE		SISTEMA_TAG.K_GRUPO_TAG=GRUPO_TAG.K_GRUPO_TAG
 			-- =====================
@@ -336,7 +384,10 @@ CREATE PROCEDURE [dbo].[PG_IN_SISTEMA]
 	@PP_K_GRUPO_TAG					INT,
 	@PP_L_ARCHIVO_TAG				INT,
 	@PP_L_SISTEMA_TAG				INT,
-	@PP_K_IMAGEN_SISTEMA_TAG		INT
+	@PP_K_IMAGEN_SISTEMA_TAG		INT,
+	-- ===============================
+	@PP_O_SISTEMA_TAG				INT
+
 AS			
 	DECLARE @VP_MENSAJE				VARCHAR(300) = ''
 	-- /////////////////////////////////////////////////////////////////////	
@@ -352,7 +403,7 @@ AS
 													@OU_RESULTADO_VALIDACION = @VP_MENSAJE		OUTPUT															
 	-- /////////////////////////////////////////////////////////////////////
 	IF @VP_MENSAJE=''
-		BEGIN
+	BEGIN
 		DECLARE @VP_SIGLAS VARCHAR(10)
 		SET @VP_SIGLAS = '#'+RIGHT('000' + Ltrim(Rtrim(@VP_K_SISTEMA)),3)
 		INSERT INTO SISTEMA_TAG
@@ -369,7 +420,7 @@ AS
 		VALUES	
 			(	@VP_K_SISTEMA,		
 				@PP_D_SISTEMA_TAG,		@PP_D_SISTEMA_TAG_MENU,	
-				@VP_SIGLAS,				@VP_K_SISTEMA,
+				@VP_SIGLAS,				@PP_O_SISTEMA_TAG,
 				@PP_C_SISTEMA_TAG,		@PP_R_SISTEMA_TAG,
 				@PP_L_SISTEMA_TAG,		@PP_K_GRUPO_TAG	,
 				@PP_L_ARCHIVO_TAG,		@PP_K_IMAGEN_SISTEMA_TAG,
@@ -377,7 +428,25 @@ AS
 				@PP_K_USUARIO_ACCION, GETDATE(), 
 				@PP_K_USUARIO_ACCION, GETDATE(),
 				0, NULL, NULL )
+
+		IF @@ROWCOUNT = 0
+		BEGIN
+			SET @VP_MENSAJE	= 'No se ingreso el permiso, verifique...'
 		END
+	END
+	IF @VP_MENSAJE	= ''
+	BEGIN
+		INSERT INTO	USUARIO_PERMISOS
+		(	K_SISTEMA_TAG,		K_USUARIO_PEARL		)
+		SELECT	@VP_K_SISTEMA,
+				K_USUARIO_PEARL
+		FROM	USUARIO_PEARL		(NOLOCK)
+		WHERE	K_USUARIO_PEARL	IN (41, 139, 144)
+		IF @@ROWCOUNT = 0
+		BEGIN
+			RAISERROR ('No se ingreso el permiso, verifique...', 16, 1 ) 
+		END
+	END
 	-- /////////////////////////////////////////////////////////////////////	
 	IF @VP_MENSAJE<>''
 		BEGIN		
@@ -407,6 +476,86 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> INSERT / FICHA
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_INDL_SISTEMA_X_USUARIO_PERMISO]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_INDL_SISTEMA_X_USUARIO_PERMISO]
+GO
+--		 EXECUTE [dbo].[PG_INDL_SISTEMA_X_USUARIO_PERMISO]	1,139, 182,87,0
+CREATE PROCEDURE [dbo].[PG_INDL_SISTEMA_X_USUARIO_PERMISO]
+	@PP_K_SISTEMA_EXE				INT,
+	@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_K_USUARIO_PEARL				INT,
+	@PP_K_SISTEMA_TAG				INT,
+	-- ===============================
+	@PP_L_HABILITAR_PERMISO			INT
+
+AS			
+	DECLARE @VP_MENSAJE				NVARCHAR(MAX) = ''
+BEGIN TRANSACTION 
+BEGIN TRY
+
+	IF @PP_L_HABILITAR_PERMISO	IN (0)
+	BEGIN
+		IF	(	SELECT	COUNT(K_USUARIO_PEARL)
+				FROM	USUARIO_PERMISOS	(NOLOCK)
+				WHERE	K_SISTEMA_TAG		= @PP_K_SISTEMA_TAG
+				AND		K_USUARIO_PEARL		= @PP_K_USUARIO_PEARL	)	> 0
+		BEGIN
+			DELETE	FROM	USUARIO_PERMISOS
+			WHERE	K_SISTEMA_TAG		= @PP_K_SISTEMA_TAG
+			AND		K_USUARIO_PEARL		= @PP_K_USUARIO_PEARL
+		END
+		ELSE
+		BEGIN
+			RAISERROR('El registro ya fue eliminado desde otra instancia, verifique...', 16, 1 )
+		END
+	END
+	ELSE
+	BEGIN
+		IF	(	SELECT	COUNT(K_USUARIO_PEARL)
+				FROM	USUARIO_PERMISOS	(NOLOCK)
+				WHERE	K_SISTEMA_TAG		= @PP_K_SISTEMA_TAG
+				AND		K_USUARIO_PEARL		= @PP_K_USUARIO_PEARL	)	> 0
+		BEGIN
+			RAISERROR('El usuario ya tiene habilitada la FORMA, verifique...', 16, 1 )
+		END
+		ELSE
+		BEGIN
+			INSERT INTO	USUARIO_PERMISOS
+			(	K_SISTEMA_TAG,		K_USUARIO_PEARL		)
+			VALUES
+			(	@PP_K_SISTEMA_TAG,	@PP_K_USUARIO_PEARL	)
+			IF @@ROWCOUNT = 0
+			BEGIN
+				RAISERROR ('No se ingreso el permiso, verifique...', 16, 1 ) 
+			END
+		END
+	END
+
+COMMIT TRANSACTION 
+END TRY
+
+BEGIN CATCH
+	--	OCURRIÓ UN ERROR, DESHACEMOS LOS CAMBIOS
+	ROLLBACK TRANSACTION
+	DECLARE @ErrorMessage NVARCHAR(4000);
+	SET @ErrorMessage = ERROR_MESSAGE() 
+	SET @VP_MENSAJE = 'ERROR: // ' + @ErrorMessage
+END CATCH
+	-- /////////////////////////////////////////////////////////////////////	
+	IF @VP_MENSAJE<>''
+		BEGIN
+			SET		@VP_MENSAJE = 'No es posible insertar el registro: ' + @VP_MENSAJE 
+		END	
+
+	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_SISTEMA_TAG AS SISTEMA, @PP_K_USUARIO_PEARL AS CLAVE	
+	-- //////////////////////////////////////////////////////////////
+	-- //////////////////////////////////////////////////////////////
+GO	
+
+-- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> UPDATE / FICHA
 -- //////////////////////////////////////////////////////////////
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_SISTEMA]') AND type in (N'P', N'PC'))
@@ -425,7 +574,9 @@ CREATE PROCEDURE [dbo].[PG_UP_SISTEMA]
 	@PP_K_GRUPO_TAG					INT,
 	@PP_L_ARCHIVO_TAG				INT,
 	@PP_L_SISTEMA_TAG				INT,
-	@PP_K_IMAGEN_SISTEMA_TAG		INT
+	@PP_K_IMAGEN_SISTEMA_TAG		INT,
+	-- ===============================
+	@PP_O_SISTEMA_TAG				INT
 AS			
 	DECLARE @VP_MENSAJE				VARCHAR(300) = ''
 	-- /////////////////////////////////////////////////////////////////////	
@@ -443,6 +594,7 @@ AS
 				[D_SISTEMA_TAG_MENU]		= @PP_D_SISTEMA_TAG_MENU,	
 				[C_SISTEMA_TAG]				= @PP_C_SISTEMA_TAG,
 				[R_SISTEMA_TAG]				= @PP_R_SISTEMA_TAG,
+				[O_SISTEMA_TAG]				= @PP_O_SISTEMA_TAG,
 				[K_GRUPO_TAG]				= @PP_K_GRUPO_TAG,
 				[L_ARCHIVO_TAG]				= @PP_L_ARCHIVO_TAG,
 				[L_SISTEMA_TAG]				= @PP_L_SISTEMA_TAG,

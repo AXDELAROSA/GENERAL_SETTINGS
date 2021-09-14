@@ -15,12 +15,13 @@ GO
 --	[PG_LI_USUARIO_PEARL]
 --	[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]
 --	[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]
+--	[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG]
 --	[PG_SK_USUARIO_PEARL]
 --	[PG_SK_USUARIO_INCONVENIENTE]
 --	[PG_ASIGNAR_D_USUARIO]
 --	[PG_SK_USUARIO_PEARL_NUEVO]
 --	[PG_IN_USUARIO_PEARL]
---	[PG_INUP_USUARIO_PERMISOS]
+--	[PG_INUP_USUARIO_PERMISOS]		-- YA NO SE UTILIZARÁ
 --	[PG_UP_USUARIO_PEARL]
 --	[PG_DL_USUARIO_PEARL]
 --	[PG_SK_USUARIO_EXIST]
@@ -71,14 +72,18 @@ AS
 	LEFT JOIN HOWE.DBO.VISTA_GAFETES	(NOLOCK) ON EN_NUM_EMP								= K_EMPLEADO_PEARL
 	LEFT JOIN DEPARTAMENTO				(NOLOCK) ON USUARIO_PEARL.K_USUARIO_DEPARTAMENTO	= DEPARTAMENTO.DP_DEPTO_HOWE
 	WHERE	USUARIO_PEARL.L_BORRADO	= 0
-	ORDER	BY O_DEPARTAMENTO ASC,	APELLIDO_PATERNO ASC
+	--ORDER	BY O_DEPARTAMENTO ASC,	APELLIDO_PATERNO ASC
+	--ORDER	BY DP_DEPTO_HOWE ASC	,D_USUARIO_PEARL	--,APELLIDO_PATERNO ASC
+	ORDER	BY O_DEPARTAMENTO ASC	,DP_DEPTO_HOWE ASC	,D_USUARIO_PEARL	--,APELLIDO_PATERNO ASC
 	-- /////////////////////////////////////////////////////////////////////
 GO
 
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
--- // SE UTILIZA EN LA FORMA DE USUARIO
+-- // SE UTILIZA EN LA FORMA DE USUARIO:
+-- //				PARA OBTENER LAS PANTALLAS A LAS QUE TIENE 
+-- //				ACCESO EL USUARIO.
 -- //////////////////////////////////////////////////////////////
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG]
@@ -109,7 +114,9 @@ GO
 
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / LISTADO
--- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER
+-- // SE UTILIZA EN LA FORMA DE MENU_EXPLORER:
+-- //		PARA MOSTRAR LOS NOMBRES DE LAS PANTALLAS A LAS QUE
+-- //		TIENE PERMISO EL USUARIO.
 -- //////////////////////////////////////////////////////////////
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_SISTEMA_TAG_MENU]
@@ -142,6 +149,114 @@ AS
 		AND			GRUPO_TAG.K_GRUPO_TAG											= @PP_K_GRUPO_TAG
 		AND			L_SISTEMA_TAG													= 1
 		ORDER		BY	K_GRUPO_TAG,	O_SISTEMA_TAG,		K_SISTEMA_TAG
+	-- /////////////////////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- // SE UTILIZA EN LA FORMA DE USUARIO
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG]
+GO
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG] 0,139,139
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG] 0,139,87
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG] 0,139,89
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG] 0,139,-1
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG] 0,139,0
+CREATE PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_X_SISTEMA_TAG]
+	@PP_K_SISTEMA_EXE				INT,
+	@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_K_USUARIO_PEARL				INT
+AS	
+	-- =========================================
+	--IF @PP_K_USUARIO_PEARL	NOT IN (-1,0)
+	--BEGIN
+		SELECT	SISTEMA_TAG.K_SISTEMA_TAG,
+				D_SISTEMA_TAG_MENU,
+				GRUPO_TAG.K_GRUPO_TAG,
+				D_GRUPO_TAG,
+				S_GRUPO_TAG,
+				(CASE
+					WHEN	ISNULL(USUARIO_PERMISOS.K_SISTEMA_TAG,0)	<> 0 THEN	1
+					ELSE	0
+				END)		AS L_HABILITADO,
+				@PP_K_USUARIO_PEARL		AS	K_CODIGO
+		FROM	SISTEMA_TAG		(NOLOCK)
+		LEFT JOIN	USUARIO_PERMISOS		(NOLOCK) ON USUARIO_PERMISOS.K_SISTEMA_TAG	= SISTEMA_TAG.K_SISTEMA_TAG
+		AND		USUARIO_PERMISOS.K_USUARIO_PEARL	= @PP_K_USUARIO_PEARL
+		INNER JOIN	GRUPO_TAG				(NOLOCK) ON	GRUPO_TAG.K_GRUPO_TAG			= SISTEMA_TAG.K_GRUPO_TAG
+		ORDER BY	K_GRUPO_TAG		,D_SISTEMA_TAG_MENU
+	--END
+	-- /////////////////////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT / LISTADO
+-- // SE UTILIZA EN LA FORMA DE USUARIO
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_LI_USUARIO_PERMISOS_X_GRUPO_APROBADOR]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_X_GRUPO_APROBADOR]
+GO
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_GRUPO_APROBADOR] 0,	139,	144
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_GRUPO_APROBADOR] 0,	139,	14428
+--		 EXECUTE [dbo].[PG_LI_USUARIO_PERMISOS_X_GRUPO_APROBADOR] 0,	139,	15209
+CREATE PROCEDURE [dbo].[PG_LI_USUARIO_PERMISOS_X_GRUPO_APROBADOR]
+	@PP_K_SISTEMA_EXE				INT,
+	@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_K_USUARIO_PEARL				INT
+AS	
+	-- =========================================
+	SELECT	D_TIPO_GRUPO_APROBADOR,
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			ISNULL(D_GRUPO_APROBADOR,
+										ISNULL(	(	SELECT	DISTINCT(D_GRUPO_APROBADOR)
+													FROM	GRUPO_APROBADOR
+													WHERE	K_TIPO_GRUPO_APROBADOR	= TIPO_GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR ),
+															(	SELECT	TOP (1) D_TIPO_GRUPO_APROBADOR
+																FROM	TIPO_GRUPO_APROBADOR
+																WHERE	K_TIPO_GRUPO_APROBADOR	= TIPO_GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR)	)
+			) AS D_GRUPO_APROBADOR,
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			ISNULL(S_GRUPO_APROBADOR,
+										ISNULL(	(	SELECT	TOP (1) S_GRUPO_APROBADOR
+													FROM	GRUPO_APROBADOR
+													WHERE	K_TIPO_GRUPO_APROBADOR	= TIPO_GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR ),
+															(	SELECT	TOP (1) S_TIPO_GRUPO_APROBADOR
+																FROM	TIPO_GRUPO_APROBADOR
+																WHERE	K_TIPO_GRUPO_APROBADOR	= TIPO_GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR)	)
+			) AS S_GRUPO_APROBADOR,
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			(CASE
+						WHEN	ISNULL(GRUPO_APROBADOR.K_USUARIO,0)	<> 0 THEN	1
+						ELSE	0
+			END)		AS L_HABILITADO,
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			(CASE
+						WHEN	ISNULL(	K_ESTATUS_GRUPO_APROBADOR, 0)	<> 0 THEN	1
+						ELSE	0
+			END)		AS L_ESTATUS_GRUPO_APROBADOR,
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			-- ===========================================================================================================================
+			* 
+	FROM	TIPO_GRUPO_APROBADOR		(NOLOCK)
+	LEFT JOIN	GRUPO_APROBADOR			(NOLOCK) ON GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR	= TIPO_GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR
+	AND			K_USUARIO		= @PP_K_USUARIO_PEARL
+	LEFT JOIN	USUARIO_PEARL			(NOLOCK) ON USUARIO_PEARL.K_EMPLEADO_PEARL	= GRUPO_APROBADOR.K_USUARIO
+	ORDER BY	L_HABILITADO DESC, TIPO_GRUPO_APROBADOR.K_TIPO_GRUPO_APROBADOR
 	-- /////////////////////////////////////////////////////////////////////
 GO
 
@@ -592,130 +707,210 @@ GO
 
 
 -- //////////////////////////////////////////////////////////////
--- // STORED PROCEDURE ---> INSERT
+-- // STORED PROCEDURE ---> INSERT / FICHA
 -- //////////////////////////////////////////////////////////////
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_INUP_USUARIO_PERMISOS]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[PG_INUP_USUARIO_PERMISOS]
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]
 GO
--- EXECUTE [dbo].[PG_INUP_USUARIO_PERMISOS] 0, 139, 139, '23/31/51/52/53'
-CREATE PROCEDURE [dbo].[PG_INUP_USUARIO_PERMISOS]
+--		 EXECUTE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]	1,139, 182,87,0
+CREATE PROCEDURE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
 	-- ===========================
-	@PP_K_USUARIO_PERMISOS			INT,
-	-- ===========================
-	@PP_PERMISOS_ARRAY				NVARCHAR(MAX)
+	@PP_K_USUARIO_PEARL				INT,
+	@PP_K_SISTEMA_TAG				INT,
+	-- ===============================
+	@PP_L_HABILITAR_PERMISO			INT
 AS			
-
-DECLARE @VP_MENSAJE				VARCHAR(500) = ''
-DECLARE @VP_K_USUARIO_PEARL			INT = 0;	
---DECLARE @VP_K_ADDRESS_USUARIO_PEARL	INT = 0;	
---DECLARE @VP_K_CONTACT_USUARIO_PEARL	INT = 0
-	
+	DECLARE @VP_MENSAJE				NVARCHAR(MAX) = ''
 BEGIN TRANSACTION 
 BEGIN TRY
--- /////////////////////////////////////////////////////////////////////
-	IF @VP_MENSAJE=''
-	BEGIN		
-	--============================================================================
-	--======================================ELIMINAR PERMISOS
-	--============================================================================
-	DELETE	FROM USUARIO_PERMISOS
-	WHERE	K_USUARIO_PEARL=@PP_K_USUARIO_PERMISOS
-	--============================================================================
-	--======================================INSERTAR PERMISOS
-	--============================================================================
-	-----=====================================================
-	-- SE HACE UN CURSOR PARA OBTENER CADA UNO DE LOS PERMISOS
-	-- SE DECLARA LA TABLA DONDE SE ALMACENARAN LOS REGISTROS OBTENIDOS DEL ARRAY.	
-		DECLARE @TBL_USUARIO_PERMISOS TABLE 
-				(
-				K_SISTEMA		INT
-				)
-		SET NOCOUNT ON
-				
-				DECLARE @VP_POSICION_K_SISTEMA		INT
-				DECLARE @VP_VALOR_K_SISTEMA			INT
-								
-				--COLOCAMOS UN SEPARADOR AL FINAL DE LOS PARAMETROS PARA QUE FUNCIONE BIEN NUESTRO CODIGO
-				SET	@PP_PERMISOS_ARRAY=@PP_PERMISOS_ARRAY + '/'		
-			
-				--HACEMOS UN BUCLE QUE SE REPITE MIENTRAS HAYA SEPARADORES, PATINDEX BUSCA UN PATRON EN UNA CADENA Y NOS DEVUELVE SU POSICION
-				WHILE patindex('%/%' , @PP_PERMISOS_ARRAY) <> 0
-					BEGIN
-						SELECT @VP_POSICION_K_SISTEMA	=	patindex('%/%' , @PP_PERMISOS_ARRAY)
-						
-						--BUSCAMOS LA POSICION DE LA PRIMERA Y OBTENEMOS LOS CARACTERES HASTA ESA POSICION
-						SELECT @VP_VALOR_K_SISTEMA		= LEFT(@PP_PERMISOS_ARRAY, @VP_POSICION_K_SISTEMA - 1)
-						
-						--SE HACE EL INSERT DEL REGISTRO EN LA TABLA, AQUI HARÁ UN INSERT POR CADA UNO DE LOS VALORES ENCONTRADOS EN EL ARRAY.
-								INSERT	INTO	@TBL_USUARIO_PERMISOS
-								VALUES	(
-											@VP_VALOR_K_SISTEMA
-										)																								
-						--REEMPLAZAMOS LO PROCESADO CON NADA CON LA FUNCION STUFF
-						SELECT @PP_PERMISOS_ARRAY			= STUFF(@PP_PERMISOS_ARRAY, 1, @VP_POSICION_K_SISTEMA, '')
-				END
-				
-				DECLARE @VP_N_K_SISTEMA INT = 0
-				SELECT @VP_N_K_SISTEMA = COUNT(K_SISTEMA) FROM @TBL_USUARIO_PERMISOS
-				SET NOCOUNT OFF
-		-- ---------------SI NO HAY PIELES SELECCIONADAS GENERAMOS UN ERROR DE TRANSACCION
-				IF @VP_N_K_SISTEMA IS NULL
-					RAISERROR ('No se recibió ningún [PERMISO]. Debe seleccionar uno como mínimo.', 16, 1 )
-		
-			DECLARE @VP_CU_K_SISTEMA			INT
 
-			DECLARE CU_CURSOR CURSOR LOCAL FOR
-				SELECT K_SISTEMA FROM @TBL_USUARIO_PERMISOS
-			OPEN CU_CURSOR
-					FETCH NEXT FROM CU_CURSOR INTO @VP_CU_K_SISTEMA
-					WHILE @@FETCH_STATUS = 0
-					BEGIN
-					----------------------------------------------------	
-					-- AQUI REALIZARA LOS INSERT DE LOS PERMISOS DEL USUARIO
-						INSERT INTO USUARIO_PERMISOS
-							(	[K_USUARIO_PEARL]			,
-								-- =========================
-								[K_SISTEMA_TAG]				)
-						VALUES	
-							(	@PP_K_USUARIO_PERMISOS		, 
-								-- ===========================
-								@VP_CU_K_SISTEMA			)
-						
-							IF @@ROWCOUNT = 0
-								BEGIN
-									SET @VP_MENSAJE='No se insertaron los permisos de usuario(INTO). [K_SISTEMA#'+CONVERT(VARCHAR(10),@VP_CU_K_SISTEMA)+']'
-									RAISERROR (@VP_MENSAJE, 16, 1 )
-								END				
-
-					FETCH NEXT FROM CU_CURSOR INTO @VP_CU_K_SISTEMA
-					END
-			CLOSE CU_CURSOR
-			DEALLOCATE CU_CURSOR
-	-----=====================================================
+	IF @PP_L_HABILITAR_PERMISO	IN (0)
+	BEGIN
+		IF	(	SELECT	COUNT(K_USUARIO_PEARL)
+				FROM	USUARIO_PERMISOS	(NOLOCK)
+				WHERE	K_SISTEMA_TAG		= @PP_K_SISTEMA_TAG
+				AND		K_USUARIO_PEARL		= @PP_K_USUARIO_PEARL	)	> 0
+		BEGIN
+			DELETE	FROM	USUARIO_PERMISOS
+			WHERE	K_SISTEMA_TAG		= @PP_K_SISTEMA_TAG
+			AND		K_USUARIO_PEARL		= @PP_K_USUARIO_PEARL
+		END
+		ELSE
+		BEGIN
+			RAISERROR('El registro ya fue eliminado desde otra instancia, verifique...', 16, 1 )
+		END
 	END
--- /////////////////////////////////////////////////////////////////////
+	ELSE
+	BEGIN
+		IF	(	SELECT	COUNT(K_USUARIO_PEARL)
+				FROM	USUARIO_PERMISOS	(NOLOCK)
+				WHERE	K_SISTEMA_TAG		= @PP_K_SISTEMA_TAG
+				AND		K_USUARIO_PEARL		= @PP_K_USUARIO_PEARL	)	> 0
+		BEGIN
+			RAISERROR('El usuario ya tiene habilitada la FORMA, verifique...', 16, 1 )
+		END
+		ELSE
+		BEGIN
+			INSERT INTO	USUARIO_PERMISOS
+			(	K_SISTEMA_TAG,		K_USUARIO_PEARL		)
+			VALUES
+			(	@PP_K_SISTEMA_TAG,	@PP_K_USUARIO_PEARL	)
+			IF @@ROWCOUNT = 0
+			BEGIN
+				RAISERROR ('No se ingreso el permiso, verifique...', 16, 1 ) 
+			END
+		END
+	END
+
 COMMIT TRANSACTION 
 END TRY
 
 BEGIN CATCH
-	-- Ocurrió un error, deshacemos los cambios
+	--	OCURRIÓ UN ERROR, DESHACEMOS LOS CAMBIOS
 	ROLLBACK TRANSACTION
-	DECLARE @VP_ERROR_TRANS NVARCHAR(4000);
-	SET @VP_ERROR_TRANS = ERROR_MESSAGE() 
-	SET @VP_MENSAJE = 'ERROR:// ' + @VP_ERROR_TRANS
-END CATCH	
-
+	DECLARE @ErrorMessage NVARCHAR(4000);
+	SET @ErrorMessage = ERROR_MESSAGE() 
+	SET @VP_MENSAJE = 'ERROR: // ' + @ErrorMessage
+END CATCH
 	-- /////////////////////////////////////////////////////////////////////	
 	IF @VP_MENSAJE<>''
-	BEGIN
-		SET		@VP_MENSAJE = 'No es posible [Insertar] los [PERMISOS]: ' + @VP_MENSAJE 
-	END
+		BEGIN
+			SET		@VP_MENSAJE = 'No es posible insertar el registro: ' + @VP_MENSAJE 
+		END	
 
-	SELECT	@VP_MENSAJE AS MENSAJE
+	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_SISTEMA_TAG AS SISTEMA, @PP_K_USUARIO_PEARL AS CLAVE	
 	-- //////////////////////////////////////////////////////////////
-GO
+	-- //////////////////////////////////////////////////////////////
+GO	
+
+
+---- //////////////////////////////////////////////////////////////
+---- // STORED PROCEDURE ---> INSERT
+---- //////////////////////////////////////////////////////////////
+--IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_INUP_USUARIO_PERMISOS]') AND type in (N'P', N'PC'))
+--	DROP PROCEDURE [dbo].[PG_INUP_USUARIO_PERMISOS]
+--GO
+---- EXECUTE [dbo].[PG_INUP_USUARIO_PERMISOS] 0, 139, 139, '23/31/51/52/53'
+--CREATE PROCEDURE [dbo].[PG_INUP_USUARIO_PERMISOS]
+--	@PP_K_SISTEMA_EXE				INT,
+--	@PP_K_USUARIO_ACCION			INT,
+--	-- ===========================
+--	@PP_K_USUARIO_PERMISOS			INT,
+--	-- ===========================
+--	@PP_PERMISOS_ARRAY				NVARCHAR(MAX)
+--AS			
+
+--DECLARE @VP_MENSAJE				VARCHAR(500) = ''
+--DECLARE @VP_K_USUARIO_PEARL			INT = 0;	
+----DECLARE @VP_K_ADDRESS_USUARIO_PEARL	INT = 0;	
+----DECLARE @VP_K_CONTACT_USUARIO_PEARL	INT = 0
+	
+--BEGIN TRANSACTION 
+--BEGIN TRY
+---- /////////////////////////////////////////////////////////////////////
+--	IF @VP_MENSAJE=''
+--	BEGIN		
+--	--============================================================================
+--	--======================================ELIMINAR PERMISOS
+--	--============================================================================
+--	DELETE	FROM USUARIO_PERMISOS
+--	WHERE	K_USUARIO_PEARL=@PP_K_USUARIO_PERMISOS
+--	--============================================================================
+--	--======================================INSERTAR PERMISOS
+--	--============================================================================
+--	-----=====================================================
+--	-- SE HACE UN CURSOR PARA OBTENER CADA UNO DE LOS PERMISOS
+--	-- SE DECLARA LA TABLA DONDE SE ALMACENARAN LOS REGISTROS OBTENIDOS DEL ARRAY.	
+--		DECLARE @TBL_USUARIO_PERMISOS TABLE 
+--				(
+--				K_SISTEMA		INT
+--				)
+--		SET NOCOUNT ON
+				
+--				DECLARE @VP_POSICION_K_SISTEMA		INT
+--				DECLARE @VP_VALOR_K_SISTEMA			INT
+								
+--				--COLOCAMOS UN SEPARADOR AL FINAL DE LOS PARAMETROS PARA QUE FUNCIONE BIEN NUESTRO CODIGO
+--				SET	@PP_PERMISOS_ARRAY=@PP_PERMISOS_ARRAY + '/'		
+			
+--				--HACEMOS UN BUCLE QUE SE REPITE MIENTRAS HAYA SEPARADORES, PATINDEX BUSCA UN PATRON EN UNA CADENA Y NOS DEVUELVE SU POSICION
+--				WHILE patindex('%/%' , @PP_PERMISOS_ARRAY) <> 0
+--					BEGIN
+--						SELECT @VP_POSICION_K_SISTEMA	=	patindex('%/%' , @PP_PERMISOS_ARRAY)
+						
+--						--BUSCAMOS LA POSICION DE LA PRIMERA Y OBTENEMOS LOS CARACTERES HASTA ESA POSICION
+--						SELECT @VP_VALOR_K_SISTEMA		= LEFT(@PP_PERMISOS_ARRAY, @VP_POSICION_K_SISTEMA - 1)
+						
+--						--SE HACE EL INSERT DEL REGISTRO EN LA TABLA, AQUI HARÁ UN INSERT POR CADA UNO DE LOS VALORES ENCONTRADOS EN EL ARRAY.
+--								INSERT	INTO	@TBL_USUARIO_PERMISOS
+--								VALUES	(
+--											@VP_VALOR_K_SISTEMA
+--										)																								
+--						--REEMPLAZAMOS LO PROCESADO CON NADA CON LA FUNCION STUFF
+--						SELECT @PP_PERMISOS_ARRAY			= STUFF(@PP_PERMISOS_ARRAY, 1, @VP_POSICION_K_SISTEMA, '')
+--				END
+				
+--				DECLARE @VP_N_K_SISTEMA INT = 0
+--				SELECT @VP_N_K_SISTEMA = COUNT(K_SISTEMA) FROM @TBL_USUARIO_PERMISOS
+--				SET NOCOUNT OFF
+--		-- ---------------SI NO HAY PIELES SELECCIONADAS GENERAMOS UN ERROR DE TRANSACCION
+--				IF @VP_N_K_SISTEMA IS NULL
+--					RAISERROR ('No se recibió ningún [PERMISO]. Debe seleccionar uno como mínimo.', 16, 1 )
+		
+--			DECLARE @VP_CU_K_SISTEMA			INT
+
+--			DECLARE CU_CURSOR CURSOR LOCAL FOR
+--				SELECT K_SISTEMA FROM @TBL_USUARIO_PERMISOS
+--			OPEN CU_CURSOR
+--					FETCH NEXT FROM CU_CURSOR INTO @VP_CU_K_SISTEMA
+--					WHILE @@FETCH_STATUS = 0
+--					BEGIN
+--					----------------------------------------------------	
+--					-- AQUI REALIZARA LOS INSERT DE LOS PERMISOS DEL USUARIO
+--						INSERT INTO USUARIO_PERMISOS
+--							(	[K_USUARIO_PEARL]			,
+--								-- =========================
+--								[K_SISTEMA_TAG]				)
+--						VALUES	
+--							(	@PP_K_USUARIO_PERMISOS		, 
+--								-- ===========================
+--								@VP_CU_K_SISTEMA			)
+						
+--							IF @@ROWCOUNT = 0
+--								BEGIN
+--									SET @VP_MENSAJE='No se insertaron los permisos de usuario(INTO). [K_SISTEMA#'+CONVERT(VARCHAR(10),@VP_CU_K_SISTEMA)+']'
+--									RAISERROR (@VP_MENSAJE, 16, 1 )
+--								END				
+
+--					FETCH NEXT FROM CU_CURSOR INTO @VP_CU_K_SISTEMA
+--					END
+--			CLOSE CU_CURSOR
+--			DEALLOCATE CU_CURSOR
+--	-----=====================================================
+--	END
+---- /////////////////////////////////////////////////////////////////////
+--COMMIT TRANSACTION 
+--END TRY
+
+--BEGIN CATCH
+--	-- Ocurrió un error, deshacemos los cambios
+--	ROLLBACK TRANSACTION
+--	DECLARE @VP_ERROR_TRANS NVARCHAR(4000);
+--	SET @VP_ERROR_TRANS = ERROR_MESSAGE() 
+--	SET @VP_MENSAJE = 'ERROR:// ' + @VP_ERROR_TRANS
+--END CATCH	
+
+--	-- /////////////////////////////////////////////////////////////////////	
+--	IF @VP_MENSAJE<>''
+--	BEGIN
+--		SET		@VP_MENSAJE = 'No es posible [Insertar] los [PERMISOS]: ' + @VP_MENSAJE 
+--	END
+
+--	SELECT	@VP_MENSAJE AS MENSAJE
+--	-- //////////////////////////////////////////////////////////////
+--GO
 
 
 -- //////////////////////////////////////////////////////////////
