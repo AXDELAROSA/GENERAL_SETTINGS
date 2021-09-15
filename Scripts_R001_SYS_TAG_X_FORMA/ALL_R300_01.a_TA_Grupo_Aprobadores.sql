@@ -183,6 +183,12 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6001, 'CREAR PO',					'CREAR_PO
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6002, 'AUTORIZAR PO',				'AUTOR_PO', 6002, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6003, 'NOTIFICAR PO',				'NOTIF_PO', 6003, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 6004, 'IMPRIMIR PO',				'IMPRI_PO', 6004, '', 1
+
+-- =============================================== USE BD_GENERAL===============================================
+-- ================================= NOTIFICACIONES HOJAS EMPAQUE LIVE================================== AX: 20210915
+-- =============================================== -- ===============================================	
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 7000, 'NOTIFICAR HOJA EMPAQUE FALTANTE',		'N_HOJAEMP',	7000, '', 1
+
 -- =============================================== USE BD_GENERAL===============================================
 -- ================================= NOTIFICACIONES DE PEDIDO Y RECIBOS	================================== AX
 -- =============================================== -- ===============================================	
@@ -847,6 +853,9 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1500, 'FAKE UTIL',					'FAKE_UTIL', 
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1501, 'FAKE UTIL',					'FAKE_UTIL', 43,  600, 1 -- JORGEH
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1502, 'FAKE UTIL',					'FAKE_UTIL', 44,  600, 1 -- GUILLERMOM
 
+-- =================================		NOTIFICAR HOJA EMPAQUE FALTANTE MODELOS QUE SE HACEN LIVE		==================================
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1600, 'NOTIFICAR HOJA EMPAQUE FALTANTE',			'NOTIFICAR HOJA EMPAQUE FALTANTE', 139,	7000, 1		-- AX			:2021709
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1601, 'NOTIFICAR HOJA EMPAQUE FALTANTE',			'NOTIFICAR HOJA EMPAQUE FALTANTE', 89,	7000, 0		-- VIVIANAC		:20210709
 
 -- ===============================================
 SET NOCOUNT OFF
