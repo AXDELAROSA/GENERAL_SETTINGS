@@ -324,7 +324,7 @@ AS
 			-- =====================		
 	-- COMENTADO PARA PRUEBAS
 	AND		( K_SISTEMA_TAG > 0 )
-	ORDER BY GRUPO_TAG.K_GRUPO_TAG ASC,D_SISTEMA_TAG_MENU DESC
+	ORDER BY GRUPO_TAG.K_GRUPO_TAG ASC,	O_SISTEMA_TAG DESC,	D_SISTEMA_TAG_MENU DESC
 	-- /////////////////////////////////////////////////////////////////////
 GO
 
