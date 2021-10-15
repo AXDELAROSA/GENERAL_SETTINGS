@@ -113,6 +113,7 @@ EXECUTE [dbo].[PG_CI_GRUPO_TAG] 60, 'MATERIALES',		'MATER',	60 , '#60 // MATER'	
 EXECUTE [dbo].[PG_CI_GRUPO_TAG] 70, 'PRODUCCION',		'PRODU',	70 , '#70 // PRODU'			, 1
 EXECUTE [dbo].[PG_CI_GRUPO_TAG] 80, 'RECURSOS_HUMANOS',	'RHUMA',	80 , '#80 // RHUMA'			, 1
 EXECUTE [dbo].[PG_CI_GRUPO_TAG] 90, 'SISTEMAS',			'SISTM',	90 , '#90 // SISTM'			, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 100, 'PROYECTOS',		'PROYC',	75 , '#100 // PROYC'		, 1
 
 	-- ===============================================
 GO
