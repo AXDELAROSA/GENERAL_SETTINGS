@@ -128,6 +128,7 @@ AS
 			SELECT	LTRIM(RTRIM(alt1_loc))		AS D_COMBOBOX	
 			FROM	DATA_02.DBO.imlocfil_sql	(NOLOCK)
 			WHERE	SUBSTRING(LTRIM(RTRIM(alt1_loc)),1,1) NOT IN ('T', 'G','R', 'J', 'P') 
+			AND LOC NOT IN ( 'RW0', 'THI', 'MEP', 'MCT', 'MOB', 'MOS', 'MTR' )
 		END
 
 	IF @PP_L_CON_TODOS=4
