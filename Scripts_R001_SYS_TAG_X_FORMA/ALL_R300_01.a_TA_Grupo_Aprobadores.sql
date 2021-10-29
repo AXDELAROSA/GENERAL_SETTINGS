@@ -141,6 +141,12 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 81, 'MODIFICAR ESTATUS REPORTE'
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 101, 'SELECCIONAR TODO',			'SELEC_TODO',	101, '', 1
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 102, 'ABRIR ORDEN',				'ABR_ORD',		102, '', 1
 
+-- ================================= ALTA DE HERRAMENTAL PARA VERIFICAR	================================== AX
+-- ================================= PARA REALIZAR EL INSERT/UPDATE DE TOOL_SET CON CAMPOS VACÍOS, POR ESTATUS "POR VERIFICAR"
+-- =============================================== -- ===============================================	
+EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 110, 'IN-UP TOOL_SET POR VERIFICAR',	'IN-UP TOOL_SET POR VERIFICAR',	110, '', 1		-- AX: 20211027
+-- ===============================================
+
 --=========PARA CERRAR ORDEN PANTALLA FORMLOTS========================================
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 121, 'CERRAR ORDEN',				'CERR_ORD', 121, '', 1
 
@@ -220,8 +226,6 @@ EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9704, 'NOTIFICAR CORREO MAT RMA
 EXECUTE [dbo].[PG_CI_TIPO_GRUPO_APROBADOR] 0, 0, 9800, 'NOTIFICAR CORREO FACTURA TPO',						'NOTIFICAR CORREO FACTURA TPO',	9800, '', 1		-- AX: 20211005
 GO
 
-
--- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
 
@@ -882,6 +886,9 @@ EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1600, 'NOTIFICAR HOJA EMPAQUE FALTAN
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1601, 'NOTIFICAR HOJA EMPAQUE FALTANTE',			'NOTIFICAR HOJA EMPAQUE FALTANTE', 89,	7000, 0		-- VIVIANAC		:20210917
 EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1602, 'NOTIFICAR HOJA EMPAQUE FALTANTE',			'NOTIFICAR HOJA EMPAQUE FALTANTE', 142,	7000, 1		-- ALBAJ		:20210917
 
+-- ================================= ALTA DE HERRAMENTAL PARA VERIFICAR	================================== AX
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1700, 'IN-UP TOOL_SET POR VERIFICAR',			'IN-UP TOOL_SET POR VERIFICAR', 139,	110, 0			-- AX			:20211027
+EXECUTE [dbo].[PG_CI_GRUPO_APROBADOR] 0, 0, 1701, 'IN-UP TOOL_SET POR VERIFICAR',			'IN-UP TOOL_SET POR VERIFICAR', 156,	110, 1			-- OMARG		:20211027
 -- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
