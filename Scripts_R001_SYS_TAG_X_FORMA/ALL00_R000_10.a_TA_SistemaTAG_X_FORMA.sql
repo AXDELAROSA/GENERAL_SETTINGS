@@ -114,6 +114,7 @@ EXECUTE [dbo].[PG_CI_GRUPO_TAG] 70, 'PRODUCCION',		'PRODU',	70 , '#70 // PRODU'	
 EXECUTE [dbo].[PG_CI_GRUPO_TAG] 80, 'RECURSOS_HUMANOS',	'RHUMA',	80 , '#80 // RHUMA'			, 1
 EXECUTE [dbo].[PG_CI_GRUPO_TAG] 90, 'SISTEMAS',			'SISTM',	90 , '#90 // SISTM'			, 1
 EXECUTE [dbo].[PG_CI_GRUPO_TAG] 100, 'PROYECTOS',		'PROYC',	75 , '#100 // PROYC'		, 1
+EXECUTE [dbo].[PG_CI_GRUPO_TAG] 110, 'MANTENIMIENTO',	'MANTN',	55 , '#110 // MANTN'		, 1
 
 	-- ===============================================
 GO
