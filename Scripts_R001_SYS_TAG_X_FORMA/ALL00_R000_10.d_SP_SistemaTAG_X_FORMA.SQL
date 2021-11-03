@@ -501,6 +501,14 @@ AS
 BEGIN TRANSACTION 
 BEGIN TRY
 
+	IF	@PP_K_SISTEMA_TAG IN (93)
+	BEGIN
+		DECLARE	@VP_MENSAJE_1	NVARCHAR(MAX)	= 'Es necesario asignar permisos para el botón de cargar orden_de los colores no controlados, en [TA_Forma_Control_FEG] sistema control: #180 '
+		SET		@VP_MENSAJE_1					= @VP_MENSAJE_1	+ '. En el ALL00_R000_10.d_SP_SistemaTAG_X_FORMA.'
+		RAISERROR(@VP_MENSAJE_1, 16, 1 )
+	END
+
+
 	IF @PP_L_HABILITAR_PERMISO	IN (0)
 	BEGIN
 		IF	(	SELECT	COUNT(K_USUARIO_PEARL)

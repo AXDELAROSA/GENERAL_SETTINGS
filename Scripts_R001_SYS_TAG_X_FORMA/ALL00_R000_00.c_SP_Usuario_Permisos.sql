@@ -21,6 +21,7 @@ GO
 --	[PG_ASIGNAR_D_USUARIO]
 --	[PG_SK_USUARIO_PEARL_NUEVO]
 --	[PG_IN_USUARIO_PEARL]
+--	[PG_INDL_USUARIO_PERMISO_X_SISTEMA]
 --	[PG_INUP_USUARIO_PERMISOS]		-- YA NO SE UTILIZARÁ
 --	[PG_UP_USUARIO_PEARL]
 --	[PG_DL_USUARIO_PEARL]
@@ -753,6 +754,14 @@ BEGIN TRY
 		END
 		ELSE
 		BEGIN
+
+			IF	@PP_K_SISTEMA_TAG IN (93)
+			BEGIN
+				DECLARE	@VP_MENSAJE_1	NVARCHAR(MAX)	= 'Es necesario asignar permisos para el botón de cargar orden_de los colores no controlados, en [TA_Forma_Control_FEG] sistema control: #180 '
+				SET		@VP_MENSAJE_1					= @VP_MENSAJE_1	+ '. En el ALL00_R000_00.c_SP_Usuario_Permisos.'
+				RAISERROR(@VP_MENSAJE_1, 16, 1 )
+			END
+
 			INSERT INTO	USUARIO_PERMISOS
 			(	K_SISTEMA_TAG,		K_USUARIO_PEARL		)
 			VALUES
