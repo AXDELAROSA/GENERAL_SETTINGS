@@ -12,6 +12,11 @@
 USE [BD_GENERAL] 
 GO
 
+-- //////////////////////////////////////////////////////////////
+-- ///////			CONTENIDO DEL SP
+--	[PG_SK_USER_PEARL]
+--	[PG_SK_USER_PEARL_AUTORIZAR_COMPATIBLE]
+-- //////////////////////////////////////////////////////////////
 
 -- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  '' ,'1234567'
 -- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  'PEDROS' ,'7422'
