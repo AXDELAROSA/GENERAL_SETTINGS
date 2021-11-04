@@ -10,12 +10,88 @@
 USE [BD_GENERAL]
 GO
 
--- //////////////////////////////////////////////////////////////
--- SELECT * FROM DEPARTAMENTO
--- //////////////////////////////////////////////////////////////
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DEPARTAMENTO]') AND type in (N'U'))
 	DROP TABLE [dbo].[DEPARTAMENTO]
 GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CLASE_DEPARTAMENTO]') AND type in (N'U'))
+	DROP TABLE [dbo].[CLASE_DEPARTAMENTO]
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- SELECT * FROM CLASE_DEPARTAMENTO
+-- //////////////////////////////////////////////////////////////
+CREATE TABLE [dbo].[CLASE_DEPARTAMENTO] (
+	[K_CLASE_DEPARTAMENTO]		[INT] NOT NULL,
+	-- ========================================
+	[K_DEPARTAMENTO]			[INT] NOT NULL,
+	[D_CLASE_DEPARTAMENTO]		[VARCHAR] (250) NOT NULL,
+	[S_CLASE_DEPARTAMENTO]		[VARCHAR] (250) NOT NULL,
+	[L_CLASE_DEPARTAMENTO]		[INT] NOT NULL DEFAULT 1,
+	-- ========================================
+) ON [PRIMARY]
+GO
+-- //////////////////////////////////////////////////////////////
+
+ALTER TABLE [dbo].[CLASE_DEPARTAMENTO]
+	ADD CONSTRAINT [PK_CLASE_DEPARTAMENTO]
+		PRIMARY KEY CLUSTERED ([K_CLASE_DEPARTAMENTO])
+GO
+
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_CLASE_DEPARTAMENTO]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_CI_CLASE_DEPARTAMENTO]
+GO
+CREATE PROCEDURE [dbo].[PG_CI_CLASE_DEPARTAMENTO]
+	@PP_K_USUARIO_EXE			[INT],
+	-- ========================================
+	@PP_K_CLASE_DEPARTAMENTO	[INT],
+	@PP_K_DEPARTAMENTO			[INT],
+	@PP_D_CLASE_DEPARTAMENTO	[VARCHAR](250),
+	@PP_S_CLASE_DEPARTAMENTO	[VARCHAR](250),
+	@PP_L_CLASE_DEPARTAMENTO	[INT]
+	-- ===============================
+AS
+	-- ===============================
+	DECLARE @VP_K_EXISTE	INT
+	SELECT	@VP_K_EXISTE			=	K_CLASE_DEPARTAMENTO
+	FROM	CLASE_DEPARTAMENTO		(NOLOCK)
+	WHERE	K_CLASE_DEPARTAMENTO	=	@PP_K_CLASE_DEPARTAMENTO
+	-- ===============================
+	IF @VP_K_EXISTE IS NULL
+		INSERT INTO CLASE_DEPARTAMENTO
+			(	K_CLASE_DEPARTAMENTO,			K_DEPARTAMENTO,
+				D_CLASE_DEPARTAMENTO,			S_CLASE_DEPARTAMENTO,			
+				L_CLASE_DEPARTAMENTO			)
+		VALUES	
+			(	@PP_K_CLASE_DEPARTAMENTO,		@PP_K_DEPARTAMENTO,
+				@PP_D_CLASE_DEPARTAMENTO,		@PP_S_CLASE_DEPARTAMENTO,		
+				@PP_L_CLASE_DEPARTAMENTO		)
+	ELSE
+		UPDATE	CLASE_DEPARTAMENTO
+		SET		K_DEPARTAMENTO				= @PP_K_DEPARTAMENTO,
+				D_CLASE_DEPARTAMENTO		= @PP_D_CLASE_DEPARTAMENTO,
+				S_CLASE_DEPARTAMENTO		= @PP_S_CLASE_DEPARTAMENTO,
+				L_CLASE_DEPARTAMENTO		= @PP_L_CLASE_DEPARTAMENTO
+		WHERE	K_CLASE_DEPARTAMENTO		= @PP_K_CLASE_DEPARTAMENTO
+	-- =========================================================
+GO
+
+
+SET NOCOUNT ON
+-- ===============================================
+-- ===============================================
+EXECUTE [dbo].[PG_CI_CLASE_DEPARTAMENTO] 139	,00		,00		,'( SIN DEFINIR )'	,	'( SIN DEFINIR )'		,1
+EXECUTE [dbo].[PG_CI_CLASE_DEPARTAMENTO] 139	,01		,05		,'INGENIERÍA'		,	'INGEN'					,1
+EXECUTE [dbo].[PG_CI_CLASE_DEPARTAMENTO] 139	,02		,05		,'MANTENIMIENTO'	,	'MANTO'					,1
+-- ===============================================
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- SELECT * FROM DEPARTAMENTO
+-- //////////////////////////////////////////////////////////////
 CREATE TABLE [dbo].[DEPARTAMENTO] (
 	[K_DEPARTAMENTO]			[INT] IDENTITY (1,1)	NOT NULL,
 	-- ========================================
@@ -49,6 +125,7 @@ ALTER TABLE [dbo].[DEPARTAMENTO]
 			[K_USUARIO_BAJA]				[INT]		NULL,
 			[F_BAJA]						[DATETIME]	NULL;
 GO
+
 
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_DEPARTAMENTO]') AND type in (N'P', N'PC'))
