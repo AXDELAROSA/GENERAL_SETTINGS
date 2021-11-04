@@ -14,7 +14,7 @@ GO
 
 
 -- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  '' ,'1234567'
--- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  '' ,'74123'
+-- EXECUTE [dbo].[PG_SK_USER_PEARL] 0,0,  'PEDROS' ,'7422'
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT /  
 -- //////////////////////////////////////////////////////////////
@@ -66,5 +66,55 @@ AS
 	-- =====================
 
 	-----////////////////////////////////////////////////////////////////
+	-- ////////////////////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> SELECT /  
+-- //////////////////////////////////////////////////////////////
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USER_PEARL_AUTORIZAR_COMPATIBLE]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_SK_USER_PEARL_AUTORIZAR_COMPATIBLE]
+GO
+--		EXECUTE	 [dbo].[PG_SK_USER_PEARL_AUTORIZAR_COMPATIBLE] 0,139, 'PEDROS', '7422', 'Cuarentena'
+--		EXECUTE	 [dbo].[PG_SK_USER_PEARL_AUTORIZAR_COMPATIBLE] 0,139, 'VIVIANAC', '170906', 'MRD'
+CREATE PROCEDURE [dbo].[PG_SK_USER_PEARL_AUTORIZAR_COMPATIBLE]
+	@PP_K_SISTEMA_EXE			INT,
+	@PP_K_USUARIO_ACCION		INT,
+	-- ===========================
+	@PP_USER					VARCHAR(50),
+	@PP_PASSWORD				VARCHAR(50),
+	@PP_TIPO_TRANSACCION		VARCHAR(50)
+AS
+	DECLARE	@VP_K_CODIGO		INT
+			,@VP_NOMBRE			VARCHAR(500)
+			,@VP_APELLIDO		VARCHAR(500)
+	-- ///////////////////////////////////////////
+		SELECT	@VP_K_CODIGO	= K_USUARIO_PEARL,
+				@VP_NOMBRE		= NOMBRE,
+				@VP_APELLIDO	= APELLIDO_PATERNO				
+		FROM	USUARIO_PEARL		(NOLOCK)
+		WHERE	LTRIM(RTRIM(PASSWORD_USUARIO_PEARL))	= @PP_PASSWORD
+		AND		LTRIM(RTRIM(D_USUARIO_PEARL))			= @PP_USER
+	
+		DECLARE @VP_GRUPO_APROBADOR INT = 21
+
+		IF @PP_TIPO_TRANSACCION <> 'Cuarentena'
+			SET	@VP_GRUPO_APROBADOR = 30
+	
+	IF (	SELECT	COUNT(K_GRUPO_APROBADOR) 
+			FROM	GRUPO_APROBADOR	
+			WHERE	K_TIPO_GRUPO_APROBADOR		= @VP_GRUPO_APROBADOR
+			AND		K_USUARIO					= @VP_K_CODIGO
+			AND		K_ESTATUS_GRUPO_APROBADOR	= 1		) > 0
+	BEGIN
+		SELECT @VP_NOMBRE + ' ' + @VP_APELLIDO AS MENSAJE
+	END
+	ELSE
+	BEGIN
+		SELECT ' '	AS MENSAJE
+	END
+		-----////////////////////////////////////////////////////////////////
 	-- ////////////////////////////////////////////////////////////////////
 GO
