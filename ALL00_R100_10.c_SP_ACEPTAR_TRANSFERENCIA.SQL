@@ -96,10 +96,8 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		RAISERROR ('Los datos del Usuario no son correctos o no tienes permisos para realizar la acción soilictada.', 16, 1 )
+		RAISERROR ('Los datos del Usuario no son correctos o no tienes permisos para realizar la acción solicitada.', 16, 1 )
 	END
-
-
 	-- /////////////////////////////////////////////////////////////////////
 COMMIT TRANSACTION 
 END TRY
@@ -113,9 +111,9 @@ BEGIN CATCH
 END CATCH
 	
 	IF @VP_MENSAJE<>''
-		BEGIN
-			SET	@VP_MENSAJE = '!!!! ' + @VP_MENSAJE 
-		END
+	BEGIN
+		SET	@VP_MENSAJE = '!!!! ' + @VP_MENSAJE 
+	END
 
 	SELECT	@VP_MENSAJE AS MENSAJE
 	-- //////////////////////////////////////////////////////////////
