@@ -304,6 +304,10 @@ SET NOCOUNT OFF
 -- ===================			FORMA PIEL LOG		========================
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 250, 104,	'BT_DELETE'
 SET NOCOUNT OFF
+
+-- ===================			FORMA LABELS		========================
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 300, 8,	'BT_EDIT' -- BOTON EDITAR SERIAL
+
 GO
 
 -- ===============================================
@@ -939,6 +943,16 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 950, 250,	88	-- SISTEMAS	/ D
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 951, 250,	41	-- RAFA		/ DELETE
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 952, 250,	144	-- FEG		/ DELETE
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 953, 250,	139	-- AX		/ DELETE
+
+-- ===============USUARIOS CON PERMISOS PARA MODIFICAR UN SERIAL EN PANTALLA LABELS	================================
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1001, 300,	41	-- RAFA		/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1002, 300,	144	-- FEG		/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1003, 300,	139	-- AX		/ BT_EDIT
+
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1004, 300,	174	-- CARLAC	/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1005, 300,	87	-- DIANAN	/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1006, 300,	98	-- MONICAG	/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1007, 300,	182	-- JOSÉR	/ BT_EDIT
 
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
