@@ -983,6 +983,7 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1004, 300,	174	-- CARLAC	/ B
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1005, 300,	87	-- DIANAN	/ BT_EDIT
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1006, 300,	98	-- MONICAG	/ BT_EDIT
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1007, 300,	182	-- JOSÉR	/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1008, 300,	45	-- PEDROV	/ BT_EDIT
 
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
