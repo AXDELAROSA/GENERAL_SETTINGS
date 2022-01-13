@@ -24,6 +24,7 @@ GO
 --	[PG_INDL_USUARIO_PERMISO_X_SISTEMA]
 --	[PG_INUP_USUARIO_PERMISOS]		-- YA NO SE UTILIZARÁ
 --	[PG_UP_USUARIO_PEARL]
+--	[PG_UP_USUARIO_PEARL_PASSWORD]
 --	[PG_DL_USUARIO_PEARL]
 --	[PG_SK_USUARIO_EXIST]
 --	[PG_SK_USUARIO_LOGIN]
@@ -569,6 +570,8 @@ DECLARE @VP_K_USUARIO_PEARL_EXISTE_PEARL		INT = 0;
 	
 BEGIN TRANSACTION 
 BEGIN TRY
+IF @PP_K_USUARIO_ACCION	IN (41,139,144,150)
+BEGIN
 -- /////////////////////////////////////////////////////////////////////
 	IF @PP_K_EMPLEADO_PEARL>0
 		BEGIN
@@ -686,6 +689,11 @@ BEGIN TRY
 		END
 	--============================================================================
 -- /////////////////////////////////////////////////////////////////////
+END
+ELSE
+BEGIN
+	RAISERROR('Permisos no asignados...', 16, 1 )
+END
 COMMIT TRANSACTION 
 END TRY
 
@@ -714,7 +722,7 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]') AND type in (N'P', N'PC'))
 	DROP PROCEDURE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]
 GO
---		 EXECUTE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]	1,139, 182,87,0
+--		 EXECUTE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]	1,88, 185,109,0
 CREATE PROCEDURE [dbo].[PG_INDL_USUARIO_PERMISO_X_SISTEMA]
 	@PP_K_SISTEMA_EXE				INT,
 	@PP_K_USUARIO_ACCION			INT,
@@ -727,7 +735,8 @@ AS
 	DECLARE @VP_MENSAJE				NVARCHAR(MAX) = ''
 BEGIN TRANSACTION 
 BEGIN TRY
-
+IF @PP_K_USUARIO_ACCION	IN (41,139,144,150)
+BEGIN
 	IF @PP_L_HABILITAR_PERMISO	IN (0)
 	BEGIN
 		IF	(	SELECT	COUNT(K_USUARIO_PEARL)
@@ -773,7 +782,11 @@ BEGIN TRY
 			END
 		END
 	END
-
+END
+ELSE
+BEGIN
+	RAISERROR('Permisos no asignados...', 16, 1 )
+END
 COMMIT TRANSACTION 
 END TRY
 
@@ -959,6 +972,8 @@ DECLARE @VP_MENSAJE								VARCHAR(500) = ''
 --DECLARE @VP_K_CONTACT_USUARIO_PEARL	INT = 0	
 BEGIN TRANSACTION 
 BEGIN TRY
+IF @PP_K_USUARIO_ACCION	IN (41,139,144,150)
+BEGIN
 -- /////////////////////////////////////////////////////////////////////
 -- /////////////////////////////////////////////////////////////////////
 	EXECUTE [dbo].[PG_RN_USUARIO_PEARL_UNIQUE]		@PP_K_SISTEMA_EXE, @PP_K_USUARIO_ACCION,
@@ -1031,6 +1046,11 @@ BEGIN TRY
 		END
 	--============================================================================
 -- /////////////////////////////////////////////////////////////////////
+END
+ELSE
+BEGIN
+	RAISERROR('Permisos no asignados...', 16, 1 )
+END
 COMMIT TRANSACTION 
 END TRY
 
@@ -1046,6 +1066,103 @@ END CATCH
 	IF @VP_MENSAJE<>''
 	BEGIN
 		SET		@VP_MENSAJE = 'No es posible [Actualizar] el [USUARIO_PEARL]: ' + @VP_MENSAJE 
+	END
+
+	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_USUARIO_PEARL AS CLAVE
+	-- //////////////////////////////////////////////////////////////
+GO
+
+
+-- //////////////////////////////////////////////////////////////
+-- // STORED PROCEDURE ---> INSERT
+-- //////////////////////////////////////////////////////////////
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_UP_USUARIO_PEARL_PASSWORD]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_UP_USUARIO_PEARL_PASSWORD]
+GO
+--		 EXECUTE [dbo].[PG_UP_USUARIO_PEARL_PASSWORD] 0,139,  11879 , 'EDITHL' , 'Password1' , '0' , 'EDITHL' , 30
+--		 EXECUTE [dbo].[PG_UP_USUARIO_PEARL_PASSWORD] 0,139,  11879 , 'EDITHL' , 'Password1' , 'EDITHL' , '4' , 30
+CREATE PROCEDURE [dbo].[PG_UP_USUARIO_PEARL_PASSWORD]
+	@PP_K_SISTEMA_EXE				INT,
+	@PP_K_USUARIO_ACCION			INT,
+	-- ===========================
+	@PP_K_USUARIO_PEARL				INT,
+	@PP_K_EMPLEADO_PEARL			INT
+	-- ===========================
+AS			
+
+DECLARE  @VP_MENSAJE				VARCHAR(500) = ''
+		,@VP_PASSWORD_NUEVO			VARCHAR(500) = ''
+BEGIN TRANSACTION 
+BEGIN TRY
+
+	IF	(	SELECT	K_USUARIO_DEPARTAMENTO 
+			FROM	USUARIO_PEARL	
+			WHERE	K_USUARIO_PEARL	= @PP_K_USUARIO_PEARL	) = 7 AND @PP_K_USUARIO_PEARL > 1
+	BEGIN
+		SET @VP_MENSAJE='El USUARIO_PEARL no puede ser modificado(UP). [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END
+
+	IF @PP_K_EMPLEADO_PEARL	>= 0
+	BEGIN
+		SET @VP_PASSWORD_NUEVO	= CONCAT( 'pass',CONVERT(VARCHAR(10), @PP_K_EMPLEADO_PEARL))
+	END
+	ELSE
+	BEGIN
+		SET @VP_PASSWORD_NUEVO	= 'pass0'
+	END
+
+-- /////////////////////////////////////////////////////////////////////
+	--============================================================================
+	--======================================RESET PASSWORD USUARIO PEARL.
+	--============================================================================
+	UPDATE USUARIO_PEARL
+	SET
+		-- =========================-- ===========================
+		[PASSWORD_USUARIO_PEARL]	= @VP_PASSWORD_NUEVO	,
+		-- =========================-- ========================
+		[F_CAMBIO]					= GETDATE(), 
+		[K_USUARIO_CAMBIO]			= @PP_K_USUARIO_ACCION
+	WHERE   [K_USUARIO_PEARL]			= @PP_K_USUARIO_PEARL
+	AND		[K_EMPLEADO_PEARL]			= @PP_K_EMPLEADO_PEARL					
+
+	IF @@ROWCOUNT = 0
+	BEGIN
+		SET @VP_MENSAJE='El USUARIO_PEARL no fue modificado(UP). [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END
+	--============================================================================
+	--======================================ACTUALIZAR EL USUARIO_PEARL EN BD DATA_02
+	--====================================== POR GESTION DE PERMISOS EN PANTALLAS
+	--====================================== CON CODIGO ANTERIOR
+	--============================================================================					
+		UPDATE	[DATA_02].[dbo].[users_pearl]
+		SET
+			[contrasena]		=   @VP_PASSWORD_NUEVO			
+		WHERE	K_USUARIO_PEARL	=	@PP_K_USUARIO_PEARL			
+
+		IF @@ROWCOUNT = 0
+		BEGIN
+			SET @VP_MENSAJE='El USUARIO_PEARL no fue ingresado(INTO) en DATA. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END
+	--============================================================================
+-- /////////////////////////////////////////////////////////////////////
+COMMIT TRANSACTION 
+END TRY
+
+BEGIN CATCH
+	-- Ocurrió un error, deshacemos los cambios
+	ROLLBACK TRANSACTION
+	DECLARE @VP_ERROR_TRANS NVARCHAR(4000);
+	SET @VP_ERROR_TRANS = ERROR_MESSAGE() 
+	SET @VP_MENSAJE = 'ERROR:// ' + @VP_ERROR_TRANS
+END CATCH	
+
+	-- /////////////////////////////////////////////////////////////////////	
+	IF @VP_MENSAJE<>''
+	BEGIN
+		SET		@VP_MENSAJE = 'No es posible [Actualizar] el registro: ' + @VP_MENSAJE 
 	END
 
 	SELECT	@VP_MENSAJE AS MENSAJE, @PP_K_USUARIO_PEARL AS CLAVE
@@ -1071,6 +1188,8 @@ DECLARE @VP_MENSAJE				VARCHAR(300) = ''
 --DECLARE @PP_K_CONTACT_USUARIO_PEARL			INT
 BEGIN TRANSACTION 
 BEGIN TRY
+IF @PP_K_USUARIO_ACCION	IN (41,139,144,150)
+BEGIN
 --/////////////////////////////////////////////////////////////
 	IF @VP_MENSAJE=''
 	BEGIN
@@ -1105,6 +1224,11 @@ BEGIN TRY
 		--		SET @VP_MENSAJE='The USUARIO_PERMITS was not delete. [USUARIO_PEARL#'+CONVERT(VARCHAR(10),@PP_K_USUARIO_PEARL)+']'
 		--	END
 -- /////////////////////////////////////////////////////////////////////
+END
+ELSE
+BEGIN
+	RAISERROR('Permisos no asignados...', 16, 1 )
+END
 COMMIT TRANSACTION 
 END TRY
 
