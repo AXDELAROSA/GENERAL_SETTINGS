@@ -767,9 +767,16 @@ BEGIN
 
 			IF	@PP_K_SISTEMA_TAG IN (93)
 			BEGIN
-				DECLARE	@VP_MENSAJE_1	NVARCHAR(MAX)	= 'Es necesario asignar permisos para el botón de cargar orden_de los colores no controlados, en [TA_Forma_Control_FEG] sistema control: #180 '
-				SET		@VP_MENSAJE_1					= @VP_MENSAJE_1	+ '. En el ALL00_R000_00.c_SP_Usuario_Permisos.'
-				RAISERROR(@VP_MENSAJE_1, 16, 1 )
+				
+				IF (	SELECT	COUNT(K_SISTEMA_CONTROL_PERMISO) -- *
+						FROM	SISTEMA_CONTROL_PERMISO	
+						WHERE	K_SISTEMA_CONTROL	= 180
+						AND		K_USUARIO			= @PP_K_USUARIO_PEARL	) <= 0
+				BEGIN
+					DECLARE	@VP_MENSAJE_1	NVARCHAR(MAX)	= 'Es necesario asignar permisos para el botón de cargar orden_de los colores no controlados, en [TA_Forma_Control_FEG] sistema control: #180 '
+					SET		@VP_MENSAJE_1					= @VP_MENSAJE_1	+ '. En el ALL00_R000_00.c_SP_Usuario_Permisos.'
+					RAISERROR(@VP_MENSAJE_1, 16, 1 )
+				END
 			END
 
 			INSERT INTO	USUARIO_PERMISOS
