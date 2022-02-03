@@ -110,10 +110,9 @@ EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 5,	'FO_AUTORIZAR_INSPECCION_MATERIAL
 ---- ===================FORMA FO_PRINT_PO (SECUNDARIA/DEPENDE DE UN PADRE)============================
 EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 6,	'FO_PRINT_PO'
 
-
 ---- ===================FORMA FO_INSPECCION_PIEL (DEPENDE DE OTRA)============================
 EXECUTE [dbo].[PG_CI_SUB_SISTEMA_TAG] 0, 0, 7,	'FO_AUTORIZAR_INSPECCION_PIEL'
--- ===============================================
+
 GO
 -- ===============================================
 --IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_CI_SUB_SISTEMA_TAG]') AND type in (N'P', N'PC'))
@@ -306,11 +305,15 @@ SET NOCOUNT OFF
 
 -- ===================			FORMA PIEL LOG		========================
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 250, 104,	'BT_DELETE'
-SET NOCOUNT OFF
 
 -- ===================			FORMA LABELS		========================
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 300, 8,	'BT_EDIT' -- BOTON EDITAR SERIAL
 
+
+-- ===================FORMA  FO_HOJA_EMPAQUE_X_ORDEN========================PARTE#1
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL] 0, 0, 320, 126,	'Filtros'	-- ES PRINCIPAL SE ENVÍA 0 DEL FRONT.
+
+SET NOCOUNT OFF
 GO
 
 -- ===============================================
@@ -1004,6 +1007,11 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1007, 300,	182	-- JOSÉR	/ BT
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1008, 300,	45	-- PEDROV	/ BT_EDIT
 
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1009, 300,	159	-- KARLAR	/ BT_EDIT			AX:20220117
+
+-- ===================FORMA  FO_HOJA_EMPAQUE_X_ORDEN========================PARTE#1					AX: 20220203
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1030, 320,	41	-- RAFA		/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1031, 320,	144	-- FEG		/ BT_EDIT
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1032, 320,	139	-- AX		/ BT_EDIT
 
 -- //////////////////////////////////////////////////////////////
 -- //////////////////////////////////////////////////////////////
