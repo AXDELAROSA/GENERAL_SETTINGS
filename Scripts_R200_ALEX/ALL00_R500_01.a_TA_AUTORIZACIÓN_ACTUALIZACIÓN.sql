@@ -11,6 +11,7 @@
 
 USE [BD_GENERAL]
 GO
+--	SELECT * FROM [AUTORIZACION_ACTUALIZAR]
 
 -- //////////////////////////////////////////////////////////////
 
@@ -20,9 +21,7 @@ GO
 
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AUTORIZACION_ACTUALIZAR]') AND type in (N'U'))
 	DROP TABLE [dbo].[AUTORIZACION_ACTUALIZAR]
-GO
-
-
+GO	
 -- //////////////////////////////////////////////////////////////
 -- // AUTORIZACION_ACTUALIZAR
 -- //////////////////////////////////////////////////////////////
@@ -95,7 +94,9 @@ SELECT * FROM bd_general.dbo.AUTORIZACION_ACTUALIZAR
 EXECUTE [dbo].[PG_CI_AUTORIZACION_ACTUALIZAR] 0, 0, 'MTR-TV'		,1
 EXECUTE [dbo].[PG_CI_AUTORIZACION_ACTUALIZAR] 0, 0, 'LAMINADORA'	,1
 EXECUTE [dbo].[PG_CI_AUTORIZACION_ACTUALIZAR] 0, 0, 'IT-007'		,1
-GO-- ===============================================
+EXECUTE [dbo].[PG_CI_AUTORIZACION_ACTUALIZAR] 0, 0, 'REBAJADORA'	,1
+GO
+-- ===============================================
 SET NOCOUNT OFF
 -- ===============================================
 GO
