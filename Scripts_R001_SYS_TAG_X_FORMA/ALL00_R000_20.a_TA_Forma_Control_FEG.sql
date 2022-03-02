@@ -1027,6 +1027,7 @@ EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1062, 330,	139	-- AX		/ BARR
 -----------------------------------------------------------------------------------------
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1063, 330,	123	-- JORGEN	/ BARRA HERRAMIENTAS
 EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1064, 330,	89	-- VIVIANAC	/ BARRA HERRAMIENTAS
+EXECUTE [dbo].[PG_CI_SISTEMA_CONTROL_PERMISO] 0, 0, 1065, 330,	152	-- ALEXISR	/ BARRA HERRAMIENTAS
 -----------------------------------------------------------------------------------------
 
 -- ===================FORMA  FO_REPORTE_MATERIAL_ESCANEADO_X_PROCESO========================
