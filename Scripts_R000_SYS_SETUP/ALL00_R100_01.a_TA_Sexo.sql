@@ -78,8 +78,8 @@ AS
 	-- //////////////////////////////////////////////////////////////
 GO
 
-EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  1,	'FEMENINO'			,'' , 'F',  10 , 1
-EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  2,	'MASCULINO'			,'' , 'M',  10 , 1
+EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  1,	'HOMBRE'			,'' , 'H',  10 , 1
+EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  2,	'MUJER'			,'' , 'M',  10 , 1
 
 GO
 
