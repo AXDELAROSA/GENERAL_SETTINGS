@@ -1489,6 +1489,165 @@ END CATCH
 	-- //////////////////////////////////////////////////////////////
 GO
 
+
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS]
+GO
+--		 EXECUTE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS] 'SISTEMAS'	
+--		 EXECUTE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS] 'ALEJANDROD'
+--		 EXECUTE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS] 'ROSARIOM'
+--		 EXECUTE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS] 'PLG'
+--		 EXECUTE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS] 'ADRIANC'
+CREATE PROCEDURE [dbo].[PG_SK_USUARIO_LOGIN_SISTEMAS]
+	-- ===========================
+	@PP_D_USUARIO					VARCHAR(50),
+	@PP_PASSWORD					VARCHAR(50)=''
+AS
+-- =========================================	
+	DECLARE	 @VP_MENSAJE					VARCHAR(500)
+			,@PP_K_USUARIO					INTEGER
+			-- ===========================
+			,@VP_K_CODIGO					INTEGER
+			,@VP_NOMBRE_APELLIDO			VARCHAR(100)
+			-- ===========================
+			,@VP_TEMA						VARCHAR(100)
+			,@VP_D_USUARIO					VARCHAR(100)
+			,@VP_D_USUARIO_TIPO				VARCHAR(100)
+			,@VP_S_USUARIO_TIPO				VARCHAR(100)
+			-- ===========================
+			,@VP_K_EMPLEADO_PEARL			INTEGER
+			,@VP_EXISTE_EMPLEADO			INTEGER
+			-- ===========================
+			,@VP_K_DEPARTAMENTO				INTEGER
+			,@VP_K_CLASE_DEPARTAMENTO		INTEGER
+			,@VP_D_DEPARTAMENTO				VARCHAR(100)
+
+BEGIN TRANSACTION 
+BEGIN TRY
+	SELECT	 @PP_K_USUARIO			= K_USUARIO_PEARL
+			,@VP_K_EMPLEADO_PEARL	= K_EMPLEADO_PEARL
+	FROM	USUARIO_PEARL
+	WHERE	D_USUARIO_PEARL			= @PP_D_USUARIO
+	AND		L_BORRADO				<> 1
+	
+	---- ========================================================================================
+	--	PRIMERO SE VERIFICA QUE EL USUARIO NO SE ENCUENTRE ELIMINADO...
+	IF @PP_K_USUARIO IS NULL
+	BEGIN
+		SET		@VP_K_CODIGO				= -10
+		SET		@VP_NOMBRE_APELLIDO			= NULL
+		SET		@VP_TEMA					= NULL
+		SET		@VP_D_USUARIO				= NULL
+		SET		@VP_D_USUARIO_TIPO			= NULL
+		SET		@VP_S_USUARIO_TIPO			= NULL
+		SET		@VP_K_DEPARTAMENTO			= -1
+		SET		@VP_K_CLASE_DEPARTAMENTO	= -1
+		SET		@VP_D_DEPARTAMENTO			= NULL
+		--SET		@VP_MENSAJE			= 'The [User] was down...'	---'Invalid [USER] name.'
+		SET		@VP_MENSAJE			= 'Invalid User: ['+ UPPER(@PP_D_USUARIO) +']'
+		RAISERROR (@VP_MENSAJE, 16, 1 )
+	END
+	---- ========================================================================================
+	--	SE VERIFICA QUE EL USUARIO TENGA ALTA EN LA EMPRESA, LOS QUE TIENEN VALOR [0], SON AQUELLOS QUE SON GENERICOS O FORANEOS...
+	IF @VP_K_EMPLEADO_PEARL	<> 0
+	BEGIN	
+		IF ( @VP_K_EMPLEADO_PEARL	<> -1 )--	AND @VP_K_EMPLEADO_PEARL NOT IN (13710))
+		BEGIN
+			SELECT  @VP_EXISTE_EMPLEADO=	COUNT(EN_NUM_EMP)
+			FROM    USUARIO_PEARL			 (NOLOCK)
+			LEFT JOIN HOWE.DBO.VISTA_GAFETES (NOLOCK) ON EN_NUM_EMP=K_EMPLEADO_PEARL
+			WHERE	EN_NUM_EMP	=	@VP_K_EMPLEADO_PEARL	--K_EMPLEADO_PEARL
+
+			IF @VP_EXISTE_EMPLEADO= 0
+			BEGIN
+				SET		@VP_K_CODIGO				= -10
+				SET		@VP_NOMBRE_APELLIDO			= NULL
+				SET		@VP_TEMA					= NULL
+				SET		@VP_D_USUARIO				= NULL
+				SET		@VP_D_USUARIO_TIPO			= NULL
+				SET		@VP_S_USUARIO_TIPO			= NULL
+				SET		@VP_K_DEPARTAMENTO			= -1
+				SET		@VP_K_CLASE_DEPARTAMENTO	= -1
+				SET		@VP_D_DEPARTAMENTO			= NULL
+				--SET		@VP_MENSAJE			= 'Hubo un Problema con la cuenta de [Usuario] informe a Sistemas...'	---'Invalid [USER] name.'
+				SET		@VP_MENSAJE			= 'There was a problem with the [User] account report to Systems ...'	---'Invalid [USER] name.'
+				
+				RAISERROR (@VP_MENSAJE, 16, 1 )
+			END
+		END
+	END
+
+		SELECT	@VP_K_CODIGO			= K_USUARIO_PEARL,				
+				@VP_NOMBRE_APELLIDO		= CONCAT((	CASE 
+															WHEN CHARINDEX(' ',NOMBRE)=0  THEN NOMBRE
+															WHEN CHARINDEX(' ',NOMBRE)<>0 THEN SUBSTRING( NOMBRE,1,(CHARINDEX(' ',NOMBRE))-1)
+													END ),' ',APELLIDO_PATERNO),
+				@VP_TEMA				= TEMA_USUARIO_PEARL,
+				@VP_D_USUARIO			= lower(D_USUARIO_PEARL),
+				@VP_D_USUARIO_TIPO		= D_USUARIO_TIPO,
+				@VP_S_USUARIO_TIPO		= S_USUARIO_TIPO,
+		--=======================================================
+				@VP_K_DEPARTAMENTO		= K_USUARIO_DEPARTAMENTO,
+				@VP_K_CLASE_DEPARTAMENTO= USUARIO_PEARL.K_CLASE_DEPARTAMENTO,
+				@VP_D_DEPARTAMENTO		= (	CASE
+													WHEN	K_USUARIO_DEPARTAMENTO = 5 THEN	D_CLASE_DEPARTAMENTO
+													ELSE	S_DEPARTAMENTO
+											END  )	--	AS D_DEPARTAMENTO
+		--=======================================================
+		FROM	USUARIO_PEARL		(NOLOCK) 
+		INNER JOIN	USUARIO_TIPO	(NOLOCK) ON USUARIO_TIPO.K_USUARIO_TIPO		= USUARIO_PEARL.K_USUARIO_TIPO
+		INNER JOIN	DEPARTAMENTO	(NOLOCK) ON DEPARTAMENTO.DP_DEPTO_HOWE		= USUARIO_PEARL.K_USUARIO_DEPARTAMENTO
+		INNER JOIN	CLASE_DEPARTAMENTO	(NOLOCK) ON CLASE_DEPARTAMENTO.K_CLASE_DEPARTAMENTO	= USUARIO_PEARL.K_CLASE_DEPARTAMENTO
+		WHERE	D_USUARIO_PEARL							= @PP_D_USUARIO
+		--AND		LTRIM(RTRIM(PASSWORD_USUARIO_PEARL))	= LTRIM(RTRIM(@PP_PASSWORD))
+		--=======================================================
+
+		IF	@VP_K_CODIGO IS NULL
+		BEGIN
+			SET		@VP_K_CODIGO				= -100
+			SET		@VP_NOMBRE_APELLIDO			= NULL
+			SET		@VP_TEMA					= NULL
+			SET		@VP_D_USUARIO				= NULL
+			SET		@VP_D_USUARIO_TIPO			= NULL
+			SET		@VP_S_USUARIO_TIPO			= NULL
+			SET		@VP_K_DEPARTAMENTO			= -1
+			SET		@VP_K_CLASE_DEPARTAMENTO	= -1
+			SET		@VP_D_DEPARTAMENTO			= NULL
+			--SET		@VP_MENSAJE			= '[PASSWORD] no válido, vuelva a intentar...'
+			SET		@VP_MENSAJE			= 'Invalid [PASSWORD], please try again...'				
+			RAISERROR (@VP_MENSAJE, 16, 1 )
+		END	
+	-- /////////////////////////////////////////////////////////////////////
+COMMIT TRANSACTION 
+END TRY
+
+BEGIN CATCH
+	/* Ocurrió un error, deshacemos los cambios*/ 
+	ROLLBACK TRANSACTION
+	DECLARE @VP_ERROR_TRANS NVARCHAR(4000);
+	SET @VP_ERROR_TRANS = ERROR_MESSAGE() 
+	SET @VP_MENSAJE = 'ERROR:// ' + @VP_ERROR_TRANS
+END CATCH
+	
+	IF @VP_MENSAJE<>''
+		BEGIN
+			SET	@VP_MENSAJE = '!!!! ' + @VP_MENSAJE 
+		END
+
+	SELECT	@VP_MENSAJE					AS MENSAJE,
+			@VP_K_CODIGO				AS USUARIO_CODIGO,
+			@VP_NOMBRE_APELLIDO			AS NOMBRE_APELLIDO,
+			@VP_TEMA					AS USUARIO_TEMA,
+			@VP_D_USUARIO				AS D_USUARIO,
+			@VP_S_USUARIO_TIPO			AS USUARIO_TIPO,
+			@VP_D_USUARIO_TIPO			AS D_USUARIO_TIPO,
+			@VP_K_DEPARTAMENTO			AS K_DEPARTAMENTO,
+			@VP_K_CLASE_DEPARTAMENTO	AS K_CLASE_DEPARTAMENTO,
+			@VP_D_DEPARTAMENTO			AS D_DEPARTAMENTO
+	-- //////////////////////////////////////////////////////////////
+GO
+
+
 -- //////////////////////////////////////////////////////////////
 -- // STORED PROCEDURE ---> SELECT / USUARIO POR D_USUARIO
 -- //////////////////////////////////////////////////////////////
