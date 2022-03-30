@@ -66,20 +66,32 @@ CREATE PROCEDURE [dbo].[PG_CI_SEXO]
 	@PP_L_SEXO			INT
 AS				
 	-- ===========================
-	INSERT INTO SEXO
-			(	[K_SEXO], [D_SEXO], 
-				[C_SEXO], [S_SEXO], 
-				[O_SEXO], [L_SEXO])
-	VALUES	
-			(	@PP_K_SEXO, @PP_D_SEXO, 
-				@PP_C_SEXO, @PP_S_SEXO,
-				@PP_O_SEXO, @PP_L_SEXO)
-		
+	DECLARE @VP_K_SEXO_EXISTE INT = 0
+	SELECT @VP_K_SEXO_EXISTE = COUNT(K_SEXO) FROM SEXO (NOLOCK) WHERE K_SEXO = @PP_K_SEXO
+
+	IF ISNULL(@VP_K_SEXO_EXISTE, 0) = 0
+		INSERT INTO SEXO
+				(	[K_SEXO], [D_SEXO], 
+					[C_SEXO], [S_SEXO], 
+					[O_SEXO], [L_SEXO])
+		VALUES	
+				(	@PP_K_SEXO, @PP_D_SEXO, 
+					@PP_C_SEXO, @PP_S_SEXO,
+					@PP_O_SEXO, @PP_L_SEXO)
+	ELSE
+		UPDATE SEXO
+			SET D_SEXO	=	@PP_D_SEXO,
+				C_SEXO	=	@PP_C_SEXO,
+				S_SEXO	=	@PP_S_SEXO,
+				O_SEXO	=	@PP_O_SEXO,
+				L_SEXO	=	@PP_L_SEXO
+		WHERE K_SEXO = @PP_K_SEXO	
+
 	-- //////////////////////////////////////////////////////////////
 GO
 
-EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  1,	'HOMBRE'			,'' , 'H',  10 , 1
-EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  2,	'MUJER'			,'' , 'M',  10 , 1
+EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  1,	'HOMBRE'			,'' , 'M',  10 , 1
+EXECUTE [dbo].[PG_CI_SEXO]  0, 139,  2,	'MUJER'			,'' , 'F',  10 , 1
 
 GO
 
